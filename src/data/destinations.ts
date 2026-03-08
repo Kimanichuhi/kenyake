@@ -118,6 +118,8 @@ export const destinations: Destination[] = [
     safetyRating: 4,
     accessibilityRating: 5,
     photographyScore: 4,
+    lat: -4.3477,
+    lng: 39.5682,
   },
   {
     id: "mount-kenya",
