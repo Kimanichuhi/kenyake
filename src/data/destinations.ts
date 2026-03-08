@@ -158,6 +158,8 @@ export const destinations: Destination[] = [
     safetyRating: 5,
     accessibilityRating: 4,
     photographyScore: 5,
+    lat: -0.3667,
+    lng: 36.0833,
   },
   {
     id: "lamu-old-town",
