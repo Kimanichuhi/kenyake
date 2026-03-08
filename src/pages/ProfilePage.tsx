@@ -27,6 +27,57 @@ const budgetLabels: Record<string, string> = {
   luxury: "$300+/day",
 };
 
+const SavedDestinations = () => {
+  const { favorites, toggleFavorite, loading } = useFavorites();
+  const navigate = useNavigate();
+
+  const savedDestinations = destinations.filter((d) => favorites.includes(d.id));
+
+  if (savedDestinations.length === 0) {
+    return (
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="glass-card rounded-2xl p-8 text-center">
+        <Bookmark className="h-12 w-12 text-muted-foreground/30 mx-auto mb-4" />
+        <h3 className="font-display text-lg font-semibold text-foreground mb-2">No saved destinations yet</h3>
+        <p className="text-muted-foreground font-body mb-4">Explore destinations and save your favorites</p>
+        <Button onClick={() => navigate("/destinations")} className="gradient-safari text-primary-foreground border-0">
+          Explore Destinations
+        </Button>
+      </motion.div>
+    );
+  }
+
+  return (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {savedDestinations.map((dest) => (
+        <Link key={dest.id} to={`/destination/${dest.id}`} className="group">
+          <div className="glass-card rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+            <div className="relative h-40">
+              <img src={dest.image} alt={dest.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  if (!loading) toggleFavorite(dest.id);
+                }}
+                className="absolute top-3 right-3 h-8 w-8 rounded-full bg-destructive/90 text-primary-foreground flex items-center justify-center hover:bg-destructive transition-colors"
+                aria-label="Remove from favorites"
+              >
+                <Trash2 className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="p-4">
+              <h4 className="font-display font-semibold text-foreground">{dest.name}</h4>
+              <p className="text-sm text-muted-foreground font-body flex items-center gap-1">
+                <MapPin className="h-3 w-3" /> {dest.county} • ⭐ {dest.rating}
+              </p>
+            </div>
+          </div>
+        </Link>
+      ))}
+    </motion.div>
+  );
+};
+
 const ProfilePage = () => {
   const { user, profile, signOut } = useAuth();
   const navigate = useNavigate();
