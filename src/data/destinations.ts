@@ -178,6 +178,8 @@ export const destinations: Destination[] = [
     safetyRating: 4,
     accessibilityRating: 3,
     photographyScore: 4,
+    lat: -2.2717,
+    lng: 40.9020,
   },
 ];
 
