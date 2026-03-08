@@ -15,6 +15,7 @@ const navLinks = [
 
 const moreLinks = [
   { label: "🛍️ Marketplace", href: "/marketplace" },
+  { label: "🚗 Transport", href: "/transport" },
   { label: "🤖 Trip Planner", href: "/trip-planner" },
   { label: "🐾 Wildlife Intel", href: "/wildlife-intel" },
   { label: "🧭 Local Guides", href: "/guides" },
