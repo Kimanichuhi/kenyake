@@ -635,6 +635,105 @@ export type Database = {
           },
         ]
       }
+      coworking_spaces: {
+        Row: {
+          address: string | null
+          amenities: string[] | null
+          city: string
+          contact_email: string | null
+          contact_phone: string | null
+          county: string | null
+          cover_image: string | null
+          created_at: string
+          description: string | null
+          gallery_images: string[] | null
+          has_24hr_access: boolean | null
+          has_generator: boolean | null
+          id: string
+          internet_backup: boolean | null
+          internet_speed_mbps: number | null
+          is_published: boolean | null
+          is_verified: boolean | null
+          lat: number | null
+          lng: number | null
+          name: string
+          opening_hours: string | null
+          price_currency: string | null
+          price_per_day: number | null
+          price_per_month: number | null
+          price_per_week: number | null
+          rating: number | null
+          review_count: number | null
+          slug: string
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          address?: string | null
+          amenities?: string[] | null
+          city: string
+          contact_email?: string | null
+          contact_phone?: string | null
+          county?: string | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          gallery_images?: string[] | null
+          has_24hr_access?: boolean | null
+          has_generator?: boolean | null
+          id?: string
+          internet_backup?: boolean | null
+          internet_speed_mbps?: number | null
+          is_published?: boolean | null
+          is_verified?: boolean | null
+          lat?: number | null
+          lng?: number | null
+          name: string
+          opening_hours?: string | null
+          price_currency?: string | null
+          price_per_day?: number | null
+          price_per_month?: number | null
+          price_per_week?: number | null
+          rating?: number | null
+          review_count?: number | null
+          slug: string
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          address?: string | null
+          amenities?: string[] | null
+          city?: string
+          contact_email?: string | null
+          contact_phone?: string | null
+          county?: string | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          gallery_images?: string[] | null
+          has_24hr_access?: boolean | null
+          has_generator?: boolean | null
+          id?: string
+          internet_backup?: boolean | null
+          internet_speed_mbps?: number | null
+          is_published?: boolean | null
+          is_verified?: boolean | null
+          lat?: number | null
+          lng?: number | null
+          name?: string
+          opening_hours?: string | null
+          price_currency?: string | null
+          price_per_day?: number | null
+          price_per_month?: number | null
+          price_per_week?: number | null
+          rating?: number | null
+          review_count?: number | null
+          slug?: string
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
       education_lessons: {
         Row: {
           body: string | null
@@ -1740,6 +1839,162 @@ export type Database = {
         }
         Relationships: []
       }
+      internet_zones: {
+        Row: {
+          address: string | null
+          city: string
+          county: string | null
+          created_at: string
+          has_power: boolean | null
+          id: string
+          is_free: boolean | null
+          is_published: boolean | null
+          lat: number | null
+          lng: number | null
+          name: string
+          provider: string | null
+          reliability_score: number | null
+          reported_by: string | null
+          speed_mbps: number | null
+          verified_at: string | null
+          zone_type: string
+        }
+        Insert: {
+          address?: string | null
+          city: string
+          county?: string | null
+          created_at?: string
+          has_power?: boolean | null
+          id?: string
+          is_free?: boolean | null
+          is_published?: boolean | null
+          lat?: number | null
+          lng?: number | null
+          name: string
+          provider?: string | null
+          reliability_score?: number | null
+          reported_by?: string | null
+          speed_mbps?: number | null
+          verified_at?: string | null
+          zone_type?: string
+        }
+        Update: {
+          address?: string | null
+          city?: string
+          county?: string | null
+          created_at?: string
+          has_power?: boolean | null
+          id?: string
+          is_free?: boolean | null
+          is_published?: boolean | null
+          lat?: number | null
+          lng?: number | null
+          name?: string
+          provider?: string | null
+          reliability_score?: number | null
+          reported_by?: string | null
+          speed_mbps?: number | null
+          verified_at?: string | null
+          zone_type?: string
+        }
+        Relationships: []
+      }
+      long_stay_listings: {
+        Row: {
+          amenities: string[] | null
+          bathrooms: number | null
+          bedrooms: number | null
+          city: string
+          contact_email: string | null
+          contact_phone: string | null
+          county: string | null
+          cover_image: string | null
+          created_at: string
+          description: string | null
+          furnished: boolean | null
+          gallery_images: string[] | null
+          has_workspace: boolean | null
+          id: string
+          internet_speed_mbps: number | null
+          is_available: boolean | null
+          is_published: boolean | null
+          lat: number | null
+          lng: number | null
+          max_guests: number | null
+          min_stay_months: number | null
+          name: string
+          price_currency: string | null
+          price_per_month: number
+          property_type: string
+          rating: number | null
+          review_count: number | null
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          amenities?: string[] | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          city: string
+          contact_email?: string | null
+          contact_phone?: string | null
+          county?: string | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          furnished?: boolean | null
+          gallery_images?: string[] | null
+          has_workspace?: boolean | null
+          id?: string
+          internet_speed_mbps?: number | null
+          is_available?: boolean | null
+          is_published?: boolean | null
+          lat?: number | null
+          lng?: number | null
+          max_guests?: number | null
+          min_stay_months?: number | null
+          name: string
+          price_currency?: string | null
+          price_per_month?: number
+          property_type?: string
+          rating?: number | null
+          review_count?: number | null
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          amenities?: string[] | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          city?: string
+          contact_email?: string | null
+          contact_phone?: string | null
+          county?: string | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          furnished?: boolean | null
+          gallery_images?: string[] | null
+          has_workspace?: boolean | null
+          id?: string
+          internet_speed_mbps?: number | null
+          is_available?: boolean | null
+          is_published?: boolean | null
+          lat?: number | null
+          lng?: number | null
+          max_guests?: number | null
+          min_stay_months?: number | null
+          name?: string
+          price_currency?: string | null
+          price_per_month?: number
+          property_type?: string
+          rating?: number | null
+          review_count?: number | null
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       lost_found: {
         Row: {
           category: string | null
@@ -2211,6 +2466,164 @@ export type Database = {
           services?: string[] | null
         }
         Relationships: []
+      }
+      nomad_events: {
+        Row: {
+          city: string
+          cover_image: string | null
+          created_at: string
+          current_attendees: number | null
+          description: string | null
+          end_time: string | null
+          event_date: string
+          event_type: string
+          id: string
+          is_online: boolean | null
+          is_published: boolean | null
+          max_attendees: number | null
+          online_link: string | null
+          organizer_id: string | null
+          organizer_name: string | null
+          price: string | null
+          slug: string
+          start_time: string | null
+          tags: string[] | null
+          title: string
+          venue: string | null
+        }
+        Insert: {
+          city: string
+          cover_image?: string | null
+          created_at?: string
+          current_attendees?: number | null
+          description?: string | null
+          end_time?: string | null
+          event_date: string
+          event_type?: string
+          id?: string
+          is_online?: boolean | null
+          is_published?: boolean | null
+          max_attendees?: number | null
+          online_link?: string | null
+          organizer_id?: string | null
+          organizer_name?: string | null
+          price?: string | null
+          slug: string
+          start_time?: string | null
+          tags?: string[] | null
+          title: string
+          venue?: string | null
+        }
+        Update: {
+          city?: string
+          cover_image?: string | null
+          created_at?: string
+          current_attendees?: number | null
+          description?: string | null
+          end_time?: string | null
+          event_date?: string
+          event_type?: string
+          id?: string
+          is_online?: boolean | null
+          is_published?: boolean | null
+          max_attendees?: number | null
+          online_link?: string | null
+          organizer_id?: string | null
+          organizer_name?: string | null
+          price?: string | null
+          slug?: string
+          start_time?: string | null
+          tags?: string[] | null
+          title?: string
+          venue?: string | null
+        }
+        Relationships: []
+      }
+      nomad_forum_posts: {
+        Row: {
+          author_name: string | null
+          body: string
+          category: string
+          created_at: string
+          id: string
+          is_pinned: boolean | null
+          is_published: boolean | null
+          reply_count: number | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+          upvotes: number | null
+          user_id: string
+        }
+        Insert: {
+          author_name?: string | null
+          body: string
+          category?: string
+          created_at?: string
+          id?: string
+          is_pinned?: boolean | null
+          is_published?: boolean | null
+          reply_count?: number | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          upvotes?: number | null
+          user_id: string
+        }
+        Update: {
+          author_name?: string | null
+          body?: string
+          category?: string
+          created_at?: string
+          id?: string
+          is_pinned?: boolean | null
+          is_published?: boolean | null
+          reply_count?: number | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          upvotes?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      nomad_forum_replies: {
+        Row: {
+          author_name: string | null
+          body: string
+          created_at: string
+          id: string
+          post_id: string
+          upvotes: number | null
+          user_id: string
+        }
+        Insert: {
+          author_name?: string | null
+          body: string
+          created_at?: string
+          id?: string
+          post_id: string
+          upvotes?: number | null
+          user_id: string
+        }
+        Update: {
+          author_name?: string | null
+          body?: string
+          created_at?: string
+          id?: string
+          post_id?: string
+          upvotes?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "nomad_forum_replies_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "nomad_forum_posts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       park_gates: {
         Row: {
