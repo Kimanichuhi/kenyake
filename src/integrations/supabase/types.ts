@@ -216,6 +216,90 @@ export type Database = {
           },
         ]
       }
+      budget_packages: {
+        Row: {
+          budget_tier: string
+          county: string | null
+          cover_image: string | null
+          created_at: string
+          description: string | null
+          description_sw: string | null
+          destination: string
+          duration_days: number | null
+          group_size_max: number | null
+          group_size_min: number | null
+          id: string
+          includes: string[] | null
+          is_featured: boolean | null
+          is_published: boolean | null
+          itinerary: Json | null
+          meals_included: boolean | null
+          price_kes: number
+          rating: number | null
+          review_count: number | null
+          slug: string
+          suitable_for: string[] | null
+          title: string
+          title_sw: string | null
+          transport_included: boolean | null
+          updated_at: string
+        }
+        Insert: {
+          budget_tier?: string
+          county?: string | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          description_sw?: string | null
+          destination: string
+          duration_days?: number | null
+          group_size_max?: number | null
+          group_size_min?: number | null
+          id?: string
+          includes?: string[] | null
+          is_featured?: boolean | null
+          is_published?: boolean | null
+          itinerary?: Json | null
+          meals_included?: boolean | null
+          price_kes?: number
+          rating?: number | null
+          review_count?: number | null
+          slug: string
+          suitable_for?: string[] | null
+          title: string
+          title_sw?: string | null
+          transport_included?: boolean | null
+          updated_at?: string
+        }
+        Update: {
+          budget_tier?: string
+          county?: string | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          description_sw?: string | null
+          destination?: string
+          duration_days?: number | null
+          group_size_max?: number | null
+          group_size_min?: number | null
+          id?: string
+          includes?: string[] | null
+          is_featured?: boolean | null
+          is_published?: boolean | null
+          itinerary?: Json | null
+          meals_included?: boolean | null
+          price_kes?: number
+          rating?: number | null
+          review_count?: number | null
+          slug?: string
+          suitable_for?: string[] | null
+          title?: string
+          title_sw?: string | null
+          transport_included?: boolean | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       communities: {
         Row: {
           adornment_explanation: string | null
@@ -1155,6 +1239,121 @@ export type Database = {
           },
         ]
       }
+      group_outing_members: {
+        Row: {
+          amount_due: number | null
+          amount_paid: number | null
+          id: string
+          joined_at: string
+          name: string | null
+          outing_id: string
+          payment_status: string | null
+          phone: string | null
+          user_id: string
+        }
+        Insert: {
+          amount_due?: number | null
+          amount_paid?: number | null
+          id?: string
+          joined_at?: string
+          name?: string | null
+          outing_id: string
+          payment_status?: string | null
+          phone?: string | null
+          user_id: string
+        }
+        Update: {
+          amount_due?: number | null
+          amount_paid?: number | null
+          id?: string
+          joined_at?: string
+          name?: string | null
+          outing_id?: string
+          payment_status?: string | null
+          phone?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "group_outing_members_outing_id_fkey"
+            columns: ["outing_id"]
+            isOneToOne: false
+            referencedRelation: "group_outings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      group_outings: {
+        Row: {
+          budget_per_person: number | null
+          county: string | null
+          created_at: string
+          description: string | null
+          destination: string | null
+          end_date: string | null
+          group_size: number | null
+          id: string
+          invite_code: string | null
+          is_public: boolean | null
+          organizer_id: string
+          outing_type: string
+          package_id: string | null
+          start_date: string
+          status: string | null
+          title: string
+          total_budget: number | null
+          updated_at: string
+        }
+        Insert: {
+          budget_per_person?: number | null
+          county?: string | null
+          created_at?: string
+          description?: string | null
+          destination?: string | null
+          end_date?: string | null
+          group_size?: number | null
+          id?: string
+          invite_code?: string | null
+          is_public?: boolean | null
+          organizer_id: string
+          outing_type?: string
+          package_id?: string | null
+          start_date: string
+          status?: string | null
+          title: string
+          total_budget?: number | null
+          updated_at?: string
+        }
+        Update: {
+          budget_per_person?: number | null
+          county?: string | null
+          created_at?: string
+          description?: string | null
+          destination?: string | null
+          end_date?: string | null
+          group_size?: number | null
+          id?: string
+          invite_code?: string | null
+          is_public?: boolean | null
+          organizer_id?: string
+          outing_type?: string
+          package_id?: string | null
+          start_date?: string
+          status?: string | null
+          title?: string
+          total_budget?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "group_outings_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "budget_packages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       group_trip_guides: {
         Row: {
           created_at: string
@@ -1594,6 +1793,69 @@ export type Database = {
           post_type?: string
           title?: string
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      loyalty_accounts: {
+        Row: {
+          id: string
+          member_since: string
+          points: number | null
+          tier: string | null
+          total_spent_kes: number | null
+          total_trips: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          member_since?: string
+          points?: number | null
+          tier?: string | null
+          total_spent_kes?: number | null
+          total_trips?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          member_since?: string
+          points?: number | null
+          tier?: string | null
+          total_spent_kes?: number | null
+          total_trips?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      loyalty_transactions: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          points: number
+          reference_id: string | null
+          transaction_type: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          points: number
+          reference_id?: string | null
+          transaction_type?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          points?: number
+          reference_id?: string | null
+          transaction_type?: string | null
           user_id?: string
         }
         Relationships: []
@@ -2168,6 +2430,106 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      savings_deposits: {
+        Row: {
+          amount: number
+          created_at: string
+          goal_id: string
+          id: string
+          mpesa_phone: string | null
+          payment_method: string | null
+          status: string | null
+          transaction_ref: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          goal_id: string
+          id?: string
+          mpesa_phone?: string | null
+          payment_method?: string | null
+          status?: string | null
+          transaction_ref?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          goal_id?: string
+          id?: string
+          mpesa_phone?: string | null
+          payment_method?: string | null
+          status?: string | null
+          transaction_ref?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "savings_deposits_goal_id_fkey"
+            columns: ["goal_id"]
+            isOneToOne: false
+            referencedRelation: "savings_goals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      savings_goals: {
+        Row: {
+          created_at: string
+          destination: string | null
+          id: string
+          installment_amount: number | null
+          installment_frequency: string | null
+          package_id: string | null
+          saved_amount: number | null
+          status: string | null
+          target_amount: number
+          target_date: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          destination?: string | null
+          id?: string
+          installment_amount?: number | null
+          installment_frequency?: string | null
+          package_id?: string | null
+          saved_amount?: number | null
+          status?: string | null
+          target_amount: number
+          target_date?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          destination?: string | null
+          id?: string
+          installment_amount?: number | null
+          installment_frequency?: string | null
+          package_id?: string | null
+          saved_amount?: number | null
+          status?: string | null
+          target_amount?: number
+          target_date?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "savings_goals_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "budget_packages"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       transport_bookings: {
         Row: {
