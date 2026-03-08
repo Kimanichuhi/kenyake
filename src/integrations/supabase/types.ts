@@ -3012,6 +3012,90 @@ export type Database = {
         }
         Relationships: []
       }
+      multi_reviews: {
+        Row: {
+          body: string | null
+          community_impact: number | null
+          created_at: string
+          cultural_authenticity: number | null
+          flag_reason: string | null
+          flagged_by: string | null
+          guide_quality: number | null
+          id: string
+          is_flagged: boolean | null
+          is_verified_visit: boolean | null
+          language: string | null
+          operator_response: string | null
+          operator_response_at: string | null
+          overall_rating: number
+          photo_urls: string[] | null
+          reviewable_id: string
+          reviewable_type: string
+          safety: number | null
+          title: string | null
+          translated_body: Json | null
+          updated_at: string
+          upvotes: number | null
+          user_id: string
+          value_for_money: number | null
+          video_url: string | null
+        }
+        Insert: {
+          body?: string | null
+          community_impact?: number | null
+          created_at?: string
+          cultural_authenticity?: number | null
+          flag_reason?: string | null
+          flagged_by?: string | null
+          guide_quality?: number | null
+          id?: string
+          is_flagged?: boolean | null
+          is_verified_visit?: boolean | null
+          language?: string | null
+          operator_response?: string | null
+          operator_response_at?: string | null
+          overall_rating: number
+          photo_urls?: string[] | null
+          reviewable_id: string
+          reviewable_type: string
+          safety?: number | null
+          title?: string | null
+          translated_body?: Json | null
+          updated_at?: string
+          upvotes?: number | null
+          user_id: string
+          value_for_money?: number | null
+          video_url?: string | null
+        }
+        Update: {
+          body?: string | null
+          community_impact?: number | null
+          created_at?: string
+          cultural_authenticity?: number | null
+          flag_reason?: string | null
+          flagged_by?: string | null
+          guide_quality?: number | null
+          id?: string
+          is_flagged?: boolean | null
+          is_verified_visit?: boolean | null
+          language?: string | null
+          operator_response?: string | null
+          operator_response_at?: string | null
+          overall_rating?: number
+          photo_urls?: string[] | null
+          reviewable_id?: string
+          reviewable_type?: string
+          safety?: number | null
+          title?: string | null
+          translated_body?: Json | null
+          updated_at?: string
+          upvotes?: number | null
+          user_id?: string
+          value_for_money?: number | null
+          video_url?: string | null
+        }
+        Relationships: []
+      }
       nomad_events: {
         Row: {
           city: string
@@ -3170,6 +3254,42 @@ export type Database = {
           },
         ]
       }
+      operator_flags: {
+        Row: {
+          created_at: string
+          evidence_urls: string[] | null
+          flag_type: string
+          id: string
+          operator_id: string
+          operator_type: string
+          reason: string
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          evidence_urls?: string[] | null
+          flag_type?: string
+          id?: string
+          operator_id: string
+          operator_type: string
+          reason: string
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          evidence_urls?: string[] | null
+          flag_type?: string
+          id?: string
+          operator_id?: string
+          operator_type?: string
+          reason?: string
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       operator_impact_badges: {
         Row: {
           awarded_at: string
@@ -3307,6 +3427,44 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      review_flags: {
+        Row: {
+          created_at: string
+          flag_type: string
+          id: string
+          reason: string | null
+          review_id: string
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          flag_type?: string
+          id?: string
+          reason?: string | null
+          review_id: string
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          flag_type?: string
+          id?: string
+          reason?: string | null
+          review_id?: string
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_flags_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "multi_reviews"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       road_conditions: {
         Row: {

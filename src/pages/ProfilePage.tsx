@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate, Link } from "react-router-dom";
-import { User, MapPin, Heart, Wallet, Globe, LogOut, Settings, Bookmark, History, Trash2, Calendar, Clock, Users, Loader2, XCircle, Bed } from "lucide-react";
+import { User, MapPin, Heart, Wallet, Globe, LogOut, Settings, Bookmark, History, Trash2, Calendar, Clock, Users, Loader2, XCircle, Bed, Car } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
@@ -99,29 +99,48 @@ interface AccBookingWithAccommodation {
   accommodations: { name: string; location_name: string | null; price_display: string | null; property_type: string } | null;
 }
 
+interface TransportBooking {
+  id: string;
+  booking_type: string;
+  pickup_date: string;
+  pickup_time: string | null;
+  pickup_location: string;
+  dropoff_location: string | null;
+  return_date: string | null;
+  passenger_count: number | null;
+  total_price: number | null;
+  status: string | null;
+  created_at: string;
+  transport_vehicles: { name: string; vehicle_type: string; make: string | null; model: string | null } | null;
+  transport_drivers: { name: string } | null;
+}
+
 const MyBookings = () => {
   const [expBookings, setExpBookings] = useState<BookingWithExperience[]>([]);
   const [accBookings, setAccBookings] = useState<AccBookingWithAccommodation[]>([]);
+  const [transportBookings, setTransportBookings] = useState<TransportBooking[]>([]);
   const [loading, setLoading] = useState(true);
   const [cancelling, setCancelling] = useState<string | null>(null);
-  const [subTab, setSubTab] = useState<"experiences" | "accommodation">("experiences");
+  const [subTab, setSubTab] = useState<"experiences" | "accommodation" | "transport">("experiences");
   const { toast } = useToast();
   const navigate = useNavigate();
 
   const fetchBookings = async () => {
     setLoading(true);
-    const [expRes, accRes] = await Promise.all([
+    const [expRes, accRes, transRes] = await Promise.all([
       supabase.from("experience_bookings").select("id, booking_date, start_time, guest_count, total_price, status, special_requests, created_at, experiences(title, host_name, location_name, price_display, duration_minutes)").order("booking_date", { ascending: false }),
       supabase.from("accommodation_bookings").select("id, check_in, check_out, guest_count, rooms, total_price, status, created_at, accommodations(name, location_name, price_display, property_type)").order("check_in", { ascending: false }),
+      supabase.from("transport_bookings").select("id, booking_type, pickup_date, pickup_time, pickup_location, dropoff_location, return_date, passenger_count, total_price, status, created_at, transport_vehicles(name, vehicle_type, make, model), transport_drivers(name)").order("pickup_date", { ascending: false }),
     ]);
     if (expRes.data) setExpBookings(expRes.data as unknown as BookingWithExperience[]);
     if (accRes.data) setAccBookings(accRes.data as unknown as AccBookingWithAccommodation[]);
+    if (transRes.data) setTransportBookings(transRes.data as unknown as TransportBooking[]);
     setLoading(false);
   };
 
   useEffect(() => { fetchBookings(); }, []);
 
-  const cancelBooking = async (id: string, table: "experience_bookings" | "accommodation_bookings") => {
+  const cancelBooking = async (id: string, table: "experience_bookings" | "accommodation_bookings" | "transport_bookings") => {
     setCancelling(id);
     const { error } = await supabase.from(table).update({ status: "cancelled" }).eq("id", id);
     setCancelling(null);
@@ -135,17 +154,18 @@ const MyBookings = () => {
 
   if (loading) return <div className="flex justify-center py-12"><Loader2 className="h-8 w-8 animate-spin text-muted-foreground" /></div>;
 
-  const noBookings = expBookings.length === 0 && accBookings.length === 0;
+  const noBookings = expBookings.length === 0 && accBookings.length === 0 && transportBookings.length === 0;
 
   if (noBookings) {
     return (
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="glass-card rounded-2xl p-8 text-center">
         <Calendar className="h-12 w-12 text-muted-foreground/30 mx-auto mb-4" />
         <h3 className="font-display text-lg font-semibold text-foreground mb-2">No bookings yet</h3>
-        <p className="text-muted-foreground font-body mb-4">Book experiences and accommodation to see them here</p>
-        <div className="flex gap-3 justify-center">
+        <p className="text-muted-foreground font-body mb-4">Book experiences, accommodation, or transport to see them here</p>
+        <div className="flex gap-3 justify-center flex-wrap">
           <Button onClick={() => navigate("/experiences")} className="gradient-sunset text-primary-foreground border-0">Browse Experiences</Button>
           <Button onClick={() => navigate("/accommodation")} variant="outline">Find Accommodation</Button>
+          <Button onClick={() => navigate("/transport")} variant="outline">Hire Transport</Button>
         </div>
       </motion.div>
     );
@@ -154,12 +174,15 @@ const MyBookings = () => {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
       {/* Sub-tabs */}
-      <div className="flex gap-2 mb-4">
+      <div className="flex gap-2 mb-4 flex-wrap">
         <button onClick={() => setSubTab("experiences")} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-body font-medium transition-all ${subTab === "experiences" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}>
           <Calendar className="h-3 w-3" /> Experiences ({expBookings.length})
         </button>
         <button onClick={() => setSubTab("accommodation")} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-body font-medium transition-all ${subTab === "accommodation" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}>
           <Bed className="h-3 w-3" /> Accommodation ({accBookings.length})
+        </button>
+        <button onClick={() => setSubTab("transport")} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-body font-medium transition-all ${subTab === "transport" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}>
+          <Car className="h-3 w-3" /> Transport ({transportBookings.length})
         </button>
       </div>
 
@@ -214,6 +237,49 @@ const MyBookings = () => {
           </div>
         </div>
       ))}
+
+      {subTab === "transport" && transportBookings.map((b) => (
+        <div key={b.id} className="glass-card rounded-2xl p-5">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1">
+                <Car className="h-4 w-4 text-primary" />
+                <h4 className="font-display font-semibold text-foreground truncate">
+                  {b.transport_vehicles ? `${b.transport_vehicles.name}` : "Vehicle"}
+                  {b.transport_vehicles?.make && ` (${b.transport_vehicles.make} ${b.transport_vehicles.model || ""})`}
+                </h4>
+                <Badge className={`text-xs ${statusColors[b.status || "pending"]}`}>{b.status}</Badge>
+              </div>
+              {b.transport_drivers && <p className="text-sm text-muted-foreground font-body">Driver: {b.transport_drivers.name}</p>}
+              <div className="text-xs text-muted-foreground font-body mt-1 space-y-0.5">
+                <p className="flex items-center gap-1"><MapPin className="h-3 w-3" /> {b.pickup_location}{b.dropoff_location ? ` → ${b.dropoff_location}` : ""}</p>
+              </div>
+              <div className="flex flex-wrap gap-3 mt-2 text-xs text-muted-foreground font-body">
+                <span className="flex items-center gap-1"><Calendar className="h-3 w-3" />{new Date(b.pickup_date).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}</span>
+                {b.pickup_time && <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{b.pickup_time}</span>}
+                {b.return_date && <span className="flex items-center gap-1">Return: {new Date(b.return_date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>}
+                <span className="flex items-center gap-1"><Users className="h-3 w-3" />{b.passenger_count} passenger{(b.passenger_count || 1) > 1 ? "s" : ""}</span>
+                {b.total_price && <span className="font-semibold text-foreground">KES {b.total_price.toLocaleString()}</span>}
+                <Badge variant="outline" className="text-xs capitalize">{b.booking_type.replace("_", " ")}</Badge>
+              </div>
+            </div>
+            {b.status === "pending" && (
+              <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive shrink-0" disabled={cancelling === b.id} onClick={() => cancelBooking(b.id, "transport_bookings")}>
+                {cancelling === b.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <><XCircle className="h-4 w-4 mr-1" />Cancel</>}
+              </Button>
+            )}
+          </div>
+        </div>
+      ))}
+
+      {subTab === "transport" && transportBookings.length === 0 && (
+        <div className="glass-card rounded-2xl p-8 text-center">
+          <Car className="h-12 w-12 text-muted-foreground/30 mx-auto mb-4" />
+          <h3 className="font-display text-lg font-semibold text-foreground mb-2">No transport bookings</h3>
+          <p className="text-muted-foreground font-body mb-4">Hire a vehicle or book a transfer</p>
+          <Button onClick={() => navigate("/transport")} variant="outline">Browse Transport</Button>
+        </div>
+      )}
     </motion.div>
   );
 };
