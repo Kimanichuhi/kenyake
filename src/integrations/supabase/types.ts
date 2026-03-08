@@ -1360,6 +1360,301 @@ export type Database = {
         }
         Relationships: []
       }
+      marketplace_orders: {
+        Row: {
+          buyer_id: string
+          buyer_notes: string | null
+          created_at: string
+          custom_description: string | null
+          id: string
+          is_custom_order: boolean | null
+          is_international: boolean | null
+          payment_method: string | null
+          price_currency: string | null
+          product_id: string
+          quantity: number | null
+          seller_id: string
+          seller_notes: string | null
+          shipping_address: string | null
+          shipping_country: string | null
+          status: string | null
+          total_price: number
+          tracking_number: string | null
+          updated_at: string
+        }
+        Insert: {
+          buyer_id: string
+          buyer_notes?: string | null
+          created_at?: string
+          custom_description?: string | null
+          id?: string
+          is_custom_order?: boolean | null
+          is_international?: boolean | null
+          payment_method?: string | null
+          price_currency?: string | null
+          product_id: string
+          quantity?: number | null
+          seller_id: string
+          seller_notes?: string | null
+          shipping_address?: string | null
+          shipping_country?: string | null
+          status?: string | null
+          total_price: number
+          tracking_number?: string | null
+          updated_at?: string
+        }
+        Update: {
+          buyer_id?: string
+          buyer_notes?: string | null
+          created_at?: string
+          custom_description?: string | null
+          id?: string
+          is_custom_order?: boolean | null
+          is_international?: boolean | null
+          payment_method?: string | null
+          price_currency?: string | null
+          product_id?: string
+          quantity?: number | null
+          seller_id?: string
+          seller_notes?: string | null
+          shipping_address?: string | null
+          shipping_country?: string | null
+          status?: string | null
+          total_price?: number
+          tracking_number?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_orders_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketplace_orders_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_sellers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_products: {
+        Row: {
+          authenticity_notes: string | null
+          category: string
+          commission_starting_price: number | null
+          cover_image: string | null
+          created_at: string
+          description: string | null
+          dimensions: string | null
+          id: string
+          images: string[] | null
+          in_stock: boolean | null
+          is_authentic_verified: boolean | null
+          is_custom_commission: boolean | null
+          is_featured: boolean | null
+          is_preorder: boolean | null
+          is_published: boolean | null
+          made_by_story: string | null
+          materials: string | null
+          order_count: number | null
+          preorder_lead_days: number | null
+          price_amount: number
+          price_currency: string | null
+          price_display: string | null
+          price_usd: number | null
+          rating: number | null
+          review_count: number | null
+          seller_id: string
+          slug: string
+          stock_count: number | null
+          subcategory: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+          weight_grams: number | null
+        }
+        Insert: {
+          authenticity_notes?: string | null
+          category?: string
+          commission_starting_price?: number | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          dimensions?: string | null
+          id?: string
+          images?: string[] | null
+          in_stock?: boolean | null
+          is_authentic_verified?: boolean | null
+          is_custom_commission?: boolean | null
+          is_featured?: boolean | null
+          is_preorder?: boolean | null
+          is_published?: boolean | null
+          made_by_story?: string | null
+          materials?: string | null
+          order_count?: number | null
+          preorder_lead_days?: number | null
+          price_amount?: number
+          price_currency?: string | null
+          price_display?: string | null
+          price_usd?: number | null
+          rating?: number | null
+          review_count?: number | null
+          seller_id: string
+          slug: string
+          stock_count?: number | null
+          subcategory?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          weight_grams?: number | null
+        }
+        Update: {
+          authenticity_notes?: string | null
+          category?: string
+          commission_starting_price?: number | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          dimensions?: string | null
+          id?: string
+          images?: string[] | null
+          in_stock?: boolean | null
+          is_authentic_verified?: boolean | null
+          is_custom_commission?: boolean | null
+          is_featured?: boolean | null
+          is_preorder?: boolean | null
+          is_published?: boolean | null
+          made_by_story?: string | null
+          materials?: string | null
+          order_count?: number | null
+          preorder_lead_days?: number | null
+          price_amount?: number
+          price_currency?: string | null
+          price_display?: string | null
+          price_usd?: number | null
+          rating?: number | null
+          review_count?: number | null
+          seller_id?: string
+          slug?: string
+          stock_count?: number | null
+          subcategory?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          weight_grams?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_products_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_sellers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_sellers: {
+        Row: {
+          accepts_card: boolean | null
+          accepts_commissions: boolean | null
+          accepts_mpesa: boolean | null
+          bio: string | null
+          commission_lead_days: number | null
+          community_id: string | null
+          cooperative_members: number | null
+          county: string | null
+          created_at: string
+          id: string
+          is_cooperative: boolean | null
+          is_published: boolean | null
+          is_verified: boolean | null
+          location: string | null
+          mpesa_phone: string | null
+          name: string
+          photo_url: string | null
+          rating: number | null
+          review_count: number | null
+          seller_type: string
+          shipping_notes: string | null
+          ships_internationally: boolean | null
+          slug: string
+          story: string | null
+          total_sales: number | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          accepts_card?: boolean | null
+          accepts_commissions?: boolean | null
+          accepts_mpesa?: boolean | null
+          bio?: string | null
+          commission_lead_days?: number | null
+          community_id?: string | null
+          cooperative_members?: number | null
+          county?: string | null
+          created_at?: string
+          id?: string
+          is_cooperative?: boolean | null
+          is_published?: boolean | null
+          is_verified?: boolean | null
+          location?: string | null
+          mpesa_phone?: string | null
+          name: string
+          photo_url?: string | null
+          rating?: number | null
+          review_count?: number | null
+          seller_type?: string
+          shipping_notes?: string | null
+          ships_internationally?: boolean | null
+          slug: string
+          story?: string | null
+          total_sales?: number | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          accepts_card?: boolean | null
+          accepts_commissions?: boolean | null
+          accepts_mpesa?: boolean | null
+          bio?: string | null
+          commission_lead_days?: number | null
+          community_id?: string | null
+          cooperative_members?: number | null
+          county?: string | null
+          created_at?: string
+          id?: string
+          is_cooperative?: boolean | null
+          is_published?: boolean | null
+          is_verified?: boolean | null
+          location?: string | null
+          mpesa_phone?: string | null
+          name?: string
+          photo_url?: string | null
+          rating?: number | null
+          review_count?: number | null
+          seller_type?: string
+          shipping_notes?: string | null
+          ships_internationally?: boolean | null
+          slug?: string
+          story?: string | null
+          total_sales?: number | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_sellers_community_id_fkey"
+            columns: ["community_id"]
+            isOneToOne: false
+            referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           accessibility_needs: string[] | null

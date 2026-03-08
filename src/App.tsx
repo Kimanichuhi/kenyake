@@ -27,6 +27,7 @@ import CulturalPrepPage from "./pages/CulturalPrepPage";
 import GuideRegisterPage from "./pages/GuideRegisterPage";
 import GuideDashboardPage from "./pages/GuideDashboardPage";
 import AccommodationPage from "./pages/AccommodationPage";
+import MarketplacePage from "./pages/MarketplacePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -62,6 +63,7 @@ const App = () => (
             <Route path="/guide-register" element={<GuideRegisterPage />} />
             <Route path="/guide-dashboard" element={<GuideDashboardPage />} />
             <Route path="/accommodation" element={<AccommodationPage />} />
+            <Route path="/marketplace" element={<MarketplacePage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
