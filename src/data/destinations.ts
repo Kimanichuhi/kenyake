@@ -31,6 +31,8 @@ export interface Destination {
   safetyRating: number;
   accessibilityRating: number;
   photographyScore: number;
+  lat: number;
+  lng: number;
 }
 
 export interface Experience {
