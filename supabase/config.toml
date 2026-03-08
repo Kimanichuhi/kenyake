@@ -2,3 +2,6 @@ project_id = "mohjvtborkhqhossbtyd"
 
 [functions.nearby-discover]
 verify_jwt = false
+
+[functions.trip-assistant]
+verify_jwt = false

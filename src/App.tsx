@@ -20,6 +20,7 @@ import OnboardingPage from "./pages/OnboardingPage";
 import AuthPage from "./pages/AuthPage";
 import ProfilePage from "./pages/ProfilePage";
 import NearbyPage from "./pages/NearbyPage";
+import TripPlannerPage from "./pages/TripPlannerPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -48,6 +49,7 @@ const App = () => (
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/nearby" element={<NearbyPage />} />
+            <Route path="/trip-planner" element={<TripPlannerPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
