@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { ChevronRight, ChevronLeft, Check, User, MapPin, Heart, Wallet, Accessibility, Globe, Plane } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 const travelStyles = [
   { id: "wildlife", label: "Wildlife Safari", emoji: "🦁" },
@@ -36,17 +38,36 @@ const languages = ["English", "Swahili", "German", "French", "Spanish", "Italian
 
 const OnboardingPage = () => {
   const navigate = useNavigate();
+  const { user, profile, updateProfile, refreshProfile } = useAuth();
+  const { toast } = useToast();
   const [step, setStep] = useState(0);
-  const [profile, setProfile] = useState({
-    name: "",
+  const [saving, setSaving] = useState(false);
+  const [formData, setFormData] = useState({
+    full_name: "",
     nationality: "",
-    travelerType: "tourist" as "tourist" | "diaspora" | "nomad" | "corporate",
-    travelStyles: [] as string[],
-    budget: "",
-    accessibility: [] as string[],
+    traveler_type: "tourist" as "tourist" | "diaspora" | "nomad" | "corporate",
+    travel_styles: [] as string[],
+    budget_range: "",
+    accessibility_needs: [] as string[],
     languages: [] as string[],
-    firstVisit: true,
+    first_visit: true,
   });
+
+  // Pre-fill from existing profile
+  useEffect(() => {
+    if (profile) {
+      setFormData({
+        full_name: profile.full_name || "",
+        nationality: profile.nationality || "",
+        traveler_type: (profile.traveler_type as any) || "tourist",
+        travel_styles: profile.travel_styles || [],
+        budget_range: profile.budget_range || "",
+        accessibility_needs: profile.accessibility_needs || [],
+        languages: profile.languages || [],
+        first_visit: profile.first_visit ?? true,
+      });
+    }
+  }, [profile]);
 
   const steps = [
     { title: "Welcome", icon: User },
@@ -63,8 +84,24 @@ const OnboardingPage = () => {
   const nextStep = () => setStep((s) => Math.min(s + 1, steps.length - 1));
   const prevStep = () => setStep((s) => Math.max(s - 1, 0));
 
-  const completeOnboarding = () => {
-    localStorage.setItem("safarikenya_profile", JSON.stringify(profile));
+  const completeOnboarding = async () => {
+    if (user) {
+      setSaving(true);
+      const { error } = await updateProfile({
+        ...formData,
+        onboarding_completed: true,
+      });
+      setSaving(false);
+      if (error) {
+        toast({ title: "Error saving preferences", description: String(error), variant: "destructive" });
+        return;
+      }
+      await refreshProfile();
+      toast({ title: "Preferences saved!", description: "Your profile has been updated." });
+    } else {
+      // For non-authenticated users, store in localStorage
+      localStorage.setItem("safarikenya_profile", JSON.stringify(formData));
+    }
     navigate("/");
   };
 
@@ -95,29 +132,33 @@ const OnboardingPage = () => {
             {step === 0 && (
               <div className="text-center">
                 <div className="text-5xl mb-4">🦒</div>
-                <h1 className="font-display text-3xl font-bold mb-3">Welcome to SafariKenya</h1>
-                <p className="text-primary-foreground/60 font-body mb-8">Let's personalize your experience. This takes about 1 minute.</p>
+                <h1 className="font-display text-3xl font-bold mb-3">
+                  {user ? `Welcome back, ${formData.full_name || "Explorer"}!` : "Welcome to SafariKenya"}
+                </h1>
+                <p className="text-primary-foreground/60 font-body mb-8">
+                  {user ? "Update your travel preferences" : "Let's personalize your experience. This takes about 1 minute."}
+                </p>
                 <div className="space-y-4 max-w-sm mx-auto">
                   <input
                     type="text"
                     placeholder="Your name"
-                    value={profile.name}
-                    onChange={(e) => setProfile({ ...profile, name: e.target.value })}
+                    value={formData.full_name}
+                    onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
                     className="w-full px-4 py-3 rounded-xl bg-primary-foreground/10 border border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/40 font-body outline-none focus:border-savannah-gold"
                   />
                   <input
                     type="text"
                     placeholder="Your nationality"
-                    value={profile.nationality}
-                    onChange={(e) => setProfile({ ...profile, nationality: e.target.value })}
+                    value={formData.nationality}
+                    onChange={(e) => setFormData({ ...formData, nationality: e.target.value })}
                     className="w-full px-4 py-3 rounded-xl bg-primary-foreground/10 border border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/40 font-body outline-none focus:border-savannah-gold"
                   />
                   <div className="grid grid-cols-2 gap-3">
                     {(["tourist", "diaspora", "nomad", "corporate"] as const).map((type) => (
                       <button
                         key={type}
-                        onClick={() => setProfile({ ...profile, travelerType: type })}
-                        className={`px-4 py-3 rounded-xl text-sm font-body font-medium transition-all ${profile.travelerType === type ? "gradient-sunset text-primary-foreground" : "bg-primary-foreground/10 text-primary-foreground/60 hover:bg-primary-foreground/20"}`}
+                        onClick={() => setFormData({ ...formData, traveler_type: type })}
+                        className={`px-4 py-3 rounded-xl text-sm font-body font-medium transition-all ${formData.traveler_type === type ? "gradient-sunset text-primary-foreground" : "bg-primary-foreground/10 text-primary-foreground/60 hover:bg-primary-foreground/20"}`}
                       >
                         {type === "tourist" && "Tourist"}
                         {type === "diaspora" && "Diaspora/Heritage"}
@@ -128,8 +169,8 @@ const OnboardingPage = () => {
                   </div>
                   <div className="flex items-center gap-3 mt-4">
                     <label className="text-sm font-body text-primary-foreground/60">First time visiting Kenya?</label>
-                    <button onClick={() => setProfile({ ...profile, firstVisit: !profile.firstVisit })} className={`w-12 h-6 rounded-full relative transition-colors ${profile.firstVisit ? "bg-savannah-gold" : "bg-primary-foreground/20"}`}>
-                      <div className={`absolute top-1 h-4 w-4 rounded-full bg-primary-foreground transition-all ${profile.firstVisit ? "right-1" : "left-1"}`} />
+                    <button onClick={() => setFormData({ ...formData, first_visit: !formData.first_visit })} className={`w-12 h-6 rounded-full relative transition-colors ${formData.first_visit ? "bg-savannah-gold" : "bg-primary-foreground/20"}`}>
+                      <div className={`absolute top-1 h-4 w-4 rounded-full bg-primary-foreground transition-all ${formData.first_visit ? "right-1" : "left-1"}`} />
                     </button>
                   </div>
                 </div>
@@ -144,8 +185,8 @@ const OnboardingPage = () => {
                   {travelStyles.map((style) => (
                     <button
                       key={style.id}
-                      onClick={() => setProfile({ ...profile, travelStyles: toggleArrayItem(profile.travelStyles, style.id) })}
-                      className={`p-4 rounded-xl text-center transition-all ${profile.travelStyles.includes(style.id) ? "gradient-sunset text-primary-foreground" : "bg-primary-foreground/10 hover:bg-primary-foreground/20"}`}
+                      onClick={() => setFormData({ ...formData, travel_styles: toggleArrayItem(formData.travel_styles, style.id) })}
+                      className={`p-4 rounded-xl text-center transition-all ${formData.travel_styles.includes(style.id) ? "gradient-sunset text-primary-foreground" : "bg-primary-foreground/10 hover:bg-primary-foreground/20"}`}
                     >
                       <div className="text-2xl mb-2">{style.emoji}</div>
                       <div className="text-xs font-body font-medium">{style.label}</div>
@@ -163,14 +204,14 @@ const OnboardingPage = () => {
                   {budgetRanges.map((b) => (
                     <button
                       key={b.id}
-                      onClick={() => setProfile({ ...profile, budget: b.id })}
-                      className={`w-full p-4 rounded-xl text-left transition-all flex items-center justify-between ${profile.budget === b.id ? "gradient-sunset text-primary-foreground" : "bg-primary-foreground/10 hover:bg-primary-foreground/20"}`}
+                      onClick={() => setFormData({ ...formData, budget_range: b.id })}
+                      className={`w-full p-4 rounded-xl text-left transition-all flex items-center justify-between ${formData.budget_range === b.id ? "gradient-sunset text-primary-foreground" : "bg-primary-foreground/10 hover:bg-primary-foreground/20"}`}
                     >
                       <div>
                         <div className="font-body font-semibold">{b.label}</div>
                         <div className="text-xs opacity-70">{b.desc}</div>
                       </div>
-                      {profile.budget === b.id && <Check className="h-5 w-5" />}
+                      {formData.budget_range === b.id && <Check className="h-5 w-5" />}
                     </button>
                   ))}
                 </div>
@@ -185,8 +226,8 @@ const OnboardingPage = () => {
                   {accessibilityNeeds.map((need) => (
                     <button
                       key={need.id}
-                      onClick={() => setProfile({ ...profile, accessibility: toggleArrayItem(profile.accessibility, need.id) })}
-                      className={`px-4 py-2 rounded-full text-sm font-body font-medium transition-all ${profile.accessibility.includes(need.id) ? "gradient-safari text-primary-foreground" : "bg-primary-foreground/10 hover:bg-primary-foreground/20"}`}
+                      onClick={() => setFormData({ ...formData, accessibility_needs: toggleArrayItem(formData.accessibility_needs, need.id) })}
+                      className={`px-4 py-2 rounded-full text-sm font-body font-medium transition-all ${formData.accessibility_needs.includes(need.id) ? "gradient-safari text-primary-foreground" : "bg-primary-foreground/10 hover:bg-primary-foreground/20"}`}
                     >
                       {need.label}
                     </button>
@@ -203,8 +244,8 @@ const OnboardingPage = () => {
                   {languages.map((lang) => (
                     <button
                       key={lang}
-                      onClick={() => setProfile({ ...profile, languages: toggleArrayItem(profile.languages, lang) })}
-                      className={`px-4 py-2 rounded-full text-sm font-body font-medium transition-all ${profile.languages.includes(lang) ? "gradient-sunset text-primary-foreground" : "bg-primary-foreground/10 hover:bg-primary-foreground/20"}`}
+                      onClick={() => setFormData({ ...formData, languages: toggleArrayItem(formData.languages, lang) })}
+                      className={`px-4 py-2 rounded-full text-sm font-body font-medium transition-all ${formData.languages.includes(lang) ? "gradient-sunset text-primary-foreground" : "bg-primary-foreground/10 hover:bg-primary-foreground/20"}`}
                     >
                       {lang}
                     </button>
@@ -216,16 +257,21 @@ const OnboardingPage = () => {
             {step === 5 && (
               <div className="text-center">
                 <div className="text-5xl mb-4">🎉</div>
-                <h2 className="font-display text-2xl font-bold mb-2">You're all set, {profile.name || "Explorer"}!</h2>
+                <h2 className="font-display text-2xl font-bold mb-2">You're all set, {formData.full_name || "Explorer"}!</h2>
                 <p className="text-primary-foreground/60 font-body mb-8">Your personalized Kenya adventure awaits. We'll recommend experiences based on your preferences.</p>
                 <div className="flex flex-wrap justify-center gap-2 mb-8">
-                  {profile.travelStyles.map((s) => {
+                  {formData.travel_styles.map((s) => {
                     const style = travelStyles.find((ts) => ts.id === s);
                     return style ? (
                       <span key={s} className="px-3 py-1 rounded-full bg-savannah-gold/20 text-savannah-gold text-xs font-body">{style.emoji} {style.label}</span>
                     ) : null;
                   })}
                 </div>
+                {!user && (
+                  <p className="text-primary-foreground/40 text-sm font-body">
+                    <button onClick={() => navigate("/auth")} className="text-savannah-gold hover:underline">Sign in</button> to save your preferences permanently
+                  </p>
+                )}
               </div>
             )}
 
@@ -243,8 +289,8 @@ const OnboardingPage = () => {
                   Continue <ChevronRight className="h-4 w-4 ml-1" />
                 </Button>
               ) : (
-                <Button onClick={completeOnboarding} className="gradient-sunset text-primary-foreground border-0">
-                  Start Exploring <ChevronRight className="h-4 w-4 ml-1" />
+                <Button onClick={completeOnboarding} disabled={saving} className="gradient-sunset text-primary-foreground border-0">
+                  {saving ? "Saving..." : "Start Exploring"} <ChevronRight className="h-4 w-4 ml-1" />
                 </Button>
               )}
             </div>

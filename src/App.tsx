@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import DestinationsPage from "./pages/DestinationsPage";
 import DestinationDetail from "./pages/DestinationDetail";
@@ -16,6 +17,8 @@ import SafetyPage from "./pages/SafetyPage";
 import ImpactPage from "./pages/ImpactPage";
 import NomadsPage from "./pages/NomadsPage";
 import OnboardingPage from "./pages/OnboardingPage";
+import AuthPage from "./pages/AuthPage";
+import ProfilePage from "./pages/ProfilePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,22 +29,26 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/destinations" element={<DestinationsPage />} />
-          <Route path="/destinations/:id" element={<DestinationDetail />} />
-          <Route path="/experiences" element={<ExperiencesPage />} />
-          <Route path="/wildlife" element={<WildlifePage />} />
-          <Route path="/community" element={<CommunityPage />} />
-          <Route path="/guides" element={<GuidesPage />} />
-          <Route path="/events" element={<EventsPage />} />
-          <Route path="/food" element={<FoodPage />} />
-          <Route path="/safety" element={<SafetyPage />} />
-          <Route path="/impact" element={<ImpactPage />} />
-          <Route path="/nomads" element={<NomadsPage />} />
-          <Route path="/onboard" element={<OnboardingPage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/destinations" element={<DestinationsPage />} />
+            <Route path="/destinations/:id" element={<DestinationDetail />} />
+            <Route path="/experiences" element={<ExperiencesPage />} />
+            <Route path="/wildlife" element={<WildlifePage />} />
+            <Route path="/community" element={<CommunityPage />} />
+            <Route path="/guides" element={<GuidesPage />} />
+            <Route path="/events" element={<EventsPage />} />
+            <Route path="/food" element={<FoodPage />} />
+            <Route path="/safety" element={<SafetyPage />} />
+            <Route path="/impact" element={<ImpactPage />} />
+            <Route path="/nomads" element={<NomadsPage />} />
+            <Route path="/onboard" element={<OnboardingPage />} />
+            <Route path="/auth" element={<AuthPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

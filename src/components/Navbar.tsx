@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Globe, Heart, User, ChevronDown } from "lucide-react";
+import { Menu, X, Globe, Heart, User, ChevronDown, LogOut } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
 
 const navLinks = [
   { label: "Destinations", href: "/destinations" },
@@ -24,6 +25,7 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
   const location = useLocation();
+  const { user, profile, signOut } = useAuth();
 
   return (
     <motion.nav
@@ -87,12 +89,31 @@ const Navbar = () => {
           <Button variant="ghost" size="icon" className="text-primary-foreground/80 hover:text-savannah-gold hover:bg-primary-foreground/10">
             <Heart className="h-4 w-4" />
           </Button>
-          <Link to="/onboard">
-            <Button className="gradient-sunset text-primary-foreground font-medium rounded-full px-5 text-sm border-0">
-              <User className="h-4 w-4 mr-2" />
-              Get Started
-            </Button>
-          </Link>
+          {user ? (
+            <div className="flex items-center gap-2">
+              <Link to="/profile">
+                <Button variant="ghost" className="text-primary-foreground/80 hover:text-savannah-gold hover:bg-primary-foreground/10 rounded-full px-3 text-sm">
+                  <User className="h-4 w-4 mr-1" />
+                  {profile?.full_name || "Profile"}
+                </Button>
+              </Link>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => signOut()}
+                className="text-primary-foreground/80 hover:text-savannah-gold hover:bg-primary-foreground/10"
+              >
+                <LogOut className="h-4 w-4" />
+              </Button>
+            </div>
+          ) : (
+            <Link to="/auth">
+              <Button className="gradient-sunset text-primary-foreground font-medium rounded-full px-5 text-sm border-0">
+                <User className="h-4 w-4 mr-2" />
+                Sign In
+              </Button>
+            </Link>
+          )}
         </div>
 
         <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden text-primary-foreground/80">
@@ -119,11 +140,22 @@ const Navbar = () => {
                   {link.label}
                 </Link>
               ))}
-              <Link to="/onboard" onClick={() => setMobileOpen(false)}>
-                <Button className="gradient-sunset text-primary-foreground font-medium rounded-full mt-2 border-0 w-full">
-                  Get Started
-                </Button>
-              </Link>
+              {user ? (
+                <>
+                  <Link to="/profile" onClick={() => setMobileOpen(false)} className="text-sm font-medium py-2 text-primary-foreground/80">
+                    My Profile
+                  </Link>
+                  <Button onClick={() => { signOut(); setMobileOpen(false); }} variant="ghost" className="text-primary-foreground/80 justify-start px-0">
+                    <LogOut className="h-4 w-4 mr-2" /> Sign Out
+                  </Button>
+                </>
+              ) : (
+                <Link to="/auth" onClick={() => setMobileOpen(false)}>
+                  <Button className="gradient-sunset text-primary-foreground font-medium rounded-full mt-2 border-0 w-full">
+                    Sign In
+                  </Button>
+                </Link>
+              )}
             </div>
           </motion.div>
         )}
