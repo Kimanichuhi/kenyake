@@ -88,8 +88,24 @@ const GuidesPage = () => {
   const [loading, setLoading] = useState(true);
   const [bookingLoading, setBookingLoading] = useState(false);
   const [sortBy, setSortBy] = useState<"rating" | "price" | "experience" | "response">("rating");
+  const [selectedForGroup, setSelectedForGroup] = useState<string[]>([]);
+  const [groupTripForm, setGroupTripForm] = useState({ title: "", description: "", startDate: "", endDate: "", groupSize: 1 });
+  const [showGroupPanel, setShowGroupPanel] = useState(false);
+  const [groupLoading, setGroupLoading] = useState(false);
+  const [isGuide, setIsGuide] = useState(false);
   const { user } = useAuth();
   const { toast } = useToast();
+
+  useEffect(() => {
+    fetchGuides();
+    if (user) checkIfGuide();
+  }, [user]);
+
+  const checkIfGuide = async () => {
+    if (!user) return;
+    const { data } = await supabase.from("guides").select("id").eq("user_id", user.id).maybeSingle();
+    setIsGuide(!!data);
+  };
 
   useEffect(() => {
     fetchGuides();
