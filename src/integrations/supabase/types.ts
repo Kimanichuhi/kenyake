@@ -353,6 +353,63 @@ export type Database = {
         }
         Relationships: []
       }
+      carbon_offset_projects: {
+        Row: {
+          county: string | null
+          cover_image: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_published: boolean | null
+          is_verified: boolean | null
+          location_name: string | null
+          partner_name: string | null
+          price_per_ton_kes: number | null
+          project_type: string
+          slug: string
+          title: string
+          tons_available: number | null
+          tons_offset_total: number | null
+          updated_at: string
+        }
+        Insert: {
+          county?: string | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_published?: boolean | null
+          is_verified?: boolean | null
+          location_name?: string | null
+          partner_name?: string | null
+          price_per_ton_kes?: number | null
+          project_type?: string
+          slug: string
+          title: string
+          tons_available?: number | null
+          tons_offset_total?: number | null
+          updated_at?: string
+        }
+        Update: {
+          county?: string | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_published?: boolean | null
+          is_verified?: boolean | null
+          location_name?: string | null
+          partner_name?: string | null
+          price_per_ton_kes?: number | null
+          project_type?: string
+          slug?: string
+          title?: string
+          tons_available?: number | null
+          tons_offset_total?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       communities: {
         Row: {
           adornment_explanation: string | null
@@ -684,6 +741,71 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "community_gallery_community_id_fkey"
+            columns: ["community_id"]
+            isOneToOne: false
+            referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_impact_reports: {
+        Row: {
+          community_id: string | null
+          conservation_fund_kes: number | null
+          created_at: string
+          education_fund_kes: number | null
+          hectares_conserved: number | null
+          id: string
+          infrastructure_fund_kes: number | null
+          is_published: boolean | null
+          local_employment_count: number | null
+          local_procurement_percent: number | null
+          schools_supported: number | null
+          summary: string | null
+          total_revenue_kes: number | null
+          total_visitors: number | null
+          trees_planted: number | null
+          year: number
+        }
+        Insert: {
+          community_id?: string | null
+          conservation_fund_kes?: number | null
+          created_at?: string
+          education_fund_kes?: number | null
+          hectares_conserved?: number | null
+          id?: string
+          infrastructure_fund_kes?: number | null
+          is_published?: boolean | null
+          local_employment_count?: number | null
+          local_procurement_percent?: number | null
+          schools_supported?: number | null
+          summary?: string | null
+          total_revenue_kes?: number | null
+          total_visitors?: number | null
+          trees_planted?: number | null
+          year: number
+        }
+        Update: {
+          community_id?: string | null
+          conservation_fund_kes?: number | null
+          created_at?: string
+          education_fund_kes?: number | null
+          hectares_conserved?: number | null
+          id?: string
+          infrastructure_fund_kes?: number | null
+          is_published?: boolean | null
+          local_employment_count?: number | null
+          local_procurement_percent?: number | null
+          schools_supported?: number | null
+          summary?: string | null
+          total_revenue_kes?: number | null
+          total_visitors?: number | null
+          trees_planted?: number | null
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_impact_reports_community_id_fkey"
             columns: ["community_id"]
             isOneToOne: false
             referencedRelation: "communities"
@@ -2232,6 +2354,36 @@ export type Database = {
           },
         ]
       }
+      impact_certificates: {
+        Row: {
+          certificate_type: string
+          id: string
+          issued_at: string
+          share_token: string | null
+          stats: Json | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          certificate_type?: string
+          id?: string
+          issued_at?: string
+          share_token?: string | null
+          stats?: Json | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          certificate_type?: string
+          id?: string
+          issued_at?: string
+          share_token?: string | null
+          stats?: Json | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       internet_zones: {
         Row: {
           address: string | null
@@ -3018,6 +3170,42 @@ export type Database = {
           },
         ]
       }
+      operator_impact_badges: {
+        Row: {
+          awarded_at: string
+          badge_label: string
+          badge_type: string
+          expires_at: string | null
+          id: string
+          is_active: boolean | null
+          operator_id: string
+          operator_type: string
+          score: number | null
+        }
+        Insert: {
+          awarded_at?: string
+          badge_label: string
+          badge_type: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          operator_id: string
+          operator_type: string
+          score?: number | null
+        }
+        Update: {
+          awarded_at?: string
+          badge_label?: string
+          badge_type?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          operator_id?: string
+          operator_type?: string
+          score?: number | null
+        }
+        Relationships: []
+      }
       park_gates: {
         Row: {
           closing_time: string | null
@@ -3333,6 +3521,121 @@ export type Database = {
             columns: ["package_id"]
             isOneToOne: false
             referencedRelation: "budget_packages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sponsorship_contributions: {
+        Row: {
+          amount_kes: number
+          created_at: string
+          id: string
+          is_anonymous: boolean | null
+          message: string | null
+          project_id: string
+          units: number | null
+          user_id: string
+        }
+        Insert: {
+          amount_kes: number
+          created_at?: string
+          id?: string
+          is_anonymous?: boolean | null
+          message?: string | null
+          project_id: string
+          units?: number | null
+          user_id: string
+        }
+        Update: {
+          amount_kes?: number
+          created_at?: string
+          id?: string
+          is_anonymous?: boolean | null
+          message?: string | null
+          project_id?: string
+          units?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sponsorship_contributions_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "sponsorship_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sponsorship_projects: {
+        Row: {
+          community_id: string | null
+          county: string | null
+          cover_image: string | null
+          created_at: string
+          description: string | null
+          goal_amount_kes: number | null
+          id: string
+          is_featured: boolean | null
+          is_published: boolean | null
+          project_type: string
+          raised_amount_kes: number | null
+          slug: string
+          sponsor_count: number | null
+          title: string
+          unit_cost_kes: number | null
+          unit_label: string | null
+          units_completed: number | null
+          units_goal: number | null
+          updated_at: string
+        }
+        Insert: {
+          community_id?: string | null
+          county?: string | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          goal_amount_kes?: number | null
+          id?: string
+          is_featured?: boolean | null
+          is_published?: boolean | null
+          project_type?: string
+          raised_amount_kes?: number | null
+          slug: string
+          sponsor_count?: number | null
+          title: string
+          unit_cost_kes?: number | null
+          unit_label?: string | null
+          units_completed?: number | null
+          units_goal?: number | null
+          updated_at?: string
+        }
+        Update: {
+          community_id?: string | null
+          county?: string | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          goal_amount_kes?: number | null
+          id?: string
+          is_featured?: boolean | null
+          is_published?: boolean | null
+          project_type?: string
+          raised_amount_kes?: number | null
+          slug?: string
+          sponsor_count?: number | null
+          title?: string
+          unit_cost_kes?: number | null
+          unit_label?: string | null
+          units_completed?: number | null
+          units_goal?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sponsorship_projects_community_id_fkey"
+            columns: ["community_id"]
+            isOneToOne: false
+            referencedRelation: "communities"
             referencedColumns: ["id"]
           },
         ]
