@@ -431,9 +431,24 @@ const GuidesPage = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.06 }}
-                  className="bg-card rounded-xl border border-border overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+                  className={`bg-card rounded-xl border overflow-hidden hover:shadow-lg transition-shadow cursor-pointer ${
+                    selectedForGroup.includes(guide.id) ? "border-primary ring-2 ring-primary/20" : "border-border"
+                  }`}
                   onClick={() => openGuideProfile(guide.id)}
                 >
+                  {/* Multi-select checkbox */}
+                  {showGroupPanel && (
+                    <button
+                      onClick={(e) => { e.stopPropagation(); toggleGroupSelect(guide.id); }}
+                      className={`absolute top-3 right-3 z-10 h-6 w-6 rounded-full border-2 flex items-center justify-center transition-colors ${
+                        selectedForGroup.includes(guide.id)
+                          ? "bg-primary border-primary text-primary-foreground"
+                          : "bg-card/80 border-primary-foreground/50 backdrop-blur"
+                      }`}
+                    >
+                      {selectedForGroup.includes(guide.id) && <CheckCircle2 className="h-4 w-4" />}
+                    </button>
+                  )}
                   <div className="relative">
                     <img
                       src={guide.photo_url || "https://via.placeholder.com/400x300"}
