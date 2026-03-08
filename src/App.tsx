@@ -26,6 +26,7 @@ import CommunityProfilePage from "./pages/CommunityProfilePage";
 import CulturalPrepPage from "./pages/CulturalPrepPage";
 import GuideRegisterPage from "./pages/GuideRegisterPage";
 import GuideDashboardPage from "./pages/GuideDashboardPage";
+import AccommodationPage from "./pages/AccommodationPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
