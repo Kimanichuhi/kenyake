@@ -186,7 +186,57 @@ const GuidesPage = () => {
     }
   };
 
-  const sorted = [...guides].sort((a, b) => {
+  const toggleGroupSelect = (guideId: string) => {
+    setSelectedForGroup((prev) =>
+      prev.includes(guideId) ? prev.filter((id) => id !== guideId) : [...prev, guideId]
+    );
+  };
+
+  const createGroupTrip = async () => {
+    if (!user) {
+      toast({ title: "Sign in required", variant: "destructive" });
+      return;
+    }
+    if (selectedForGroup.length < 2) {
+      toast({ title: "Select at least 2 guides", description: "Group trips require multiple guides.", variant: "destructive" });
+      return;
+    }
+    if (!groupTripForm.title || !groupTripForm.startDate || !groupTripForm.endDate) {
+      toast({ title: "Fill in trip details", variant: "destructive" });
+      return;
+    }
+
+    setGroupLoading(true);
+    const { data: trip, error } = await supabase.from("group_trips").insert({
+      tourist_id: user.id,
+      title: groupTripForm.title,
+      description: groupTripForm.description || null,
+      start_date: groupTripForm.startDate,
+      end_date: groupTripForm.endDate,
+      group_size: groupTripForm.groupSize,
+    }).select().single();
+
+    if (error || !trip) {
+      setGroupLoading(false);
+      toast({ title: "Failed to create trip", description: error?.message, variant: "destructive" });
+      return;
+    }
+
+    // Add guides to the trip
+    const guideInserts = selectedForGroup.map((guideId, i) => ({
+      trip_id: trip.id,
+      guide_id: guideId,
+      role: i === 0 ? "lead" : "guide",
+    }));
+    await supabase.from("group_trip_guides").insert(guideInserts);
+
+    setGroupLoading(false);
+    setShowGroupPanel(false);
+    setSelectedForGroup([]);
+    toast({ title: "🎉 Group trip created!", description: `${selectedForGroup.length} guides invited. They'll respond soon.` });
+  };
+
+
     if (sortBy === "rating") return b.rating - a.rating;
     if (sortBy === "price") return (a.price_per_day || 0) - (b.price_per_day || 0);
     if (sortBy === "experience") return b.years_experience - a.years_experience;
