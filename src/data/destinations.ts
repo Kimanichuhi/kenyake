@@ -78,6 +78,8 @@ export const destinations: Destination[] = [
     safetyRating: 4,
     accessibilityRating: 3,
     photographyScore: 5,
+    lat: -1.4833,
+    lng: 35.0000,
   },
   {
     id: "amboseli",
