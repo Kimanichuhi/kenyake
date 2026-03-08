@@ -119,6 +119,57 @@ export type Database = {
         }
         Relationships: []
       }
+      wildlife_sightings: {
+        Row: {
+          animal_count: number | null
+          behavior: string | null
+          created_at: string
+          description: string | null
+          id: string
+          lat: number
+          lng: number
+          location_name: string
+          park_name: string | null
+          photo_url: string | null
+          species: string
+          species_category: string
+          user_id: string
+          verified: boolean | null
+        }
+        Insert: {
+          animal_count?: number | null
+          behavior?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          lat: number
+          lng: number
+          location_name: string
+          park_name?: string | null
+          photo_url?: string | null
+          species: string
+          species_category?: string
+          user_id: string
+          verified?: boolean | null
+        }
+        Update: {
+          animal_count?: number | null
+          behavior?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          lat?: number
+          lng?: number
+          location_name?: string
+          park_name?: string | null
+          photo_url?: string | null
+          species?: string
+          species_category?: string
+          user_id?: string
+          verified?: boolean | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
