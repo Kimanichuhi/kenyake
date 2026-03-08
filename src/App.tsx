@@ -29,6 +29,7 @@ import GuideDashboardPage from "./pages/GuideDashboardPage";
 import AccommodationPage from "./pages/AccommodationPage";
 import MarketplacePage from "./pages/MarketplacePage";
 import TransportPage from "./pages/TransportPage";
+import DomesticPage from "./pages/DomesticPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -66,6 +67,7 @@ const App = () => (
             <Route path="/accommodation" element={<AccommodationPage />} />
             <Route path="/marketplace" element={<MarketplacePage />} />
             <Route path="/transport" element={<TransportPage />} />
+            <Route path="/domestic" element={<DomesticPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>

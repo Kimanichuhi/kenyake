@@ -27,6 +27,7 @@ const moreLinks = [
   { label: "Safety", href: "/safety" },
   { label: "Your Impact", href: "/impact" },
   { label: "📚 Cultural Prep", href: "/cultural-prep" },
+  { label: "🇰🇪 Tembea Kenya", href: "/domestic" },
 ];
 
 const Navbar = () => {
