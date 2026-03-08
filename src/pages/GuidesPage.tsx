@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import {
   Search, Star, MapPin, Clock, Languages, Award, Calendar, MessageCircle,
   ChevronDown, ChevronRight, Filter, Shield, Zap, Users, DollarSign,
@@ -87,8 +88,24 @@ const GuidesPage = () => {
   const [loading, setLoading] = useState(true);
   const [bookingLoading, setBookingLoading] = useState(false);
   const [sortBy, setSortBy] = useState<"rating" | "price" | "experience" | "response">("rating");
+  const [selectedForGroup, setSelectedForGroup] = useState<string[]>([]);
+  const [groupTripForm, setGroupTripForm] = useState({ title: "", description: "", startDate: "", endDate: "", groupSize: 1 });
+  const [showGroupPanel, setShowGroupPanel] = useState(false);
+  const [groupLoading, setGroupLoading] = useState(false);
+  const [isGuide, setIsGuide] = useState(false);
   const { user } = useAuth();
   const { toast } = useToast();
+
+  useEffect(() => {
+    fetchGuides();
+    if (user) checkIfGuide();
+  }, [user]);
+
+  const checkIfGuide = async () => {
+    if (!user) return;
+    const { data } = await supabase.from("guides").select("id").eq("user_id", user.id).maybeSingle();
+    setIsGuide(!!data);
+  };
 
   useEffect(() => {
     fetchGuides();
@@ -169,6 +186,56 @@ const GuidesPage = () => {
     }
   };
 
+  const toggleGroupSelect = (guideId: string) => {
+    setSelectedForGroup((prev) =>
+      prev.includes(guideId) ? prev.filter((id) => id !== guideId) : [...prev, guideId]
+    );
+  };
+
+  const createGroupTrip = async () => {
+    if (!user) {
+      toast({ title: "Sign in required", variant: "destructive" });
+      return;
+    }
+    if (selectedForGroup.length < 2) {
+      toast({ title: "Select at least 2 guides", description: "Group trips require multiple guides.", variant: "destructive" });
+      return;
+    }
+    if (!groupTripForm.title || !groupTripForm.startDate || !groupTripForm.endDate) {
+      toast({ title: "Fill in trip details", variant: "destructive" });
+      return;
+    }
+
+    setGroupLoading(true);
+    const { data: trip, error } = await supabase.from("group_trips").insert({
+      tourist_id: user.id,
+      title: groupTripForm.title,
+      description: groupTripForm.description || null,
+      start_date: groupTripForm.startDate,
+      end_date: groupTripForm.endDate,
+      group_size: groupTripForm.groupSize,
+    }).select().single();
+
+    if (error || !trip) {
+      setGroupLoading(false);
+      toast({ title: "Failed to create trip", description: error?.message, variant: "destructive" });
+      return;
+    }
+
+    // Add guides to the trip
+    const guideInserts = selectedForGroup.map((guideId, i) => ({
+      trip_id: trip.id,
+      guide_id: guideId,
+      role: i === 0 ? "lead" : "guide",
+    }));
+    await supabase.from("group_trip_guides").insert(guideInserts);
+
+    setGroupLoading(false);
+    setShowGroupPanel(false);
+    setSelectedForGroup([]);
+    toast({ title: "🎉 Group trip created!", description: `${selectedForGroup.length} guides invited. They'll respond soon.` });
+  };
+
   const sorted = [...guides].sort((a, b) => {
     if (sortBy === "rating") return b.rating - a.rating;
     if (sortBy === "price") return (a.price_per_day || 0) - (b.price_per_day || 0);
@@ -207,6 +274,25 @@ const GuidesPage = () => {
               Connect directly with certified Kenyan guides. Fair pricing set by guides, not platforms.
               Book with confidence — every guide is community-verified.
             </p>
+            <div className="flex justify-center gap-3 mt-4">
+              {user && isGuide ? (
+                <Button asChild variant="outline" className="rounded-full text-sm">
+                  <Link to="/guide-dashboard">📊 Guide Dashboard</Link>
+                </Button>
+              ) : (
+                <Button asChild variant="outline" className="rounded-full text-sm">
+                  <Link to="/guide-register">🎓 Become a Guide</Link>
+                </Button>
+              )}
+              <Button
+                variant={selectedForGroup.length > 0 ? "default" : "outline"}
+                className="rounded-full text-sm"
+                onClick={() => setShowGroupPanel(!showGroupPanel)}
+              >
+                <Users className="h-4 w-4 mr-1" />
+                {selectedForGroup.length > 0 ? `Group Trip (${selectedForGroup.length} guides)` : "Multi-Guide Trip"}
+              </Button>
+            </div>
           </motion.div>
 
           {/* Search & filters */}
@@ -260,7 +346,75 @@ const GuidesPage = () => {
         </div>
       </section>
 
-      {/* Guide grid */}
+      {/* Group Trip Panel */}
+      <AnimatePresence>
+        {showGroupPanel && (
+          <motion.section
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="overflow-hidden border-y border-border bg-card/50"
+          >
+            <div className="container mx-auto px-4 py-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-display font-semibold text-foreground flex items-center gap-2">
+                  <Users className="h-5 w-5 text-primary" /> Create Multi-Guide Group Trip
+                </h3>
+                <Button variant="ghost" size="sm" onClick={() => setShowGroupPanel(false)}>
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+              {selectedForGroup.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {selectedForGroup.map((gid) => {
+                    const g = guides.find((x) => x.id === gid);
+                    return g ? (
+                      <Badge key={gid} className="bg-primary/15 text-primary border-primary/25 text-xs">
+                        {g.name}
+                        <button onClick={() => toggleGroupSelect(gid)} className="ml-1"><X className="h-3 w-3" /></button>
+                      </Badge>
+                    ) : null;
+                  })}
+                </div>
+              )}
+              <p className="text-xs text-muted-foreground font-body mb-3">
+                Select guides from the grid below, then fill in trip details. Guides will be able to communicate with each other.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+                <input
+                  value={groupTripForm.title}
+                  onChange={(e) => setGroupTripForm((p) => ({ ...p, title: e.target.value }))}
+                  placeholder="Trip title (e.g. Mara + Coast Safari)"
+                  className="border border-border rounded-lg px-3 py-2 text-sm font-body bg-background text-foreground"
+                />
+                <input
+                  type="date"
+                  value={groupTripForm.startDate}
+                  onChange={(e) => setGroupTripForm((p) => ({ ...p, startDate: e.target.value }))}
+                  min={new Date().toISOString().split("T")[0]}
+                  className="border border-border rounded-lg px-3 py-2 text-sm font-body bg-background text-foreground"
+                />
+                <input
+                  type="date"
+                  value={groupTripForm.endDate}
+                  onChange={(e) => setGroupTripForm((p) => ({ ...p, endDate: e.target.value }))}
+                  min={groupTripForm.startDate || new Date().toISOString().split("T")[0]}
+                  className="border border-border rounded-lg px-3 py-2 text-sm font-body bg-background text-foreground"
+                />
+              </div>
+              <Button
+                onClick={createGroupTrip}
+                disabled={groupLoading || selectedForGroup.length < 2 || !groupTripForm.title}
+                className="rounded-full"
+              >
+                {groupLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Send className="h-4 w-4 mr-2" />}
+                Create Group Trip ({selectedForGroup.length} guides)
+              </Button>
+            </div>
+          </motion.section>
+        )}
+      </AnimatePresence>
+
       <section className="py-12">
         <div className="container mx-auto px-4">
           <p className="font-body text-sm text-muted-foreground mb-6">{filtered.length} guides found</p>
@@ -277,9 +431,24 @@ const GuidesPage = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.06 }}
-                  className="bg-card rounded-xl border border-border overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+                  className={`relative bg-card rounded-xl border overflow-hidden hover:shadow-lg transition-shadow cursor-pointer ${
+                    selectedForGroup.includes(guide.id) ? "border-primary ring-2 ring-primary/20" : "border-border"
+                  }`}
                   onClick={() => openGuideProfile(guide.id)}
                 >
+                  {/* Multi-select checkbox */}
+                  {showGroupPanel && (
+                    <button
+                      onClick={(e) => { e.stopPropagation(); toggleGroupSelect(guide.id); }}
+                      className={`absolute top-3 right-3 z-10 h-6 w-6 rounded-full border-2 flex items-center justify-center transition-colors ${
+                        selectedForGroup.includes(guide.id)
+                          ? "bg-primary border-primary text-primary-foreground"
+                          : "bg-card/80 border-primary-foreground/50 backdrop-blur"
+                      }`}
+                    >
+                      {selectedForGroup.includes(guide.id) && <CheckCircle2 className="h-4 w-4" />}
+                    </button>
+                  )}
                   <div className="relative">
                     <img
                       src={guide.photo_url || "https://via.placeholder.com/400x300"}

@@ -540,6 +540,96 @@ export type Database = {
           },
         ]
       }
+      group_trip_guides: {
+        Row: {
+          created_at: string
+          guide_id: string
+          id: string
+          notes: string | null
+          price_agreed: number | null
+          role: string | null
+          status: string | null
+          trip_id: string
+        }
+        Insert: {
+          created_at?: string
+          guide_id: string
+          id?: string
+          notes?: string | null
+          price_agreed?: number | null
+          role?: string | null
+          status?: string | null
+          trip_id: string
+        }
+        Update: {
+          created_at?: string
+          guide_id?: string
+          id?: string
+          notes?: string | null
+          price_agreed?: number | null
+          role?: string | null
+          status?: string | null
+          trip_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "group_trip_guides_guide_id_fkey"
+            columns: ["guide_id"]
+            isOneToOne: false
+            referencedRelation: "guides"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "group_trip_guides_trip_id_fkey"
+            columns: ["trip_id"]
+            isOneToOne: false
+            referencedRelation: "group_trips"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      group_trips: {
+        Row: {
+          created_at: string
+          description: string | null
+          end_date: string
+          group_size: number | null
+          id: string
+          start_date: string
+          status: string | null
+          title: string
+          total_price: number | null
+          tourist_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          end_date: string
+          group_size?: number | null
+          id?: string
+          start_date: string
+          status?: string | null
+          title: string
+          total_price?: number | null
+          tourist_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          end_date?: string
+          group_size?: number | null
+          id?: string
+          start_date?: string
+          status?: string | null
+          title?: string
+          total_price?: number | null
+          tourist_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       guide_availability: {
         Row: {
           date: string
@@ -621,6 +711,38 @@ export type Database = {
             columns: ["guide_id"]
             isOneToOne: false
             referencedRelation: "guides"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guide_messages: {
+        Row: {
+          created_at: string
+          id: string
+          message: string
+          sender_id: string
+          trip_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message: string
+          sender_id: string
+          trip_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string
+          sender_id?: string
+          trip_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guide_messages_trip_id_fkey"
+            columns: ["trip_id"]
+            isOneToOne: false
+            referencedRelation: "group_trips"
             referencedColumns: ["id"]
           },
         ]
