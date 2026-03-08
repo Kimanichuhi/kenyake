@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import {
   Search, Star, MapPin, Clock, Languages, Award, Calendar, MessageCircle,
   ChevronDown, ChevronRight, Filter, Shield, Zap, Users, DollarSign,
