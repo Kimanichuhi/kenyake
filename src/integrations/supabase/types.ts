@@ -1541,6 +1541,63 @@ export type Database = {
         }
         Relationships: []
       }
+      lost_found: {
+        Row: {
+          category: string | null
+          contact_method: string | null
+          county: string | null
+          created_at: string
+          description: string
+          id: string
+          is_published: boolean | null
+          is_resolved: boolean | null
+          lat: number | null
+          lng: number | null
+          location_name: string | null
+          photo_url: string | null
+          post_type: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          contact_method?: string | null
+          county?: string | null
+          created_at?: string
+          description: string
+          id?: string
+          is_published?: boolean | null
+          is_resolved?: boolean | null
+          lat?: number | null
+          lng?: number | null
+          location_name?: string | null
+          photo_url?: string | null
+          post_type?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          contact_method?: string | null
+          county?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          is_published?: boolean | null
+          is_resolved?: boolean | null
+          lat?: number | null
+          lng?: number | null
+          location_name?: string | null
+          photo_url?: string | null
+          post_type?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       marketplace_orders: {
         Row: {
           buyer_id: string
@@ -1836,6 +1893,63 @@ export type Database = {
           },
         ]
       }
+      medical_facilities: {
+        Row: {
+          county: string
+          created_at: string
+          emergency_phone: string | null
+          facility_type: string
+          has_ambulance: boolean | null
+          has_emergency: boolean | null
+          has_pharmacy: boolean | null
+          id: string
+          is_published: boolean | null
+          lat: number | null
+          lng: number | null
+          location_name: string | null
+          name: string
+          operating_hours: string | null
+          phone: string | null
+          services: string[] | null
+        }
+        Insert: {
+          county: string
+          created_at?: string
+          emergency_phone?: string | null
+          facility_type?: string
+          has_ambulance?: boolean | null
+          has_emergency?: boolean | null
+          has_pharmacy?: boolean | null
+          id?: string
+          is_published?: boolean | null
+          lat?: number | null
+          lng?: number | null
+          location_name?: string | null
+          name: string
+          operating_hours?: string | null
+          phone?: string | null
+          services?: string[] | null
+        }
+        Update: {
+          county?: string
+          created_at?: string
+          emergency_phone?: string | null
+          facility_type?: string
+          has_ambulance?: boolean | null
+          has_emergency?: boolean | null
+          has_pharmacy?: boolean | null
+          id?: string
+          is_published?: boolean | null
+          lat?: number | null
+          lng?: number | null
+          location_name?: string | null
+          name?: string
+          operating_hours?: string | null
+          phone?: string | null
+          services?: string[] | null
+        }
+        Relationships: []
+      }
       park_gates: {
         Row: {
           closing_time: string | null
@@ -1980,6 +2094,57 @@ export type Database = {
           route_name?: string
           segment?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      safety_alerts: {
+        Row: {
+          alert_type: string
+          county: string | null
+          created_at: string
+          expires_at: string | null
+          id: string
+          is_active: boolean | null
+          lat: number | null
+          lng: number | null
+          message: string
+          region: string
+          reported_by: string | null
+          severity: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          alert_type?: string
+          county?: string | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          lat?: number | null
+          lng?: number | null
+          message: string
+          region: string
+          reported_by?: string | null
+          severity?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          alert_type?: string
+          county?: string | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          lat?: number | null
+          lng?: number | null
+          message?: string
+          region?: string
+          reported_by?: string | null
+          severity?: string
+          title?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -2329,6 +2494,48 @@ export type Database = {
           notes?: string | null
           rating?: number | null
           start_date?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      trusted_contacts: {
+        Row: {
+          contact_email: string | null
+          contact_name: string
+          contact_phone: string | null
+          created_at: string
+          id: string
+          is_sharing_location: boolean | null
+          last_shared_at: string | null
+          last_shared_lat: number | null
+          last_shared_lng: number | null
+          sharing_started_at: string | null
+          user_id: string
+        }
+        Insert: {
+          contact_email?: string | null
+          contact_name: string
+          contact_phone?: string | null
+          created_at?: string
+          id?: string
+          is_sharing_location?: boolean | null
+          last_shared_at?: string | null
+          last_shared_lat?: number | null
+          last_shared_lng?: number | null
+          sharing_started_at?: string | null
+          user_id: string
+        }
+        Update: {
+          contact_email?: string | null
+          contact_name?: string
+          contact_phone?: string | null
+          created_at?: string
+          id?: string
+          is_sharing_location?: boolean | null
+          last_shared_at?: string | null
+          last_shared_lat?: number | null
+          last_shared_lng?: number | null
+          sharing_started_at?: string | null
           user_id?: string
         }
         Relationships: []
