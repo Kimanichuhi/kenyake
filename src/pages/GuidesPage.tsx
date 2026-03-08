@@ -274,6 +274,25 @@ const GuidesPage = () => {
               Connect directly with certified Kenyan guides. Fair pricing set by guides, not platforms.
               Book with confidence — every guide is community-verified.
             </p>
+            <div className="flex justify-center gap-3 mt-4">
+              {user && isGuide ? (
+                <Button asChild variant="outline" className="rounded-full text-sm">
+                  <Link to="/guide-dashboard">📊 Guide Dashboard</Link>
+                </Button>
+              ) : (
+                <Button asChild variant="outline" className="rounded-full text-sm">
+                  <Link to="/guide-register">🎓 Become a Guide</Link>
+                </Button>
+              )}
+              <Button
+                variant={selectedForGroup.length > 0 ? "default" : "outline"}
+                className="rounded-full text-sm"
+                onClick={() => setShowGroupPanel(!showGroupPanel)}
+              >
+                <Users className="h-4 w-4 mr-1" />
+                {selectedForGroup.length > 0 ? `Group Trip (${selectedForGroup.length} guides)` : "Multi-Guide Trip"}
+              </Button>
+            </div>
           </motion.div>
 
           {/* Search & filters */}
