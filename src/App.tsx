@@ -61,6 +61,7 @@ const App = () => (
             <Route path="/cultural-prep" element={<CulturalPrepPage />} />
             <Route path="/guide-register" element={<GuideRegisterPage />} />
             <Route path="/guide-dashboard" element={<GuideDashboardPage />} />
+            <Route path="/accommodation" element={<AccommodationPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
