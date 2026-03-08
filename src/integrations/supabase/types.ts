@@ -349,6 +349,112 @@ export type Database = {
           },
         ]
       }
+      education_lessons: {
+        Row: {
+          body: string | null
+          created_at: string
+          id: string
+          media_type: string | null
+          media_url: string | null
+          module_id: string
+          quiz_questions: Json | null
+          sort_order: number | null
+          title: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          media_type?: string | null
+          media_url?: string | null
+          module_id: string
+          quiz_questions?: Json | null
+          sort_order?: number | null
+          title: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          media_type?: string | null
+          media_url?: string | null
+          module_id?: string
+          quiz_questions?: Json | null
+          sort_order?: number | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "education_lessons_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "education_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      education_modules: {
+        Row: {
+          category: string
+          community_id: string | null
+          cover_image: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          difficulty: string | null
+          estimated_minutes: number | null
+          icon: string | null
+          id: string
+          is_published: boolean | null
+          slug: string
+          sort_order: number | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          community_id?: string | null
+          cover_image?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          difficulty?: string | null
+          estimated_minutes?: number | null
+          icon?: string | null
+          id?: string
+          is_published?: boolean | null
+          slug: string
+          sort_order?: number | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          community_id?: string | null
+          cover_image?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          difficulty?: string | null
+          estimated_minutes?: number | null
+          icon?: string | null
+          id?: string
+          is_published?: boolean | null
+          slug?: string
+          sort_order?: number | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "education_modules_community_id_fkey"
+            columns: ["community_id"]
+            isOneToOne: false
+            referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_invitations: {
         Row: {
           created_at: string
@@ -538,6 +644,81 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      user_certifications: {
+        Row: {
+          certification_type: string
+          earned_at: string
+          id: string
+          modules_completed: string[] | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          certification_type: string
+          earned_at?: string
+          id?: string
+          modules_completed?: string[] | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          certification_type?: string
+          earned_at?: string
+          id?: string
+          modules_completed?: string[] | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_education_progress: {
+        Row: {
+          completed: boolean | null
+          completed_at: string | null
+          created_at: string
+          id: string
+          lesson_id: string | null
+          module_id: string
+          quiz_score: number | null
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          lesson_id?: string | null
+          module_id: string
+          quiz_score?: number | null
+          user_id: string
+        }
+        Update: {
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          lesson_id?: string | null
+          module_id?: string
+          quiz_score?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_education_progress_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "education_lessons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_education_progress_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "education_modules"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       wildlife_sightings: {
         Row: {

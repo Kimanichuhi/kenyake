@@ -22,6 +22,7 @@ const moreLinks = [
   { label: "Digital Nomads", href: "/nomads" },
   { label: "Safety", href: "/safety" },
   { label: "Your Impact", href: "/impact" },
+  { label: "📚 Cultural Prep", href: "/cultural-prep" },
 ];
 
 const Navbar = () => {
