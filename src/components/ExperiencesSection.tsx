@@ -1,42 +1,7 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { Clock, Star, Heart } from "lucide-react";
-
-import expBeadwork from "@/assets/exp-beadwork.jpg";
-import expCooking from "@/assets/exp-cooking.jpg";
-import expWalking from "@/assets/exp-walking-safari.jpg";
-
-const experiences = [
-  {
-    title: "Maasai Beadwork Workshop",
-    host: "Narok Women's Collective",
-    image: expBeadwork,
-    duration: "3 hours",
-    price: "$35",
-    rating: 4.9,
-    reviews: 128,
-    tag: "Cultural",
-  },
-  {
-    title: "Traditional Kenyan Cooking",
-    host: "Chef Wanjiku",
-    image: expCooking,
-    duration: "4 hours",
-    price: "$45",
-    rating: 4.8,
-    reviews: 256,
-    tag: "Food",
-  },
-  {
-    title: "Walking Safari Adventure",
-    host: "Mara Guides Association",
-    image: expWalking,
-    duration: "5 hours",
-    price: "$85",
-    rating: 4.9,
-    reviews: 342,
-    tag: "Adventure",
-  },
-];
+import { experiences } from "@/data/destinations";
 
 const ExperiencesSection = () => (
   <section id="experiences" className="py-20 lg:py-28 bg-muted/50">
@@ -60,9 +25,9 @@ const ExperiencesSection = () => (
       </motion.div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {experiences.map((exp, i) => (
+        {experiences.slice(0, 3).map((exp, i) => (
           <motion.div
-            key={exp.title}
+            key={exp.id}
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -70,16 +35,9 @@ const ExperiencesSection = () => (
             className="group cursor-pointer"
           >
             <div className="relative rounded-2xl overflow-hidden h-72 mb-4">
-              <img
-                src={exp.image}
-                alt={exp.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                loading="lazy"
-              />
+              <img src={exp.image} alt={exp.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
               <div className="absolute top-3 left-3">
-                <span className="gradient-safari text-primary-foreground text-xs font-body font-medium px-3 py-1 rounded-full">
-                  {exp.tag}
-                </span>
+                <span className="gradient-safari text-primary-foreground text-xs font-body font-medium px-3 py-1 rounded-full">{exp.tag}</span>
               </div>
               <button className="absolute top-3 right-3 h-8 w-8 rounded-full bg-background/70 backdrop-blur flex items-center justify-center hover:bg-background transition-colors">
                 <Heart className="h-4 w-4 text-foreground" />
@@ -103,6 +61,12 @@ const ExperiencesSection = () => (
             </div>
           </motion.div>
         ))}
+      </div>
+
+      <div className="text-center mt-10">
+        <Link to="/experiences" className="gradient-sunset text-primary-foreground rounded-full px-8 py-3 font-body font-semibold text-sm inline-block hover:opacity-90 transition-opacity">
+          View All Experiences →
+        </Link>
       </div>
     </div>
   </section>
