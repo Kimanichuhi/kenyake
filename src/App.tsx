@@ -19,6 +19,7 @@ import NomadsPage from "./pages/NomadsPage";
 import OnboardingPage from "./pages/OnboardingPage";
 import AuthPage from "./pages/AuthPage";
 import ProfilePage from "./pages/ProfilePage";
+import NearbyPage from "./pages/NearbyPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
