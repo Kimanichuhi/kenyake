@@ -21,6 +21,7 @@ import AuthPage from "./pages/AuthPage";
 import ProfilePage from "./pages/ProfilePage";
 import NearbyPage from "./pages/NearbyPage";
 import TripPlannerPage from "./pages/TripPlannerPage";
+import WildlifeIntelPage from "./pages/WildlifeIntelPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
