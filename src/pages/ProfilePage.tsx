@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
-import { User, MapPin, Heart, Wallet, Globe, LogOut, Settings, Bookmark, History } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
+import { User, MapPin, Heart, Wallet, Globe, LogOut, Settings, Bookmark, History, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
+import { useFavorites } from "@/hooks/useFavorites";
+import { destinations } from "@/data/destinations";
 import Navbar from "@/components/Navbar";
 import FooterSection from "@/components/FooterSection";
 
