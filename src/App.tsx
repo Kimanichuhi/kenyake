@@ -49,6 +49,7 @@ const App = () => (
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/nearby" element={<NearbyPage />} />
+            <Route path="/trip-planner" element={<TripPlannerPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
