@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.trip-assistant]
 verify_jwt = false
+
+[functions.wildlife-intel]
+verify_jwt = false

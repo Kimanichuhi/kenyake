@@ -51,6 +51,7 @@ const App = () => (
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/nearby" element={<NearbyPage />} />
             <Route path="/trip-planner" element={<TripPlannerPage />} />
+            <Route path="/wildlife-intel" element={<WildlifeIntelPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
