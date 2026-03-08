@@ -16,7 +16,8 @@ const navLinks = [
 const moreLinks = [
   { label: "🤖 Trip Planner", href: "/trip-planner" },
   { label: "🐾 Wildlife Intel", href: "/wildlife-intel" },
-  { label: "Local Guides", href: "/guides" },
+  { label: "🧭 Local Guides", href: "/guides" },
+  { label: "🎓 Become a Guide", href: "/guide-register" },
   { label: "Cultural Events", href: "/events" },
   { label: "Food & Dining", href: "/food" },
   { label: "Digital Nomads", href: "/nomads" },
