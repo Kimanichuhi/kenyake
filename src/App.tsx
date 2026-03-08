@@ -63,6 +63,7 @@ const App = () => (
             <Route path="/guide-register" element={<GuideRegisterPage />} />
             <Route path="/guide-dashboard" element={<GuideDashboardPage />} />
             <Route path="/accommodation" element={<AccommodationPage />} />
+            <Route path="/marketplace" element={<MarketplacePage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
