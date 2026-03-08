@@ -98,6 +98,8 @@ export const destinations: Destination[] = [
     safetyRating: 5,
     accessibilityRating: 4,
     photographyScore: 5,
+    lat: -2.6527,
+    lng: 37.2606,
   },
   {
     id: "diani-beach",
