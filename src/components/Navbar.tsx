@@ -14,10 +14,12 @@ const navLinks = [
 ];
 
 const moreLinks = [
+  { label: "🛍️ Marketplace", href: "/marketplace" },
   { label: "🤖 Trip Planner", href: "/trip-planner" },
   { label: "🐾 Wildlife Intel", href: "/wildlife-intel" },
   { label: "🧭 Local Guides", href: "/guides" },
   { label: "🎓 Become a Guide", href: "/guide-register" },
+  { label: "📍 Nearby", href: "/nearby" },
   { label: "Cultural Events", href: "/events" },
   { label: "Food & Dining", href: "/food" },
   { label: "Digital Nomads", href: "/nomads" },
