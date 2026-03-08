@@ -9,6 +9,7 @@ const navLinks = [
   { label: "Destinations", href: "/destinations" },
   { label: "Experiences", href: "/experiences" },
   { label: "Wildlife", href: "/wildlife" },
+  { label: "Nearby", href: "/nearby" },
   { label: "Community", href: "/community" },
 ];
 

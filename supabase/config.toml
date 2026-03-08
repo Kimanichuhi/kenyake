@@ -1,1 +1,4 @@
 project_id = "mohjvtborkhqhossbtyd"
+
+[functions.nearby-discover]
+verify_jwt = false
