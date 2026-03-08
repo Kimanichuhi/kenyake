@@ -14,6 +14,234 @@ export type Database = {
   }
   public: {
     Tables: {
+      communities: {
+        Row: {
+          adornment_explanation: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          county: string
+          created_at: string
+          current_visitor_count: number | null
+          description: string | null
+          ecological_knowledge: string | null
+          established_year: string | null
+          hero_image: string | null
+          history: string | null
+          id: string
+          is_published: boolean | null
+          lat: number | null
+          leader_name: string | null
+          leader_title: string | null
+          lng: number | null
+          managed_by: string | null
+          max_daily_visitors: number | null
+          name: string
+          origin_story: string | null
+          population: number | null
+          region: string | null
+          slug: string
+          specialty: string | null
+          traditional_dress: string | null
+          updated_at: string
+          visitor_guidelines: string | null
+        }
+        Insert: {
+          adornment_explanation?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          county: string
+          created_at?: string
+          current_visitor_count?: number | null
+          description?: string | null
+          ecological_knowledge?: string | null
+          established_year?: string | null
+          hero_image?: string | null
+          history?: string | null
+          id?: string
+          is_published?: boolean | null
+          lat?: number | null
+          leader_name?: string | null
+          leader_title?: string | null
+          lng?: number | null
+          managed_by?: string | null
+          max_daily_visitors?: number | null
+          name: string
+          origin_story?: string | null
+          population?: number | null
+          region?: string | null
+          slug: string
+          specialty?: string | null
+          traditional_dress?: string | null
+          updated_at?: string
+          visitor_guidelines?: string | null
+        }
+        Update: {
+          adornment_explanation?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          county?: string
+          created_at?: string
+          current_visitor_count?: number | null
+          description?: string | null
+          ecological_knowledge?: string | null
+          established_year?: string | null
+          hero_image?: string | null
+          history?: string | null
+          id?: string
+          is_published?: boolean | null
+          lat?: number | null
+          leader_name?: string | null
+          leader_title?: string | null
+          lng?: number | null
+          managed_by?: string | null
+          max_daily_visitors?: number | null
+          name?: string
+          origin_story?: string | null
+          population?: number | null
+          region?: string | null
+          slug?: string
+          specialty?: string | null
+          traditional_dress?: string | null
+          updated_at?: string
+          visitor_guidelines?: string | null
+        }
+        Relationships: []
+      }
+      community_content: {
+        Row: {
+          body: string | null
+          community_id: string
+          content_type: string
+          created_at: string
+          id: string
+          media_type: string | null
+          media_url: string | null
+          metadata: Json | null
+          sort_order: number | null
+          title: string
+        }
+        Insert: {
+          body?: string | null
+          community_id: string
+          content_type: string
+          created_at?: string
+          id?: string
+          media_type?: string | null
+          media_url?: string | null
+          metadata?: Json | null
+          sort_order?: number | null
+          title: string
+        }
+        Update: {
+          body?: string | null
+          community_id?: string
+          content_type?: string
+          created_at?: string
+          id?: string
+          media_type?: string | null
+          media_url?: string | null
+          metadata?: Json | null
+          sort_order?: number | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_content_community_id_fkey"
+            columns: ["community_id"]
+            isOneToOne: false
+            referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_gallery: {
+        Row: {
+          caption: string | null
+          community_id: string
+          created_at: string
+          id: string
+          is_approved: boolean | null
+          media_type: string
+          media_url: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          caption?: string | null
+          community_id: string
+          created_at?: string
+          id?: string
+          is_approved?: boolean | null
+          media_type?: string
+          media_url: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          caption?: string | null
+          community_id?: string
+          created_at?: string
+          id?: string
+          is_approved?: boolean | null
+          media_type?: string
+          media_url?: string
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_gallery_community_id_fkey"
+            columns: ["community_id"]
+            isOneToOne: false
+            referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_review_responses: {
+        Row: {
+          community_id: string
+          created_at: string
+          id: string
+          responded_at: string | null
+          responded_by: string | null
+          response_text: string | null
+          review_date: string | null
+          review_rating: number | null
+          review_text: string
+          reviewer_name: string
+        }
+        Insert: {
+          community_id: string
+          created_at?: string
+          id?: string
+          responded_at?: string | null
+          responded_by?: string | null
+          response_text?: string | null
+          review_date?: string | null
+          review_rating?: number | null
+          review_text: string
+          reviewer_name: string
+        }
+        Update: {
+          community_id?: string
+          created_at?: string
+          id?: string
+          responded_at?: string | null
+          responded_by?: string | null
+          response_text?: string | null
+          review_date?: string | null
+          review_rating?: number | null
+          review_text?: string
+          reviewer_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_review_responses_community_id_fkey"
+            columns: ["community_id"]
+            isOneToOne: false
+            referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           accessibility_needs: string[] | null
