@@ -1655,6 +1655,57 @@ export type Database = {
           },
         ]
       }
+      park_gates: {
+        Row: {
+          closing_time: string | null
+          created_at: string
+          entry_fee_nonresident: string | null
+          entry_fee_resident: string | null
+          entry_fee_vehicle: string | null
+          gate_name: string
+          id: string
+          is_published: boolean | null
+          lat: number | null
+          lng: number | null
+          notes: string | null
+          opening_time: string | null
+          park_name: string
+          requirements: string[] | null
+        }
+        Insert: {
+          closing_time?: string | null
+          created_at?: string
+          entry_fee_nonresident?: string | null
+          entry_fee_resident?: string | null
+          entry_fee_vehicle?: string | null
+          gate_name: string
+          id?: string
+          is_published?: boolean | null
+          lat?: number | null
+          lng?: number | null
+          notes?: string | null
+          opening_time?: string | null
+          park_name: string
+          requirements?: string[] | null
+        }
+        Update: {
+          closing_time?: string | null
+          created_at?: string
+          entry_fee_nonresident?: string | null
+          entry_fee_resident?: string | null
+          entry_fee_vehicle?: string | null
+          gate_name?: string
+          id?: string
+          is_published?: boolean | null
+          lat?: number | null
+          lng?: number | null
+          notes?: string | null
+          opening_time?: string | null
+          park_name?: string
+          requirements?: string[] | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           accessibility_needs: string[] | null
@@ -1706,6 +1757,51 @@ export type Database = {
         }
         Relationships: []
       }
+      road_conditions: {
+        Row: {
+          condition: string
+          created_at: string
+          description: string | null
+          id: string
+          is_current: boolean | null
+          lat: number | null
+          lng: number | null
+          photo_url: string | null
+          reported_at: string
+          route_name: string
+          segment: string | null
+          user_id: string
+        }
+        Insert: {
+          condition?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_current?: boolean | null
+          lat?: number | null
+          lng?: number | null
+          photo_url?: string | null
+          reported_at?: string
+          route_name: string
+          segment?: string | null
+          user_id: string
+        }
+        Update: {
+          condition?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_current?: boolean | null
+          lat?: number | null
+          lng?: number | null
+          photo_url?: string | null
+          reported_at?: string
+          route_name?: string
+          segment?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       saved_destinations: {
         Row: {
           destination_id: string
@@ -1726,6 +1822,302 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      transport_bookings: {
+        Row: {
+          booking_type: string
+          contact_phone: string | null
+          created_at: string
+          driver_id: string | null
+          dropoff_location: string | null
+          id: string
+          passenger_count: number | null
+          pickup_date: string
+          pickup_location: string
+          pickup_time: string | null
+          price_currency: string | null
+          return_date: string | null
+          special_requests: string | null
+          status: string | null
+          total_price: number | null
+          updated_at: string
+          user_id: string
+          vehicle_id: string | null
+        }
+        Insert: {
+          booking_type?: string
+          contact_phone?: string | null
+          created_at?: string
+          driver_id?: string | null
+          dropoff_location?: string | null
+          id?: string
+          passenger_count?: number | null
+          pickup_date: string
+          pickup_location: string
+          pickup_time?: string | null
+          price_currency?: string | null
+          return_date?: string | null
+          special_requests?: string | null
+          status?: string | null
+          total_price?: number | null
+          updated_at?: string
+          user_id: string
+          vehicle_id?: string | null
+        }
+        Update: {
+          booking_type?: string
+          contact_phone?: string | null
+          created_at?: string
+          driver_id?: string | null
+          dropoff_location?: string | null
+          id?: string
+          passenger_count?: number | null
+          pickup_date?: string
+          pickup_location?: string
+          pickup_time?: string | null
+          price_currency?: string | null
+          return_date?: string | null
+          special_requests?: string | null
+          status?: string | null
+          total_price?: number | null
+          updated_at?: string
+          user_id?: string
+          vehicle_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transport_bookings_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "transport_drivers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transport_bookings_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "transport_vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      transport_drivers: {
+        Row: {
+          bio: string | null
+          county: string | null
+          created_at: string
+          id: string
+          is_available: boolean | null
+          is_published: boolean | null
+          is_verified: boolean | null
+          languages: string[] | null
+          license_class: string | null
+          location: string | null
+          name: string
+          phone: string | null
+          photo_url: string | null
+          rating: number | null
+          review_count: number | null
+          slug: string
+          specializations: string[] | null
+          total_trips: number | null
+          updated_at: string
+          user_id: string | null
+          years_experience: number | null
+        }
+        Insert: {
+          bio?: string | null
+          county?: string | null
+          created_at?: string
+          id?: string
+          is_available?: boolean | null
+          is_published?: boolean | null
+          is_verified?: boolean | null
+          languages?: string[] | null
+          license_class?: string | null
+          location?: string | null
+          name: string
+          phone?: string | null
+          photo_url?: string | null
+          rating?: number | null
+          review_count?: number | null
+          slug: string
+          specializations?: string[] | null
+          total_trips?: number | null
+          updated_at?: string
+          user_id?: string | null
+          years_experience?: number | null
+        }
+        Update: {
+          bio?: string | null
+          county?: string | null
+          created_at?: string
+          id?: string
+          is_available?: boolean | null
+          is_published?: boolean | null
+          is_verified?: boolean | null
+          languages?: string[] | null
+          license_class?: string | null
+          location?: string | null
+          name?: string
+          phone?: string | null
+          photo_url?: string | null
+          rating?: number | null
+          review_count?: number | null
+          slug?: string
+          specializations?: string[] | null
+          total_trips?: number | null
+          updated_at?: string
+          user_id?: string | null
+          years_experience?: number | null
+        }
+        Relationships: []
+      }
+      transport_routes: {
+        Row: {
+          created_at: string
+          description: string | null
+          destination: string
+          difficulty: string | null
+          distance_km: number | null
+          duration_minutes: number | null
+          elevation_gain_m: number | null
+          frequency: string | null
+          fuel_stations: string[] | null
+          highlights: string[] | null
+          id: string
+          is_published: boolean | null
+          name: string
+          operating_hours: string | null
+          origin: string
+          price_display: string | null
+          route_type: string
+          slug: string
+          stops: string[] | null
+          trail_map_url: string | null
+          vehicle_type: string | null
+          warnings: string[] | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          destination: string
+          difficulty?: string | null
+          distance_km?: number | null
+          duration_minutes?: number | null
+          elevation_gain_m?: number | null
+          frequency?: string | null
+          fuel_stations?: string[] | null
+          highlights?: string[] | null
+          id?: string
+          is_published?: boolean | null
+          name: string
+          operating_hours?: string | null
+          origin: string
+          price_display?: string | null
+          route_type?: string
+          slug: string
+          stops?: string[] | null
+          trail_map_url?: string | null
+          vehicle_type?: string | null
+          warnings?: string[] | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          destination?: string
+          difficulty?: string | null
+          distance_km?: number | null
+          duration_minutes?: number | null
+          elevation_gain_m?: number | null
+          frequency?: string | null
+          fuel_stations?: string[] | null
+          highlights?: string[] | null
+          id?: string
+          is_published?: boolean | null
+          name?: string
+          operating_hours?: string | null
+          origin?: string
+          price_display?: string | null
+          route_type?: string
+          slug?: string
+          stops?: string[] | null
+          trail_map_url?: string | null
+          vehicle_type?: string | null
+          warnings?: string[] | null
+        }
+        Relationships: []
+      }
+      transport_vehicles: {
+        Row: {
+          capacity: number | null
+          created_at: string
+          driver_id: string | null
+          features: string[] | null
+          id: string
+          is_available: boolean | null
+          is_published: boolean | null
+          make: string | null
+          model: string | null
+          name: string
+          photo_url: string | null
+          plate_number: string | null
+          price_currency: string | null
+          price_display: string | null
+          price_per_day: number
+          price_per_km: number | null
+          vehicle_type: string
+          year: number | null
+        }
+        Insert: {
+          capacity?: number | null
+          created_at?: string
+          driver_id?: string | null
+          features?: string[] | null
+          id?: string
+          is_available?: boolean | null
+          is_published?: boolean | null
+          make?: string | null
+          model?: string | null
+          name: string
+          photo_url?: string | null
+          plate_number?: string | null
+          price_currency?: string | null
+          price_display?: string | null
+          price_per_day?: number
+          price_per_km?: number | null
+          vehicle_type?: string
+          year?: number | null
+        }
+        Update: {
+          capacity?: number | null
+          created_at?: string
+          driver_id?: string | null
+          features?: string[] | null
+          id?: string
+          is_available?: boolean | null
+          is_published?: boolean | null
+          make?: string | null
+          model?: string | null
+          name?: string
+          photo_url?: string | null
+          plate_number?: string | null
+          price_currency?: string | null
+          price_display?: string | null
+          price_per_day?: number
+          price_per_km?: number | null
+          vehicle_type?: string
+          year?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transport_vehicles_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "transport_drivers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       trip_history: {
         Row: {
