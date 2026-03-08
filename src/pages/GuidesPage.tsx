@@ -346,7 +346,75 @@ const GuidesPage = () => {
         </div>
       </section>
 
-      {/* Guide grid */}
+      {/* Group Trip Panel */}
+      <AnimatePresence>
+        {showGroupPanel && (
+          <motion.section
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="overflow-hidden border-y border-border bg-card/50"
+          >
+            <div className="container mx-auto px-4 py-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-display font-semibold text-foreground flex items-center gap-2">
+                  <Users className="h-5 w-5 text-primary" /> Create Multi-Guide Group Trip
+                </h3>
+                <Button variant="ghost" size="sm" onClick={() => setShowGroupPanel(false)}>
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+              {selectedForGroup.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {selectedForGroup.map((gid) => {
+                    const g = guides.find((x) => x.id === gid);
+                    return g ? (
+                      <Badge key={gid} className="bg-primary/15 text-primary border-primary/25 text-xs">
+                        {g.name}
+                        <button onClick={() => toggleGroupSelect(gid)} className="ml-1"><X className="h-3 w-3" /></button>
+                      </Badge>
+                    ) : null;
+                  })}
+                </div>
+              )}
+              <p className="text-xs text-muted-foreground font-body mb-3">
+                Select guides from the grid below, then fill in trip details. Guides will be able to communicate with each other.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+                <input
+                  value={groupTripForm.title}
+                  onChange={(e) => setGroupTripForm((p) => ({ ...p, title: e.target.value }))}
+                  placeholder="Trip title (e.g. Mara + Coast Safari)"
+                  className="border border-border rounded-lg px-3 py-2 text-sm font-body bg-background text-foreground"
+                />
+                <input
+                  type="date"
+                  value={groupTripForm.startDate}
+                  onChange={(e) => setGroupTripForm((p) => ({ ...p, startDate: e.target.value }))}
+                  min={new Date().toISOString().split("T")[0]}
+                  className="border border-border rounded-lg px-3 py-2 text-sm font-body bg-background text-foreground"
+                />
+                <input
+                  type="date"
+                  value={groupTripForm.endDate}
+                  onChange={(e) => setGroupTripForm((p) => ({ ...p, endDate: e.target.value }))}
+                  min={groupTripForm.startDate || new Date().toISOString().split("T")[0]}
+                  className="border border-border rounded-lg px-3 py-2 text-sm font-body bg-background text-foreground"
+                />
+              </div>
+              <Button
+                onClick={createGroupTrip}
+                disabled={groupLoading || selectedForGroup.length < 2 || !groupTripForm.title}
+                className="rounded-full"
+              >
+                {groupLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Send className="h-4 w-4 mr-2" />}
+                Create Group Trip ({selectedForGroup.length} guides)
+              </Button>
+            </div>
+          </motion.section>
+        )}
+      </AnimatePresence>
+
       <section className="py-12">
         <div className="container mx-auto px-4">
           <p className="font-body text-sm text-muted-foreground mb-6">{filtered.length} guides found</p>
