@@ -1,17 +1,19 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Menu, X, Globe, Heart, User } from "lucide-react";
+import { Menu, X, Globe, Heart, User } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const navLinks = [
-  { label: "Destinations", href: "#destinations" },
-  { label: "Experiences", href: "#experiences" },
-  { label: "Wildlife", href: "#wildlife" },
-  { label: "Community", href: "#community" },
+  { label: "Destinations", href: "/destinations" },
+  { label: "Experiences", href: "/experiences" },
+  { label: "Wildlife", href: "/wildlife" },
+  { label: "Community", href: "/community" },
 ];
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const location = useLocation();
 
   return (
     <motion.nav
@@ -21,27 +23,28 @@ const Navbar = () => {
       className="fixed top-0 left-0 right-0 z-50 glass-card-dark"
     >
       <div className="container mx-auto flex items-center justify-between px-4 py-3 lg:px-8">
-        {/* Logo */}
-        <a href="#" className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2">
           <span className="text-2xl font-display font-bold text-savannah-gold">
             Safari<span className="text-primary-foreground">Kenya</span>
           </span>
-        </a>
+        </Link>
 
-        {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
-            <a
+            <Link
               key={link.label}
-              href={link.href}
-              className="text-sm font-medium text-primary-foreground/80 hover:text-savannah-gold transition-colors"
+              to={link.href}
+              className={`text-sm font-medium transition-colors ${
+                location.pathname.startsWith(link.href)
+                  ? "text-savannah-gold"
+                  : "text-primary-foreground/80 hover:text-savannah-gold"
+              }`}
             >
               {link.label}
-            </a>
+            </Link>
           ))}
         </div>
 
-        {/* Desktop Actions */}
         <div className="hidden md:flex items-center gap-3">
           <Button variant="ghost" size="icon" className="text-primary-foreground/80 hover:text-savannah-gold hover:bg-primary-foreground/10">
             <Globe className="h-4 w-4" />
@@ -55,16 +58,11 @@ const Navbar = () => {
           </Button>
         </div>
 
-        {/* Mobile Toggle */}
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden text-primary-foreground/80"
-        >
+        <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden text-primary-foreground/80">
           {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
       </div>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -75,14 +73,16 @@ const Navbar = () => {
           >
             <div className="px-4 py-4 flex flex-col gap-3">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.label}
-                  href={link.href}
+                  to={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="text-sm font-medium text-primary-foreground/80 hover:text-savannah-gold py-2"
+                  className={`text-sm font-medium py-2 ${
+                    location.pathname.startsWith(link.href) ? "text-savannah-gold" : "text-primary-foreground/80 hover:text-savannah-gold"
+                  }`}
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
               <Button className="gradient-sunset text-primary-foreground font-medium rounded-full mt-2 border-0">
                 Sign In
