@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Globe, Heart, User } from "lucide-react";
+import { Menu, X, Globe, Heart, User, ChevronDown } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
@@ -11,8 +11,18 @@ const navLinks = [
   { label: "Community", href: "/community" },
 ];
 
+const moreLinks = [
+  { label: "Local Guides", href: "/guides" },
+  { label: "Cultural Events", href: "/events" },
+  { label: "Food & Dining", href: "/food" },
+  { label: "Digital Nomads", href: "/nomads" },
+  { label: "Safety", href: "/safety" },
+  { label: "Your Impact", href: "/impact" },
+];
+
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
   const location = useLocation();
 
   return (
@@ -29,20 +39,45 @@ const Navbar = () => {
           </span>
         </Link>
 
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-6">
           {navLinks.map((link) => (
             <Link
               key={link.label}
               to={link.href}
-              className={`text-sm font-medium transition-colors ${
-                location.pathname.startsWith(link.href)
-                  ? "text-savannah-gold"
-                  : "text-primary-foreground/80 hover:text-savannah-gold"
-              }`}
+              className={`text-sm font-medium transition-colors ${location.pathname.startsWith(link.href) ? "text-savannah-gold" : "text-primary-foreground/80 hover:text-savannah-gold"}`}
             >
               {link.label}
             </Link>
           ))}
+          <div className="relative">
+            <button
+              onClick={() => setMoreOpen(!moreOpen)}
+              className="text-sm font-medium text-primary-foreground/80 hover:text-savannah-gold transition-colors flex items-center gap-1"
+            >
+              More <ChevronDown className={`h-3 w-3 transition-transform ${moreOpen ? "rotate-180" : ""}`} />
+            </button>
+            <AnimatePresence>
+              {moreOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="absolute top-full right-0 mt-2 w-48 glass-card rounded-xl shadow-lg overflow-hidden"
+                >
+                  {moreLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      to={link.href}
+                      onClick={() => setMoreOpen(false)}
+                      className={`block px-4 py-2.5 text-sm font-body transition-colors ${location.pathname === link.href ? "bg-muted text-foreground" : "text-foreground/80 hover:bg-muted"}`}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
 
         <div className="hidden md:flex items-center gap-3">
@@ -52,10 +87,12 @@ const Navbar = () => {
           <Button variant="ghost" size="icon" className="text-primary-foreground/80 hover:text-savannah-gold hover:bg-primary-foreground/10">
             <Heart className="h-4 w-4" />
           </Button>
-          <Button className="gradient-sunset text-primary-foreground font-medium rounded-full px-5 text-sm border-0">
-            <User className="h-4 w-4 mr-2" />
-            Sign In
-          </Button>
+          <Link to="/onboard">
+            <Button className="gradient-sunset text-primary-foreground font-medium rounded-full px-5 text-sm border-0">
+              <User className="h-4 w-4 mr-2" />
+              Get Started
+            </Button>
+          </Link>
         </div>
 
         <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden text-primary-foreground/80">
@@ -71,22 +108,22 @@ const Navbar = () => {
             exit={{ height: 0, opacity: 0 }}
             className="md:hidden overflow-hidden glass-card-dark border-t border-primary-foreground/10"
           >
-            <div className="px-4 py-4 flex flex-col gap-3">
-              {navLinks.map((link) => (
+            <div className="px-4 py-4 flex flex-col gap-2">
+              {[...navLinks, ...moreLinks].map((link) => (
                 <Link
-                  key={link.label}
+                  key={link.href}
                   to={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className={`text-sm font-medium py-2 ${
-                    location.pathname.startsWith(link.href) ? "text-savannah-gold" : "text-primary-foreground/80 hover:text-savannah-gold"
-                  }`}
+                  className={`text-sm font-medium py-2 ${location.pathname === link.href ? "text-savannah-gold" : "text-primary-foreground/80"}`}
                 >
                   {link.label}
                 </Link>
               ))}
-              <Button className="gradient-sunset text-primary-foreground font-medium rounded-full mt-2 border-0">
-                Sign In
-              </Button>
+              <Link to="/onboard" onClick={() => setMobileOpen(false)}>
+                <Button className="gradient-sunset text-primary-foreground font-medium rounded-full mt-2 border-0 w-full">
+                  Get Started
+                </Button>
+              </Link>
             </div>
           </motion.div>
         )}

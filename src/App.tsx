@@ -9,6 +9,13 @@ import DestinationDetail from "./pages/DestinationDetail";
 import ExperiencesPage from "./pages/ExperiencesPage";
 import WildlifePage from "./pages/WildlifePage";
 import CommunityPage from "./pages/CommunityPage";
+import GuidesPage from "./pages/GuidesPage";
+import EventsPage from "./pages/EventsPage";
+import FoodPage from "./pages/FoodPage";
+import SafetyPage from "./pages/SafetyPage";
+import ImpactPage from "./pages/ImpactPage";
+import NomadsPage from "./pages/NomadsPage";
+import OnboardingPage from "./pages/OnboardingPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +33,13 @@ const App = () => (
           <Route path="/experiences" element={<ExperiencesPage />} />
           <Route path="/wildlife" element={<WildlifePage />} />
           <Route path="/community" element={<CommunityPage />} />
+          <Route path="/guides" element={<GuidesPage />} />
+          <Route path="/events" element={<EventsPage />} />
+          <Route path="/food" element={<FoodPage />} />
+          <Route path="/safety" element={<SafetyPage />} />
+          <Route path="/impact" element={<ImpactPage />} />
+          <Route path="/nomads" element={<NomadsPage />} />
+          <Route path="/onboard" element={<OnboardingPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
