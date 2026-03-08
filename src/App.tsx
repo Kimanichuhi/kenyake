@@ -22,6 +22,7 @@ import ProfilePage from "./pages/ProfilePage";
 import NearbyPage from "./pages/NearbyPage";
 import TripPlannerPage from "./pages/TripPlannerPage";
 import WildlifeIntelPage from "./pages/WildlifeIntelPage";
+import CommunityProfilePage from "./pages/CommunityProfilePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,6 +41,7 @@ const App = () => (
             <Route path="/experiences" element={<ExperiencesPage />} />
             <Route path="/wildlife" element={<WildlifePage />} />
             <Route path="/community" element={<CommunityPage />} />
+            <Route path="/community/:slug" element={<CommunityProfilePage />} />
             <Route path="/guides" element={<GuidesPage />} />
             <Route path="/events" element={<EventsPage />} />
             <Route path="/food" element={<FoodPage />} />
