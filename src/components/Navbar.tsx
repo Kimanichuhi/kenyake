@@ -140,11 +140,22 @@ const Navbar = () => {
                   {link.label}
                 </Link>
               ))}
-              <Link to="/onboard" onClick={() => setMobileOpen(false)}>
-                <Button className="gradient-sunset text-primary-foreground font-medium rounded-full mt-2 border-0 w-full">
-                  Get Started
-                </Button>
-              </Link>
+              {user ? (
+                <>
+                  <Link to="/profile" onClick={() => setMobileOpen(false)} className="text-sm font-medium py-2 text-primary-foreground/80">
+                    My Profile
+                  </Link>
+                  <Button onClick={() => { signOut(); setMobileOpen(false); }} variant="ghost" className="text-primary-foreground/80 justify-start px-0">
+                    <LogOut className="h-4 w-4 mr-2" /> Sign Out
+                  </Button>
+                </>
+              ) : (
+                <Link to="/auth" onClick={() => setMobileOpen(false)}>
+                  <Button className="gradient-sunset text-primary-foreground font-medium rounded-full mt-2 border-0 w-full">
+                    Sign In
+                  </Button>
+                </Link>
+              )}
             </div>
           </motion.div>
         )}
