@@ -14,7 +14,111 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          accessibility_needs: string[] | null
+          avatar_url: string | null
+          budget_range: string | null
+          created_at: string
+          first_visit: boolean | null
+          full_name: string | null
+          id: string
+          languages: string[] | null
+          nationality: string | null
+          onboarding_completed: boolean | null
+          travel_styles: string[] | null
+          traveler_type: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          accessibility_needs?: string[] | null
+          avatar_url?: string | null
+          budget_range?: string | null
+          created_at?: string
+          first_visit?: boolean | null
+          full_name?: string | null
+          id?: string
+          languages?: string[] | null
+          nationality?: string | null
+          onboarding_completed?: boolean | null
+          travel_styles?: string[] | null
+          traveler_type?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          accessibility_needs?: string[] | null
+          avatar_url?: string | null
+          budget_range?: string | null
+          created_at?: string
+          first_visit?: boolean | null
+          full_name?: string | null
+          id?: string
+          languages?: string[] | null
+          nationality?: string | null
+          onboarding_completed?: boolean | null
+          travel_styles?: string[] | null
+          traveler_type?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      saved_destinations: {
+        Row: {
+          destination_id: string
+          id: string
+          saved_at: string
+          user_id: string
+        }
+        Insert: {
+          destination_id: string
+          id?: string
+          saved_at?: string
+          user_id: string
+        }
+        Update: {
+          destination_id?: string
+          id?: string
+          saved_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      trip_history: {
+        Row: {
+          created_at: string
+          destination_id: string
+          end_date: string | null
+          id: string
+          notes: string | null
+          rating: number | null
+          start_date: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          destination_id: string
+          end_date?: string | null
+          id?: string
+          notes?: string | null
+          rating?: number | null
+          start_date?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          destination_id?: string
+          end_date?: string | null
+          id?: string
+          notes?: string | null
+          rating?: number | null
+          start_date?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
