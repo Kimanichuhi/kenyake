@@ -540,6 +540,238 @@ export type Database = {
           },
         ]
       }
+      experience_bookings: {
+        Row: {
+          booking_date: string
+          contact_email: string | null
+          contact_phone: string | null
+          created_at: string
+          experience_id: string
+          guest_count: number | null
+          id: string
+          special_requests: string | null
+          start_time: string | null
+          status: string | null
+          total_price: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          booking_date: string
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          experience_id: string
+          guest_count?: number | null
+          id?: string
+          special_requests?: string | null
+          start_time?: string | null
+          status?: string | null
+          total_price?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          booking_date?: string
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          experience_id?: string
+          guest_count?: number | null
+          id?: string
+          special_requests?: string | null
+          start_time?: string | null
+          status?: string | null
+          total_price?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "experience_bookings_experience_id_fkey"
+            columns: ["experience_id"]
+            isOneToOne: false
+            referencedRelation: "experiences"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      experience_reviews: {
+        Row: {
+          body: string | null
+          booking_id: string | null
+          created_at: string
+          experience_id: string
+          id: string
+          rating: number
+          title: string | null
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          booking_id?: string | null
+          created_at?: string
+          experience_id: string
+          id?: string
+          rating: number
+          title?: string | null
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          booking_id?: string | null
+          created_at?: string
+          experience_id?: string
+          id?: string
+          rating?: number
+          title?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "experience_reviews_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "experience_bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "experience_reviews_experience_id_fkey"
+            columns: ["experience_id"]
+            isOneToOne: false
+            referencedRelation: "experiences"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      experiences: {
+        Row: {
+          accessibility_notes: string | null
+          available_days: string[] | null
+          category: string
+          community_id: string | null
+          county: string | null
+          cover_image: string | null
+          created_at: string
+          description: string | null
+          duration_minutes: number | null
+          gallery_images: string[] | null
+          host_bio: string | null
+          host_name: string
+          host_photo: string | null
+          id: string
+          includes: string[] | null
+          is_featured: boolean | null
+          is_published: boolean | null
+          languages: string[] | null
+          lat: number | null
+          lng: number | null
+          location_name: string | null
+          max_guests: number | null
+          min_guests: number | null
+          price_amount: number
+          price_currency: string | null
+          price_display: string | null
+          rating: number | null
+          review_count: number | null
+          short_description: string | null
+          skill_level: string | null
+          slug: string
+          start_times: string[] | null
+          subcategory: string | null
+          title: string
+          updated_at: string
+          what_to_bring: string | null
+          what_to_wear: string | null
+        }
+        Insert: {
+          accessibility_notes?: string | null
+          available_days?: string[] | null
+          category?: string
+          community_id?: string | null
+          county?: string | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number | null
+          gallery_images?: string[] | null
+          host_bio?: string | null
+          host_name: string
+          host_photo?: string | null
+          id?: string
+          includes?: string[] | null
+          is_featured?: boolean | null
+          is_published?: boolean | null
+          languages?: string[] | null
+          lat?: number | null
+          lng?: number | null
+          location_name?: string | null
+          max_guests?: number | null
+          min_guests?: number | null
+          price_amount?: number
+          price_currency?: string | null
+          price_display?: string | null
+          rating?: number | null
+          review_count?: number | null
+          short_description?: string | null
+          skill_level?: string | null
+          slug: string
+          start_times?: string[] | null
+          subcategory?: string | null
+          title: string
+          updated_at?: string
+          what_to_bring?: string | null
+          what_to_wear?: string | null
+        }
+        Update: {
+          accessibility_notes?: string | null
+          available_days?: string[] | null
+          category?: string
+          community_id?: string | null
+          county?: string | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number | null
+          gallery_images?: string[] | null
+          host_bio?: string | null
+          host_name?: string
+          host_photo?: string | null
+          id?: string
+          includes?: string[] | null
+          is_featured?: boolean | null
+          is_published?: boolean | null
+          languages?: string[] | null
+          lat?: number | null
+          lng?: number | null
+          location_name?: string | null
+          max_guests?: number | null
+          min_guests?: number | null
+          price_amount?: number
+          price_currency?: string | null
+          price_display?: string | null
+          rating?: number | null
+          review_count?: number | null
+          short_description?: string | null
+          skill_level?: string | null
+          slug?: string
+          start_times?: string[] | null
+          subcategory?: string | null
+          title?: string
+          updated_at?: string
+          what_to_bring?: string | null
+          what_to_wear?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "experiences_community_id_fkey"
+            columns: ["community_id"]
+            isOneToOne: false
+            referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       group_trip_guides: {
         Row: {
           created_at: string
