@@ -166,14 +166,7 @@ const ProfilePage = () => {
 
           {/* Saved Tab */}
           {activeTab === "saved" && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="glass-card rounded-2xl p-8 text-center">
-              <Bookmark className="h-12 w-12 text-muted-foreground/30 mx-auto mb-4" />
-              <h3 className="font-display text-lg font-semibold text-foreground mb-2">No saved destinations yet</h3>
-              <p className="text-muted-foreground font-body mb-4">Explore destinations and save your favorites</p>
-              <Button onClick={() => navigate("/destinations")} className="gradient-safari text-primary-foreground border-0">
-                Explore Destinations
-              </Button>
-            </motion.div>
+            <SavedDestinations />
           )}
 
           {/* Trips Tab */}
