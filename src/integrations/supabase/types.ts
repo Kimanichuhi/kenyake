@@ -216,6 +216,59 @@ export type Database = {
           },
         ]
       }
+      ancestral_visit_requests: {
+        Row: {
+          community_id: string | null
+          created_at: string
+          family_name: string | null
+          group_size: number | null
+          id: string
+          preferred_dates: string | null
+          purpose: string | null
+          region_of_origin: string | null
+          special_requests: string | null
+          status: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          community_id?: string | null
+          created_at?: string
+          family_name?: string | null
+          group_size?: number | null
+          id?: string
+          preferred_dates?: string | null
+          purpose?: string | null
+          region_of_origin?: string | null
+          special_requests?: string | null
+          status?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          community_id?: string | null
+          created_at?: string
+          family_name?: string | null
+          group_size?: number | null
+          id?: string
+          preferred_dates?: string | null
+          purpose?: string | null
+          region_of_origin?: string | null
+          special_requests?: string | null
+          status?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ancestral_visit_requests_community_id_fkey"
+            columns: ["community_id"]
+            isOneToOne: false
+            referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       budget_packages: {
         Row: {
           budget_tier: string
@@ -433,6 +486,56 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "community_content_community_id_fkey"
+            columns: ["community_id"]
+            isOneToOne: false
+            referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_elders: {
+        Row: {
+          availability: string | null
+          bio: string | null
+          community_id: string
+          created_at: string
+          expertise: string[] | null
+          id: string
+          is_published: boolean | null
+          languages: string[] | null
+          name: string
+          photo_url: string | null
+          title: string | null
+        }
+        Insert: {
+          availability?: string | null
+          bio?: string | null
+          community_id: string
+          created_at?: string
+          expertise?: string[] | null
+          id?: string
+          is_published?: boolean | null
+          languages?: string[] | null
+          name: string
+          photo_url?: string | null
+          title?: string | null
+        }
+        Update: {
+          availability?: string | null
+          bio?: string | null
+          community_id?: string
+          created_at?: string
+          expertise?: string[] | null
+          id?: string
+          is_published?: boolean | null
+          languages?: string[] | null
+          name?: string
+          photo_url?: string | null
+          title?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_elders_community_id_fkey"
             columns: ["community_id"]
             isOneToOne: false
             referencedRelation: "communities"
@@ -733,6 +836,77 @@ export type Database = {
           website?: string | null
         }
         Relationships: []
+      }
+      cultural_programmes: {
+        Row: {
+          accommodation_included: boolean | null
+          community_id: string | null
+          cover_image: string | null
+          created_at: string
+          description: string | null
+          duration_weeks: number | null
+          id: string
+          includes: string[] | null
+          is_published: boolean | null
+          learning_outcomes: string[] | null
+          max_participants: number | null
+          meals_included: boolean | null
+          price_amount: number | null
+          price_currency: string | null
+          slug: string
+          start_dates: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          accommodation_included?: boolean | null
+          community_id?: string | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          duration_weeks?: number | null
+          id?: string
+          includes?: string[] | null
+          is_published?: boolean | null
+          learning_outcomes?: string[] | null
+          max_participants?: number | null
+          meals_included?: boolean | null
+          price_amount?: number | null
+          price_currency?: string | null
+          slug: string
+          start_dates?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          accommodation_included?: boolean | null
+          community_id?: string | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          duration_weeks?: number | null
+          id?: string
+          includes?: string[] | null
+          is_published?: boolean | null
+          learning_outcomes?: string[] | null
+          max_participants?: number | null
+          meals_included?: boolean | null
+          price_amount?: number | null
+          price_currency?: string | null
+          slug?: string
+          start_dates?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cultural_programmes_community_id_fkey"
+            columns: ["community_id"]
+            isOneToOne: false
+            referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       education_lessons: {
         Row: {
@@ -1338,6 +1512,77 @@ export type Database = {
           },
         ]
       }
+      genealogy_guides: {
+        Row: {
+          bio: string | null
+          community_id: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          county: string | null
+          created_at: string
+          id: string
+          is_published: boolean | null
+          languages: string[] | null
+          name: string
+          photo_url: string | null
+          price_currency: string | null
+          price_per_session: number | null
+          rating: number | null
+          review_count: number | null
+          slug: string
+          specialties: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          bio?: string | null
+          community_id?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          county?: string | null
+          created_at?: string
+          id?: string
+          is_published?: boolean | null
+          languages?: string[] | null
+          name: string
+          photo_url?: string | null
+          price_currency?: string | null
+          price_per_session?: number | null
+          rating?: number | null
+          review_count?: number | null
+          slug: string
+          specialties?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          bio?: string | null
+          community_id?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          county?: string | null
+          created_at?: string
+          id?: string
+          is_published?: boolean | null
+          languages?: string[] | null
+          name?: string
+          photo_url?: string | null
+          price_currency?: string | null
+          price_per_session?: number | null
+          rating?: number | null
+          review_count?: number | null
+          slug?: string
+          specialties?: string[] | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "genealogy_guides_community_id_fkey"
+            columns: ["community_id"]
+            isOneToOne: false
+            referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       group_outing_members: {
         Row: {
           amount_due: number | null
@@ -1838,6 +2083,154 @@ export type Database = {
           years_experience?: number | null
         }
         Relationships: []
+      }
+      heritage_forum_posts: {
+        Row: {
+          body: string
+          category: string
+          community_tag: string | null
+          created_at: string
+          id: string
+          is_pinned: boolean | null
+          reply_count: number | null
+          title: string
+          updated_at: string
+          upvotes: number | null
+          user_id: string
+        }
+        Insert: {
+          body: string
+          category?: string
+          community_tag?: string | null
+          created_at?: string
+          id?: string
+          is_pinned?: boolean | null
+          reply_count?: number | null
+          title: string
+          updated_at?: string
+          upvotes?: number | null
+          user_id: string
+        }
+        Update: {
+          body?: string
+          category?: string
+          community_tag?: string | null
+          created_at?: string
+          id?: string
+          is_pinned?: boolean | null
+          reply_count?: number | null
+          title?: string
+          updated_at?: string
+          upvotes?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      heritage_forum_replies: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          post_id: string
+          upvotes: number | null
+          user_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          post_id: string
+          upvotes?: number | null
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          post_id?: string
+          upvotes?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "heritage_forum_replies_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "heritage_forum_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      homecoming_packages: {
+        Row: {
+          community_id: string | null
+          cover_image: string | null
+          created_at: string
+          description: string | null
+          duration_days: number | null
+          highlights: string[] | null
+          id: string
+          includes: string[] | null
+          is_featured: boolean | null
+          is_published: boolean | null
+          max_guests: number | null
+          price_amount: number | null
+          price_currency: string | null
+          rating: number | null
+          review_count: number | null
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          community_id?: string | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          duration_days?: number | null
+          highlights?: string[] | null
+          id?: string
+          includes?: string[] | null
+          is_featured?: boolean | null
+          is_published?: boolean | null
+          max_guests?: number | null
+          price_amount?: number | null
+          price_currency?: string | null
+          rating?: number | null
+          review_count?: number | null
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          community_id?: string | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          duration_days?: number | null
+          highlights?: string[] | null
+          id?: string
+          includes?: string[] | null
+          is_featured?: boolean | null
+          is_published?: boolean | null
+          max_guests?: number | null
+          price_amount?: number | null
+          price_currency?: string | null
+          rating?: number | null
+          review_count?: number | null
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "homecoming_packages_community_id_fkey"
+            columns: ["community_id"]
+            isOneToOne: false
+            referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       internet_zones: {
         Row: {
