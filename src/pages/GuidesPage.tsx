@@ -431,7 +431,7 @@ const GuidesPage = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.06 }}
-                  className={`bg-card rounded-xl border overflow-hidden hover:shadow-lg transition-shadow cursor-pointer ${
+                  className={`relative bg-card rounded-xl border overflow-hidden hover:shadow-lg transition-shadow cursor-pointer ${
                     selectedForGroup.includes(guide.id) ? "border-primary ring-2 ring-primary/20" : "border-border"
                   }`}
                   onClick={() => openGuideProfile(guide.id)}
