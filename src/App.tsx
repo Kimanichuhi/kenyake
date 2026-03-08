@@ -69,6 +69,7 @@ const App = () => (
             <Route path="/marketplace" element={<MarketplacePage />} />
             <Route path="/transport" element={<TransportPage />} />
             <Route path="/domestic" element={<DomesticPage />} />
+            <Route path="/heritage" element={<HeritagePage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
