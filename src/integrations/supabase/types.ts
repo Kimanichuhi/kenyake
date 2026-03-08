@@ -540,6 +540,270 @@ export type Database = {
           },
         ]
       }
+      guide_availability: {
+        Row: {
+          date: string
+          guide_id: string
+          id: string
+          is_available: boolean | null
+          notes: string | null
+        }
+        Insert: {
+          date: string
+          guide_id: string
+          id?: string
+          is_available?: boolean | null
+          notes?: string | null
+        }
+        Update: {
+          date?: string
+          guide_id?: string
+          id?: string
+          is_available?: boolean | null
+          notes?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guide_availability_guide_id_fkey"
+            columns: ["guide_id"]
+            isOneToOne: false
+            referencedRelation: "guides"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guide_bookings: {
+        Row: {
+          created_at: string
+          end_date: string
+          group_size: number | null
+          guide_id: string
+          guide_notes: string | null
+          id: string
+          message: string | null
+          start_date: string
+          status: string | null
+          total_price: number | null
+          tourist_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          end_date: string
+          group_size?: number | null
+          guide_id: string
+          guide_notes?: string | null
+          id?: string
+          message?: string | null
+          start_date: string
+          status?: string | null
+          total_price?: number | null
+          tourist_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          end_date?: string
+          group_size?: number | null
+          guide_id?: string
+          guide_notes?: string | null
+          id?: string
+          message?: string | null
+          start_date?: string
+          status?: string | null
+          total_price?: number | null
+          tourist_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guide_bookings_guide_id_fkey"
+            columns: ["guide_id"]
+            isOneToOne: false
+            referencedRelation: "guides"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guide_reviews: {
+        Row: {
+          body: string | null
+          booking_id: string | null
+          created_at: string
+          guide_id: string
+          id: string
+          rating: number
+          title: string | null
+          tourist_id: string
+        }
+        Insert: {
+          body?: string | null
+          booking_id?: string | null
+          created_at?: string
+          guide_id: string
+          id?: string
+          rating: number
+          title?: string | null
+          tourist_id: string
+        }
+        Update: {
+          body?: string | null
+          booking_id?: string | null
+          created_at?: string
+          guide_id?: string
+          id?: string
+          rating?: number
+          title?: string | null
+          tourist_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guide_reviews_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "guide_bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "guide_reviews_guide_id_fkey"
+            columns: ["guide_id"]
+            isOneToOne: false
+            referencedRelation: "guides"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guide_skills: {
+        Row: {
+          completed: boolean | null
+          completed_at: string | null
+          created_at: string
+          guide_id: string
+          id: string
+          score: number | null
+          skill_category: string | null
+          skill_name: string
+        }
+        Insert: {
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string
+          guide_id: string
+          id?: string
+          score?: number | null
+          skill_category?: string | null
+          skill_name: string
+        }
+        Update: {
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string
+          guide_id?: string
+          id?: string
+          score?: number | null
+          skill_category?: string | null
+          skill_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guide_skills_guide_id_fkey"
+            columns: ["guide_id"]
+            isOneToOne: false
+            referencedRelation: "guides"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guides: {
+        Row: {
+          bio: string | null
+          certification_level: string | null
+          certifications: string[] | null
+          county: string | null
+          created_at: string
+          id: string
+          is_available: boolean | null
+          is_published: boolean | null
+          is_verified: boolean | null
+          languages: string[] | null
+          lat: number | null
+          lng: number | null
+          location: string | null
+          name: string
+          photo_url: string | null
+          price_currency: string | null
+          price_per_day: number | null
+          rating: number | null
+          response_time_minutes: number | null
+          review_count: number | null
+          slug: string
+          specializations: string[] | null
+          total_bookings: number | null
+          total_earnings: number | null
+          updated_at: string
+          user_id: string
+          years_experience: number | null
+        }
+        Insert: {
+          bio?: string | null
+          certification_level?: string | null
+          certifications?: string[] | null
+          county?: string | null
+          created_at?: string
+          id?: string
+          is_available?: boolean | null
+          is_published?: boolean | null
+          is_verified?: boolean | null
+          languages?: string[] | null
+          lat?: number | null
+          lng?: number | null
+          location?: string | null
+          name: string
+          photo_url?: string | null
+          price_currency?: string | null
+          price_per_day?: number | null
+          rating?: number | null
+          response_time_minutes?: number | null
+          review_count?: number | null
+          slug: string
+          specializations?: string[] | null
+          total_bookings?: number | null
+          total_earnings?: number | null
+          updated_at?: string
+          user_id: string
+          years_experience?: number | null
+        }
+        Update: {
+          bio?: string | null
+          certification_level?: string | null
+          certifications?: string[] | null
+          county?: string | null
+          created_at?: string
+          id?: string
+          is_available?: boolean | null
+          is_published?: boolean | null
+          is_verified?: boolean | null
+          languages?: string[] | null
+          lat?: number | null
+          lng?: number | null
+          location?: string | null
+          name?: string
+          photo_url?: string | null
+          price_currency?: string | null
+          price_per_day?: number | null
+          rating?: number | null
+          response_time_minutes?: number | null
+          review_count?: number | null
+          slug?: string
+          specializations?: string[] | null
+          total_bookings?: number | null
+          total_earnings?: number | null
+          updated_at?: string
+          user_id?: string
+          years_experience?: number | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           accessibility_needs: string[] | null
