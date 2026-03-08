@@ -138,6 +138,8 @@ export const destinations: Destination[] = [
     safetyRating: 3,
     accessibilityRating: 2,
     photographyScore: 5,
+    lat: -0.1521,
+    lng: 37.3084,
   },
   {
     id: "lake-nakuru",
