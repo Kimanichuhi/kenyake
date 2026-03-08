@@ -47,6 +47,7 @@ const App = () => (
             <Route path="/onboard" element={<OnboardingPage />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/nearby" element={<NearbyPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
