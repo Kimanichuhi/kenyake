@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { MapPin, Star, Camera, Users } from "lucide-react";
 import { destinations } from "@/data/destinations";
+import FavoriteButton from "@/components/FavoriteButton";
 
 const container = {
   hidden: {},
@@ -50,7 +51,8 @@ const DestinationsSection = () => (
                   <div className="absolute top-3 left-3">
                     <span className="glass-card-dark text-primary-foreground text-xs font-body font-medium px-3 py-1 rounded-full">{dest.category}</span>
                   </div>
-                  <div className="absolute top-3 right-3">
+                  <div className="absolute top-3 right-3 flex items-center gap-2">
+                    <FavoriteButton destinationId={dest.id} />
                     <span className="glass-card text-xs font-body font-semibold px-3 py-1 rounded-full text-foreground flex items-center gap-1">
                       <Users className="h-3 w-3" /> {dest.crowdLevel}
                     </span>

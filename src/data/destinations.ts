@@ -31,6 +31,8 @@ export interface Destination {
   safetyRating: number;
   accessibilityRating: number;
   photographyScore: number;
+  lat: number;
+  lng: number;
 }
 
 export interface Experience {
@@ -76,6 +78,8 @@ export const destinations: Destination[] = [
     safetyRating: 4,
     accessibilityRating: 3,
     photographyScore: 5,
+    lat: -1.4833,
+    lng: 35.0000,
   },
   {
     id: "amboseli",
@@ -94,6 +98,8 @@ export const destinations: Destination[] = [
     safetyRating: 5,
     accessibilityRating: 4,
     photographyScore: 5,
+    lat: -2.6527,
+    lng: 37.2606,
   },
   {
     id: "diani-beach",
@@ -112,6 +118,8 @@ export const destinations: Destination[] = [
     safetyRating: 4,
     accessibilityRating: 5,
     photographyScore: 4,
+    lat: -4.3477,
+    lng: 39.5682,
   },
   {
     id: "mount-kenya",
@@ -130,6 +138,8 @@ export const destinations: Destination[] = [
     safetyRating: 3,
     accessibilityRating: 2,
     photographyScore: 5,
+    lat: -0.1521,
+    lng: 37.3084,
   },
   {
     id: "lake-nakuru",
@@ -148,6 +158,8 @@ export const destinations: Destination[] = [
     safetyRating: 5,
     accessibilityRating: 4,
     photographyScore: 5,
+    lat: -0.3667,
+    lng: 36.0833,
   },
   {
     id: "lamu-old-town",
@@ -166,6 +178,8 @@ export const destinations: Destination[] = [
     safetyRating: 4,
     accessibilityRating: 3,
     photographyScore: 4,
+    lat: -2.2717,
+    lng: 40.9020,
   },
 ];
 
