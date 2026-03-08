@@ -236,7 +236,7 @@ const GuidesPage = () => {
     toast({ title: "🎉 Group trip created!", description: `${selectedForGroup.length} guides invited. They'll respond soon.` });
   };
 
-
+  const sorted = [...guides].sort((a, b) => {
     if (sortBy === "rating") return b.rating - a.rating;
     if (sortBy === "price") return (a.price_per_day || 0) - (b.price_per_day || 0);
     if (sortBy === "experience") return b.years_experience - a.years_experience;
