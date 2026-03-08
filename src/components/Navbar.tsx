@@ -25,6 +25,7 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
   const location = useLocation();
+  const { user, profile, signOut } = useAuth();
 
   return (
     <motion.nav
