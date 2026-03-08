@@ -974,6 +974,187 @@ export type Database = {
           },
         ]
       }
+      food_listings: {
+        Row: {
+          community_id: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          county: string | null
+          cover_image: string | null
+          created_at: string
+          cuisine: string[] | null
+          description: string | null
+          dietary_options: string[] | null
+          gallery_images: string[] | null
+          host_bio: string | null
+          host_name: string | null
+          host_photo: string | null
+          id: string
+          is_community_kitchen: boolean | null
+          is_farm_to_table: boolean | null
+          is_featured: boolean | null
+          is_home_dining: boolean | null
+          is_published: boolean | null
+          lat: number | null
+          listing_type: string
+          lng: number | null
+          location_name: string | null
+          max_guests: number | null
+          name: string
+          opening_hours: string | null
+          price_currency: string | null
+          price_display: string | null
+          price_per_person: number | null
+          price_range: string | null
+          rating: number | null
+          region: string | null
+          review_count: number | null
+          safety_rating: number | null
+          short_description: string | null
+          slug: string
+          specialties: string[] | null
+          traditional_dishes: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          community_id?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          county?: string | null
+          cover_image?: string | null
+          created_at?: string
+          cuisine?: string[] | null
+          description?: string | null
+          dietary_options?: string[] | null
+          gallery_images?: string[] | null
+          host_bio?: string | null
+          host_name?: string | null
+          host_photo?: string | null
+          id?: string
+          is_community_kitchen?: boolean | null
+          is_farm_to_table?: boolean | null
+          is_featured?: boolean | null
+          is_home_dining?: boolean | null
+          is_published?: boolean | null
+          lat?: number | null
+          listing_type?: string
+          lng?: number | null
+          location_name?: string | null
+          max_guests?: number | null
+          name: string
+          opening_hours?: string | null
+          price_currency?: string | null
+          price_display?: string | null
+          price_per_person?: number | null
+          price_range?: string | null
+          rating?: number | null
+          region?: string | null
+          review_count?: number | null
+          safety_rating?: number | null
+          short_description?: string | null
+          slug: string
+          specialties?: string[] | null
+          traditional_dishes?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          community_id?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          county?: string | null
+          cover_image?: string | null
+          created_at?: string
+          cuisine?: string[] | null
+          description?: string | null
+          dietary_options?: string[] | null
+          gallery_images?: string[] | null
+          host_bio?: string | null
+          host_name?: string | null
+          host_photo?: string | null
+          id?: string
+          is_community_kitchen?: boolean | null
+          is_farm_to_table?: boolean | null
+          is_featured?: boolean | null
+          is_home_dining?: boolean | null
+          is_published?: boolean | null
+          lat?: number | null
+          listing_type?: string
+          lng?: number | null
+          location_name?: string | null
+          max_guests?: number | null
+          name?: string
+          opening_hours?: string | null
+          price_currency?: string | null
+          price_display?: string | null
+          price_per_person?: number | null
+          price_range?: string | null
+          rating?: number | null
+          region?: string | null
+          review_count?: number | null
+          safety_rating?: number | null
+          short_description?: string | null
+          slug?: string
+          specialties?: string[] | null
+          traditional_dishes?: string[] | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "food_listings_community_id_fkey"
+            columns: ["community_id"]
+            isOneToOne: false
+            referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      food_recommendations: {
+        Row: {
+          body: string
+          created_at: string
+          dish_recommended: string | null
+          id: string
+          is_approved: boolean | null
+          listing_id: string
+          photo_url: string | null
+          rating: number
+          title: string | null
+          user_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          dish_recommended?: string | null
+          id?: string
+          is_approved?: boolean | null
+          listing_id: string
+          photo_url?: string | null
+          rating: number
+          title?: string | null
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          dish_recommended?: string | null
+          id?: string
+          is_approved?: boolean | null
+          listing_id?: string
+          photo_url?: string | null
+          rating?: number
+          title?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "food_recommendations_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "food_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       group_trip_guides: {
         Row: {
           created_at: string
