@@ -23,6 +23,7 @@ import NearbyPage from "./pages/NearbyPage";
 import TripPlannerPage from "./pages/TripPlannerPage";
 import WildlifeIntelPage from "./pages/WildlifeIntelPage";
 import CommunityProfilePage from "./pages/CommunityProfilePage";
+import CulturalPrepPage from "./pages/CulturalPrepPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
