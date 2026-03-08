@@ -14,6 +14,208 @@ export type Database = {
   }
   public: {
     Tables: {
+      accommodation_bookings: {
+        Row: {
+          accommodation_id: string
+          check_in: string
+          check_out: string
+          contact_phone: string | null
+          created_at: string
+          guest_count: number | null
+          id: string
+          rooms: number | null
+          special_requests: string | null
+          status: string | null
+          total_price: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          accommodation_id: string
+          check_in: string
+          check_out: string
+          contact_phone?: string | null
+          created_at?: string
+          guest_count?: number | null
+          id?: string
+          rooms?: number | null
+          special_requests?: string | null
+          status?: string | null
+          total_price?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          accommodation_id?: string
+          check_in?: string
+          check_out?: string
+          contact_phone?: string | null
+          created_at?: string
+          guest_count?: number | null
+          id?: string
+          rooms?: number | null
+          special_requests?: string | null
+          status?: string | null
+          total_price?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "accommodation_bookings_accommodation_id_fkey"
+            columns: ["accommodation_id"]
+            isOneToOne: false
+            referencedRelation: "accommodations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      accommodations: {
+        Row: {
+          accessibility_features: string[] | null
+          amenities: string[] | null
+          cancellation_policy: string | null
+          check_in_time: string | null
+          check_out_time: string | null
+          community_id: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          county: string | null
+          cover_image: string | null
+          created_at: string
+          description: string | null
+          gallery_images: string[] | null
+          group_capacity: number | null
+          has_generator: boolean | null
+          has_hot_water: boolean | null
+          has_solar: boolean | null
+          id: string
+          impact_score: number | null
+          is_community_owned: boolean | null
+          is_featured: boolean | null
+          is_published: boolean | null
+          lat: number | null
+          lng: number | null
+          local_employment_count: number | null
+          local_procurement_percent: number | null
+          location_name: string | null
+          max_guests: number | null
+          name: string
+          nearby_activities: string[] | null
+          owner_name: string | null
+          price_currency: string | null
+          price_display: string | null
+          price_per_night: number
+          property_type: string
+          rating: number | null
+          review_count: number | null
+          rooms_available: number | null
+          short_description: string | null
+          slug: string
+          tier: string
+          updated_at: string
+          wifi_speed_mbps: number | null
+        }
+        Insert: {
+          accessibility_features?: string[] | null
+          amenities?: string[] | null
+          cancellation_policy?: string | null
+          check_in_time?: string | null
+          check_out_time?: string | null
+          community_id?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          county?: string | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          gallery_images?: string[] | null
+          group_capacity?: number | null
+          has_generator?: boolean | null
+          has_hot_water?: boolean | null
+          has_solar?: boolean | null
+          id?: string
+          impact_score?: number | null
+          is_community_owned?: boolean | null
+          is_featured?: boolean | null
+          is_published?: boolean | null
+          lat?: number | null
+          lng?: number | null
+          local_employment_count?: number | null
+          local_procurement_percent?: number | null
+          location_name?: string | null
+          max_guests?: number | null
+          name: string
+          nearby_activities?: string[] | null
+          owner_name?: string | null
+          price_currency?: string | null
+          price_display?: string | null
+          price_per_night?: number
+          property_type?: string
+          rating?: number | null
+          review_count?: number | null
+          rooms_available?: number | null
+          short_description?: string | null
+          slug: string
+          tier?: string
+          updated_at?: string
+          wifi_speed_mbps?: number | null
+        }
+        Update: {
+          accessibility_features?: string[] | null
+          amenities?: string[] | null
+          cancellation_policy?: string | null
+          check_in_time?: string | null
+          check_out_time?: string | null
+          community_id?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          county?: string | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          gallery_images?: string[] | null
+          group_capacity?: number | null
+          has_generator?: boolean | null
+          has_hot_water?: boolean | null
+          has_solar?: boolean | null
+          id?: string
+          impact_score?: number | null
+          is_community_owned?: boolean | null
+          is_featured?: boolean | null
+          is_published?: boolean | null
+          lat?: number | null
+          lng?: number | null
+          local_employment_count?: number | null
+          local_procurement_percent?: number | null
+          location_name?: string | null
+          max_guests?: number | null
+          name?: string
+          nearby_activities?: string[] | null
+          owner_name?: string | null
+          price_currency?: string | null
+          price_display?: string | null
+          price_per_night?: number
+          property_type?: string
+          rating?: number | null
+          review_count?: number | null
+          rooms_available?: number | null
+          short_description?: string | null
+          slug?: string
+          tier?: string
+          updated_at?: string
+          wifi_speed_mbps?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "accommodations_community_id_fkey"
+            columns: ["community_id"]
+            isOneToOne: false
+            referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       communities: {
         Row: {
           adornment_explanation: string | null
