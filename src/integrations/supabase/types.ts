@@ -154,6 +154,113 @@ export type Database = {
           },
         ]
       }
+      community_events: {
+        Row: {
+          community_id: string
+          county: string | null
+          cover_image: string | null
+          created_at: string
+          created_by: string | null
+          current_attendees: number | null
+          description: string | null
+          end_date: string | null
+          end_time: string | null
+          etiquette_notes: string | null
+          event_type: string
+          id: string
+          invitation_required: boolean | null
+          is_past: boolean | null
+          is_published: boolean | null
+          lat: number | null
+          lng: number | null
+          location_name: string | null
+          max_attendees: number | null
+          preparation_guide: string | null
+          price: string | null
+          recurrence: string | null
+          recurrence_detail: string | null
+          slug: string
+          start_date: string
+          start_time: string | null
+          title: string
+          updated_at: string
+          what_to_bring: string | null
+          what_to_wear: string | null
+        }
+        Insert: {
+          community_id: string
+          county?: string | null
+          cover_image?: string | null
+          created_at?: string
+          created_by?: string | null
+          current_attendees?: number | null
+          description?: string | null
+          end_date?: string | null
+          end_time?: string | null
+          etiquette_notes?: string | null
+          event_type?: string
+          id?: string
+          invitation_required?: boolean | null
+          is_past?: boolean | null
+          is_published?: boolean | null
+          lat?: number | null
+          lng?: number | null
+          location_name?: string | null
+          max_attendees?: number | null
+          preparation_guide?: string | null
+          price?: string | null
+          recurrence?: string | null
+          recurrence_detail?: string | null
+          slug: string
+          start_date: string
+          start_time?: string | null
+          title: string
+          updated_at?: string
+          what_to_bring?: string | null
+          what_to_wear?: string | null
+        }
+        Update: {
+          community_id?: string
+          county?: string | null
+          cover_image?: string | null
+          created_at?: string
+          created_by?: string | null
+          current_attendees?: number | null
+          description?: string | null
+          end_date?: string | null
+          end_time?: string | null
+          etiquette_notes?: string | null
+          event_type?: string
+          id?: string
+          invitation_required?: boolean | null
+          is_past?: boolean | null
+          is_published?: boolean | null
+          lat?: number | null
+          lng?: number | null
+          location_name?: string | null
+          max_attendees?: number | null
+          preparation_guide?: string | null
+          price?: string | null
+          recurrence?: string | null
+          recurrence_detail?: string | null
+          slug?: string
+          start_date?: string
+          start_time?: string | null
+          title?: string
+          updated_at?: string
+          what_to_bring?: string | null
+          what_to_wear?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_events_community_id_fkey"
+            columns: ["community_id"]
+            isOneToOne: false
+            referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       community_gallery: {
         Row: {
           caption: string | null
@@ -238,6 +345,91 @@ export type Database = {
             columns: ["community_id"]
             isOneToOne: false
             referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_invitations: {
+        Row: {
+          created_at: string
+          event_id: string
+          group_size: number | null
+          id: string
+          message: string | null
+          notify_recurring: boolean | null
+          responded_at: string | null
+          response_message: string | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          group_size?: number | null
+          id?: string
+          message?: string | null
+          notify_recurring?: boolean | null
+          responded_at?: string | null
+          response_message?: string | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          group_size?: number | null
+          id?: string
+          message?: string | null
+          notify_recurring?: boolean | null
+          responded_at?: string | null
+          response_message?: string | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_invitations_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "community_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_photos: {
+        Row: {
+          caption: string | null
+          created_at: string
+          event_id: string
+          id: string
+          is_approved: boolean | null
+          photo_url: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          event_id: string
+          id?: string
+          is_approved?: boolean | null
+          photo_url: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          event_id?: string
+          id?: string
+          is_approved?: boolean | null
+          photo_url?: string
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_photos_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "community_events"
             referencedColumns: ["id"]
           },
         ]
