@@ -89,12 +89,31 @@ const Navbar = () => {
           <Button variant="ghost" size="icon" className="text-primary-foreground/80 hover:text-savannah-gold hover:bg-primary-foreground/10">
             <Heart className="h-4 w-4" />
           </Button>
-          <Link to="/onboard">
-            <Button className="gradient-sunset text-primary-foreground font-medium rounded-full px-5 text-sm border-0">
-              <User className="h-4 w-4 mr-2" />
-              Get Started
-            </Button>
-          </Link>
+          {user ? (
+            <div className="flex items-center gap-2">
+              <Link to="/profile">
+                <Button variant="ghost" className="text-primary-foreground/80 hover:text-savannah-gold hover:bg-primary-foreground/10 rounded-full px-3 text-sm">
+                  <User className="h-4 w-4 mr-1" />
+                  {profile?.full_name || "Profile"}
+                </Button>
+              </Link>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => signOut()}
+                className="text-primary-foreground/80 hover:text-savannah-gold hover:bg-primary-foreground/10"
+              >
+                <LogOut className="h-4 w-4" />
+              </Button>
+            </div>
+          ) : (
+            <Link to="/auth">
+              <Button className="gradient-sunset text-primary-foreground font-medium rounded-full px-5 text-sm border-0">
+                <User className="h-4 w-4 mr-2" />
+                Sign In
+              </Button>
+            </Link>
+          )}
         </div>
 
         <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden text-primary-foreground/80">
