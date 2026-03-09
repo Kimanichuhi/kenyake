@@ -3326,6 +3326,48 @@ export type Database = {
         }
         Relationships: []
       }
+      operator_listings: {
+        Row: {
+          created_at: string
+          id: string
+          impact_score: number | null
+          listing_id: string
+          listing_name: string
+          listing_type: string
+          status: string
+          total_bookings: number | null
+          total_revenue: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          impact_score?: number | null
+          listing_id: string
+          listing_name: string
+          listing_type?: string
+          status?: string
+          total_bookings?: number | null
+          total_revenue?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          impact_score?: number | null
+          listing_id?: string
+          listing_name?: string
+          listing_type?: string
+          status?: string
+          total_bookings?: number | null
+          total_revenue?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       park_gates: {
         Row: {
           closing_time: string | null
@@ -3374,6 +3416,39 @@ export type Database = {
           opening_time?: string | null
           park_name?: string
           requirements?: string[] | null
+        }
+        Relationships: []
+      }
+      platform_analytics: {
+        Row: {
+          county: string | null
+          created_at: string
+          id: string
+          metadata: Json | null
+          metric_name: string
+          metric_value: number
+          period_end: string
+          period_start: string
+        }
+        Insert: {
+          county?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          metric_name: string
+          metric_value?: number
+          period_end: string
+          period_start: string
+        }
+        Update: {
+          county?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          metric_name?: string
+          metric_value?: number
+          period_end?: string
+          period_start?: string
         }
         Relationships: []
       }
@@ -4244,6 +4319,27 @@ export type Database = {
           },
         ]
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
       wildlife_sightings: {
         Row: {
           animal_count: number | null
@@ -4300,10 +4396,26 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_roles: {
+        Args: { _user_id: string }
+        Returns: Database["public"]["Enums"]["app_role"][]
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role:
+        | "admin"
+        | "community_admin"
+        | "guide"
+        | "operator"
+        | "gov_official"
+        | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -4430,6 +4542,15 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: [
+        "admin",
+        "community_admin",
+        "guide",
+        "operator",
+        "gov_official",
+        "user",
+      ],
+    },
   },
 } as const
