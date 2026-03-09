@@ -72,8 +72,10 @@ const App = () => (
             <Route path="/transport" element={<TransportPage />} />
             <Route path="/domestic" element={<DomesticPage />} />
             <Route path="/heritage" element={<HeritagePage />} />
+            <Route path="/offline-settings" element={<OfflineSettingsPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <OfflineStatusBar />
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
