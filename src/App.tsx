@@ -31,6 +31,8 @@ import MarketplacePage from "./pages/MarketplacePage";
 import TransportPage from "./pages/TransportPage";
 import DomesticPage from "./pages/DomesticPage";
 import HeritagePage from "./pages/HeritagePage";
+import OfflineSettingsPage from "./pages/OfflineSettingsPage";
+import OfflineStatusBar from "./components/OfflineStatusBar";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
