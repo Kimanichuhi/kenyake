@@ -33,6 +33,10 @@ import DomesticPage from "./pages/DomesticPage";
 import HeritagePage from "./pages/HeritagePage";
 import OfflineSettingsPage from "./pages/OfflineSettingsPage";
 import OfflineStatusBar from "./components/OfflineStatusBar";
+import CommunityDashboardPage from "./pages/CommunityDashboardPage";
+import OperatorDashboardPage from "./pages/OperatorDashboardPage";
+import CountyAnalyticsDashboardPage from "./pages/CountyAnalyticsDashboardPage";
+import PlatformAdminDashboardPage from "./pages/PlatformAdminDashboardPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
