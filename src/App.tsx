@@ -77,6 +77,10 @@ const App = () => (
             <Route path="/domestic" element={<DomesticPage />} />
             <Route path="/heritage" element={<HeritagePage />} />
             <Route path="/offline-settings" element={<OfflineSettingsPage />} />
+            <Route path="/community-dashboard" element={<CommunityDashboardPage />} />
+            <Route path="/operator-dashboard" element={<OperatorDashboardPage />} />
+            <Route path="/county-analytics" element={<CountyAnalyticsDashboardPage />} />
+            <Route path="/platform-admin" element={<PlatformAdminDashboardPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <OfflineStatusBar />
