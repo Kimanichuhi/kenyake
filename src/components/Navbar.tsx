@@ -47,7 +47,7 @@ const Navbar = () => {
       <div className="container mx-auto flex items-center justify-between px-4 py-3 lg:px-8">
         <Link to="/" className="flex items-center gap-2">
           <span className="text-2xl font-display font-bold text-savannah-gold">
-            Safari<span className="text-primary-foreground">Kenya</span>
+            Safari<span className="text-primary-foreground">Sync</span>
           </span>
         </Link>
 

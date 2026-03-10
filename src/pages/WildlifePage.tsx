@@ -133,7 +133,7 @@ const WildlifePage = () => (
           <div className="flex-1 text-center md:text-left">
             <h3 className="font-display text-xl font-bold mb-2">Conservation Matters</h3>
             <p className="text-primary-foreground/60 font-body text-sm">
-              Kenya is home to some of the world's most endangered species. Every safari booking through SafariKenya contributes 5% to local conservation funds. Together we've helped protect over 12,000 hectares of critical wildlife habitat.
+              Kenya is home to some of the world's most endangered species. Every safari booking through SafariSync contributes 5% to local conservation funds. Together we've helped protect over 12,000 hectares of critical wildlife habitat.
             </p>
           </div>
           <div className="flex items-center gap-2">

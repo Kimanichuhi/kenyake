@@ -7,7 +7,7 @@ const FooterSection = () => (
       <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
         <div className="col-span-2 md:col-span-1">
           <Link to="/" className="text-2xl font-display font-bold text-savannah-gold">
-            Safari<span className="text-primary-foreground">Kenya</span>
+            Safari<span className="text-primary-foreground">Sync</span>
           </Link>
           <p className="text-primary-foreground/50 font-body text-sm mt-3">
             Kenya's tourism intelligence platform — all 47 counties.
@@ -50,7 +50,7 @@ const FooterSection = () => (
         </div>
       </div>
       <div className="border-t border-primary-foreground/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-        <p className="text-primary-foreground/40 text-xs font-body">© 2026 SafariKenya. All rights reserved.</p>
+        <p className="text-primary-foreground/40 text-xs font-body">© 2026 SafariSync. All rights reserved.</p>
         <div className="flex gap-6 text-xs font-body text-primary-foreground/40">
           <a href="#" className="hover:text-savannah-gold transition-colors">Privacy</a>
           <a href="#" className="hover:text-savannah-gold transition-colors">Terms</a>

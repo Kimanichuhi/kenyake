@@ -41,9 +41,9 @@ export default defineConfig(({ mode }) => ({
         ],
       },
       manifest: {
-        name: "SafariKenya — Explore Kenya",
-        short_name: "SafariKenya",
-        description: "Kenya's tourism intelligence platform",
+        name: "SafariSync — Explore Kenya",
+        short_name: "SafariSync",
+        description: "AI-powered, community-centric tourism intelligence platform",
         theme_color: "#2d6a4f",
         background_color: "#faf8f5",
         display: "standalone",
