@@ -7,7 +7,7 @@ const FooterSection = () => (
       <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
         <div className="col-span-2 md:col-span-1">
           <Link to="/" className="text-2xl font-display font-bold text-savannah-gold">
-            Safari<span className="text-primary-foreground">Kenya</span>
+            Safari<span className="text-primary-foreground">Sync</span>
           </Link>
           <p className="text-primary-foreground/50 font-body text-sm mt-3">
             Kenya's tourism intelligence platform — all 47 counties.
