@@ -12,7 +12,7 @@ export const useFavorites = () => {
   const fetchFavorites = useCallback(async () => {
     if (!user) {
       // Load from localStorage for non-authenticated users
-      const stored = localStorage.getItem("safarikenya_favorites");
+      const stored = localStorage.getItem("safarisync_favorites");
       setFavorites(stored ? JSON.parse(stored) : []);
       return;
     }
