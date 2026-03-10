@@ -35,7 +35,7 @@ export const useFavorites = () => {
         ? favorites.filter((id) => id !== destinationId)
         : [...favorites, destinationId];
       setFavorites(updated);
-      localStorage.setItem("safarikenya_favorites", JSON.stringify(updated));
+      localStorage.setItem("safarisync_favorites", JSON.stringify(updated));
       toast({
         title: isFaved ? "Removed from favorites" : "Saved to favorites",
         description: user ? undefined : "Sign in to sync across devices",

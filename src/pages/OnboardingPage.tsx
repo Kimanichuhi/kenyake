@@ -133,7 +133,7 @@ const OnboardingPage = () => {
               <div className="text-center">
                 <div className="text-5xl mb-4">🦒</div>
                 <h1 className="font-display text-3xl font-bold mb-3">
-                  {user ? `Welcome back, ${formData.full_name || "Explorer"}!` : "Welcome to SafariKenya"}
+                  {user ? `Welcome back, ${formData.full_name || "Explorer"}!` : "Welcome to SafariSync"}
                 </h1>
                 <p className="text-primary-foreground/60 font-body mb-8">
                   {user ? "Update your travel preferences" : "Let's personalize your experience. This takes about 1 minute."}

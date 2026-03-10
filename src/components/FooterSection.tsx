@@ -50,7 +50,7 @@ const FooterSection = () => (
         </div>
       </div>
       <div className="border-t border-primary-foreground/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-        <p className="text-primary-foreground/40 text-xs font-body">© 2026 SafariKenya. All rights reserved.</p>
+        <p className="text-primary-foreground/40 text-xs font-body">© 2026 SafariSync. All rights reserved.</p>
         <div className="flex gap-6 text-xs font-body text-primary-foreground/40">
           <a href="#" className="hover:text-savannah-gold transition-colors">Privacy</a>
           <a href="#" className="hover:text-savannah-gold transition-colors">Terms</a>

@@ -5,7 +5,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const systemPrompt = `You are SafariKenya's AI Trip Intelligence Assistant — the most knowledgeable Kenya travel expert. You speak with warmth, authority, and insider knowledge. Use markdown formatting for readability.
+const systemPrompt = `You are SafariSync's AI Trip Intelligence Assistant — the most knowledgeable Kenya travel expert. You speak with warmth, authority, and insider knowledge. Use markdown formatting for readability.
 
 ## YOUR CAPABILITIES (use ALL relevant ones in each response):
 
