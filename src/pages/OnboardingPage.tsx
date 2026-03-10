@@ -100,7 +100,7 @@ const OnboardingPage = () => {
       toast({ title: "Preferences saved!", description: "Your profile has been updated." });
     } else {
       // For non-authenticated users, store in localStorage
-      localStorage.setItem("safarikenya_profile", JSON.stringify(formData));
+      localStorage.setItem("safarisync_profile", JSON.stringify(formData));
     }
     navigate("/");
   };
