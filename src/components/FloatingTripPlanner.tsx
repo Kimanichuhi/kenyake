@@ -171,9 +171,9 @@ const FloatingTripPlanner = () => {
                       : "bg-muted text-foreground rounded-bl-md"
                   }`}>
                     {msg.role === "assistant" ? (
-                      <ReactMarkdown className="prose prose-xs max-w-none [&_p]:mb-1 [&_li]:mb-0.5 [&_h1]:text-sm [&_h2]:text-xs [&_h3]:text-xs [&_ul]:pl-3 [&_ol]:pl-3">
-                        {msg.content}
-                      </ReactMarkdown>
+                      <div className="prose prose-xs max-w-none [&_p]:mb-1 [&_li]:mb-0.5 [&_h1]:text-sm [&_h2]:text-xs [&_h3]:text-xs [&_ul]:pl-3 [&_ol]:pl-3">
+                        <ReactMarkdown>{msg.content}</ReactMarkdown>
+                      </div>
                     ) : msg.content}
                   </div>
                 </div>
