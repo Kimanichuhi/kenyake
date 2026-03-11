@@ -72,6 +72,14 @@ const PWAInstallBanner = () => {
                 </Button>
                 <Button
                   size="sm"
+                  variant="outline"
+                  asChild
+                  className="text-xs h-8 px-3 rounded-full"
+                >
+                  <a href="/install">Learn more</a>
+                </Button>
+                <Button
+                  size="sm"
                   variant="ghost"
                   onClick={handleDismiss}
                   className="text-xs text-muted-foreground h-8 px-3"

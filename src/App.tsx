@@ -37,6 +37,7 @@ import CommunityDashboardPage from "./pages/CommunityDashboardPage";
 import OperatorDashboardPage from "./pages/OperatorDashboardPage";
 import CountyAnalyticsDashboardPage from "./pages/CountyAnalyticsDashboardPage";
 import PlatformAdminDashboardPage from "./pages/PlatformAdminDashboardPage";
+import PWAInstallPage from "./pages/PWAInstallPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -81,6 +82,7 @@ const App = () => (
             <Route path="/operator-dashboard" element={<OperatorDashboardPage />} />
             <Route path="/county-analytics" element={<CountyAnalyticsDashboardPage />} />
             <Route path="/platform-admin" element={<PlatformAdminDashboardPage />} />
+            <Route path="/install" element={<PWAInstallPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <OfflineStatusBar />

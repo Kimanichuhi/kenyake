@@ -36,6 +36,7 @@ const FooterSection = () => (
           <ul className="space-y-1.5 font-body text-sm text-primary-foreground/60">
             <li><Link to="/nomads" className="hover:text-savannah-gold transition-colors">Digital Nomads</Link></li>
             <li><Link to="/safety" className="hover:text-savannah-gold transition-colors">Safety</Link></li>
+            <li><Link to="/install" className="hover:text-savannah-gold transition-colors">Install App</Link></li>
             <li><Link to="/onboard" className="hover:text-savannah-gold transition-colors">Create Profile</Link></li>
             <li><a href="#" className="hover:text-savannah-gold transition-colors">About Us</a></li>
           </ul>
