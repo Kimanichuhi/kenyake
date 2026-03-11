@@ -11,6 +11,8 @@ node_modules
 dist
 dist-ssr
 *.local
+.env
+kenyake/
 
 # Editor directories and files
 .vscode/*

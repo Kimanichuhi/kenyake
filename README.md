@@ -1,73 +1,382 @@
-# Welcome to your Lovable project
+﻿# SafariSync Pitch Deck 2026
 
-## Project info
+## Slide 1
+- INNOVATION PROJECT PROPOSAL  â€”  2025
+- SafariSync
+- An AI-Powered, Community-Centric Tourism Intelligence Platform
+- for Sustainable and Inclusive Tourism Development in Kenya
+- "Discover Kenya with locals, powered by intelligence,
+- leaving measurable positive impact."
+- AI-Powered
+- Community-First
+- Offline-Ready
+- Pan-African Scale
+- Piloting in Narok Â· Nairobi Â· Nakuru Â· Kisumu  |  Scalable to Pan-Africa  |  18-Month Roadmap
+- SafariSync  |  AI-Powered Community Tourism Platform  |  Kenya  |  2026
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Slide 2
+- THE OPPORTUNITY
+- Kenya Tourism â€” A Sector at a Tipping Point
+- KSh 452B
+- Tourism earnings in 2024
+- (+20% year-on-year)
+- 2.39M
+- International arrivals
+- in 2024 (+14.7%)
+- 3M+
+- Jobs supported
+- directly & indirectly
+- Ksh 560B
+- Approximated earnings
+- in 2025
+- Yet the opportunity is deeply unequal
+- 70%+ of visitors concentrate on just 4â€“5 destinations â€” hundreds of counties are economically invisible
+- Local communities receive less than 15% of total tourism revenue â€” money flows to Nairobi & international operators
+- No existing platform combines AI intelligence, live wildlife data, offline capability, and community ownership
+- Digital nomad permit launched October 2024 â€” zero platforms currently serve this growing high-spend segment
+- SafariSync  |  AI-Powered Community Tourism Platform  |  Kenya  |  2026
+- Ksh 620B
+- Approximated earnings
+- in 2026
 
-## How can I edit this code?
+## Slide 3
+- PROBLEM STATEMENT
+- Six Systemic Gaps No Platform Has Solved
+- Geographic Concentration
+- 70%+ of international visitors focus on 4â€“5 destinations, leaving hundreds of counties economically excluded from tourism revenue entirely.
+- Community Marginalisation
+- Local guides, homestays, and cultural experiences receive <15% of total revenue. Platforms structurally favour large operators and foreign OTAs.
+- Fragmented Intelligence
+- No single platform combines budget-aware AI itineraries, live wildlife intelligence, cultural education modules, and real-time dynamic replanning.
+- Lack of Authenticity
+- Tourist reviews are easily manipulated. Economic impact data is completely invisible to communities. Revenue distribution is opaque to all parties.
+- Infrastructure Incompatibility
+- No tourism platform delivers robust offline-first functionality or USSD/SMS fallbacks for Kenya's rural, low-connectivity destinations.
+- Weak Sustainability Loops
+- Carbon, biodiversity, and local employment metrics are rarely tracked or attributed to specific experiences â€” SDG reporting is impossible.
+- SafariSync  |  AI-Powered Community Tourism Platform  |  Kenya  |  2026
 
-There are several ways of editing your application.
+## Slide 4
+- THE SOLUTION
+- Introducing SafariSync
+- A next-generation Community-First Smart Tourism 2.0 ecosystem
+- Community Knowledge Graph
+- Locals upload and verify cultural, ecological, and historical content. Tourists access context-aware, community-validated explanations in real time.
+- Hybrid AI Intelligence Layer
+- Conversational AI trip planning (â€˜
+- SafariSync
+- Chat') plus reinforcement-learning multi-objective optimisation across budget, wildlife, and sustainability.
+- EarthRanger Wildlife Bridge
+- Anonymised, privacy-preserving live sighting feeds, probability maps, and migration alerts. First-ever tourist-facing wildlife intelligence layer.
+- Decentralised Marketplace
+- Smart contract revenue splits ensuring â‰¥40% direct community earnings on every transaction. Blockchain-anchored impact ledger.
+- Offline-First African Stack
+- Progressive Web App + IndexedDB + USSD/SMS fallback. Full platform functionality in zero-connectivity rural environments.
+- Diaspora & Nomad Modules
+- Heritage genealogy tools, ancestral land visits, verified co-working directories. Kenya's first nomad-native tourism platform.
+- SafariSync  |  AI-Powered Community Tourism Platform  |  Kenya  |  2026
 
-**Use Lovable**
+## Slide 5
+- COMPETITIVE LANDSCAPE
+- SafariSync Closes Every Gap â€” Simultaneously
+- Platform
+- AI Planning
+- Community
+- Authorship
+- Wildlife
+- Intel
+- Offline
+- +USSD
+- Impact
+- Tracking
+- Community
+- Revenue
+- Booking.com / OTAs
+- Partial
+- No
+- No
+- No
+- No
+- <20%
+- SafariBookings
+- No
+- Limited
+- No
+- No
+- No
+- <20%
+- AI Planners (Layla)
+- Strong
+- No
+- No
+- No
+- No
+- None
+- KTB / Hapa Ni Wapi
+- No
+- Partial
+- No
+- Limited
+- No
+- Moderate
+- EarthRanger
+- N/A
+- No
+- Strong
+- Partial
+- Partial
+- None
+- SAFARISYNC
+- FULL
+- FULL
+- FULL
+- FULL
+- FULL
+- â‰¥40%
+- SafariSync  |  AI-Powered Community Tourism Platform  |  Kenya  |  2026
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## Slide 6
+- PLATFORM ARCHITECTURE
+- How SafariSync Works â€” Five-Layer Architecture
+- PRESENTATION
+- Flutter Mobile PWA  Â·  React Web Admin  Â·  USSD Gateway (Africa's Talking / Twilio)
+- APPLICATION
+- Node.js / FastAPI Microservices  Â·  GraphQL API  Â·  Kubernetes on AWS Africa / Azure East Africa
+- AI & INTELLIGENCE
+- Fine-tuned LLM (Llama-3 / Mistral) + RAG over knowledge graph  Â·  Collaborative Filtering  Â·  RL Itinerary Optimiser  Â·  NLP Authenticity Detector
+- DATA
+- PostgreSQL  Â·  MongoDB  Â·  Neo4j Knowledge Graph  Â·  IPFS Media Storage  Â·  Offline IndexedDB / PouchDB Sync
+- INTEGRATION
+- EarthRanger API  Â·  M-Pesa Daraja  Â·  OpenStreetMap + Mapbox Offline  Â·  Weather APIs  Â·  Stripe (International)  Â·  SMS Gateways
+- SECURITY & GOVERNANCE:  Zero-Trust Architecture  Â·  End-to-End Encryption  Â·  Community Consent Engine  Â·  Permissioned Blockchain Ledger  Â·  Kenya Data Protection Act 2019
+- SafariSync  |  AI-Powered Community Tourism Platform  |  Kenya  |  2026
 
-Changes made via Lovable will be committed automatically to this repo.
+## Slide 7
+- PLATFORM FEATURES
+- 24 Modules Â· 270 Features Â· One Integrated Ecosystem
+- AI Trip Companion â€˜
+- SafariSync
+- '
+- Conversational AI that builds, optimises, and dynamically replans itineraries using budget, wildlife probability, cultural alignment, and sustainability scores.
+- Community Cultural Platform
+- Wiki-style profiles, elder oral history archives, visitor capacity controls, cultural etiquette modules â€” fully authored by communities, not outsiders.
+- Live Wildlife Intelligence
+- EarthRanger-powered sighting feeds, migration alerts, Big Five probability maps, birdwatching layers. First anonymised conservation data for tourists.
+- Direct Marketplace & Payments
+- Experiences, homestays, and crafts with M-Pesa direct settlement. Smart contract splits ensuring â‰¥40% community earnings â€” zero middlemen.
+- Offline-First Infrastructure
+- Complete PWA with offline maps, cached itineraries, SMS/USSD booking. Full platform functionality in zero-connectivity rural environments.
+- Impact & Sustainability Ledger
+- Blockchain-enabled real-time tracking of jobs created, revenue distributed, carbon offset, and conservation contributions per tourist visit.
+- Domestic Tourism Module
+- Swahili-first interface, M-Pesa native, group coordination tools, savings goals, and budget guides for Kenya's 10 million+ domestic travelers.
+- Diaspora & Digital Nomad Layer
+- Heritage genealogy guides, ancestral land visits, verified co-working directories, and Kenya's digital nomad permit guide for long-stay visitors.
+- SafariSync  |  AI-Powered Community Tourism Platform  |  Kenya  |  2026
 
-**Use your preferred IDE**
+## Slide 8
+- IMPLEMENTATION ROADMAP
+- 18-Month Development & Rollout Plan
+- PHASE 1
+- Months 1â€“4
+- Research & Co-Design
+- 200+ community co-design workshops
+- Asset mapping across 4 pilot counties
+- MVP architecture & tech stack setup
+- EarthRanger partnership agreement
+- PHASE 2
+- Months 5â€“9
+- Core Build & Pilot
+- Build all 24 feature modules
+- EarthRanger integration complete
+- Offline + USSD field-tested
+- Pilot launch: Narok, Nairobi, Nakuru and Kisumu
+- PHASE 3
+- Months 9â€“13
+- National Rollout
+- All 47 counties onboarded
+- Diaspora & nomad modules live
+- Blockchain impact ledger activated
+- 15,000+ micro-enterprises created
+- PHASE 4
+- Months 14â€“18
+- Pan-Africa Scale
+- Replication toolkit ready
+- Tanzania, Uganda, Rwanda onboard
+- Third-party impact evaluation
+- Series A fundraising launch
+- MILESTONES:  MVP Pilot (M18)  Â·  National Coverage (M30)  Â·  Pan-Africa Toolkit (M36)  Â·  Financial Self-Sufficiency (Year 4)
+- SafariSync  |  AI-Powered Community Tourism Platform  |  Kenya  |  2026
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Slide 9
+- EXPECTED IMPACT
+- Measurable Impact Across Four Dimensions
+- Ksh 8â€“12M
+- Additional direct community
+- revenue over 5 years
+- 15,000+
+- New livelihoods &
+- micro-enterprise opportunities
+- +35â€“45%
+- Increase in direct
+- community earnings
+- 20+
+- Additional counties reached
+- by tourism flows
+- Economic Impact
+- KSh 8â€“12 million in additional direct community revenue over 5 years. â‰¥40% community revenue share on every transaction. Financial self-sufficiency by Year 4 through diversified revenue streams.
+- Social Impact
+- 15,000+ new livelihoods created. Improved gender equity through women-led experience listings. Digital skills training academies established in all 4 pilot counties.
+- Environmental Impact
+- 20â€“30% reduction in high-season crowding through intelligent routing. Verifiable, blockchain-anchored conservation contributions tracked per tourist visit.
+- Continental Scale
+- Replication toolkit for Tanzania, Uganda, Rwanda, and Botswana by Year 4. Federated architecture enables rapid deployment with country-specific data sovereignty.
+- SafariSync  |  AI-Powered Community Tourism Platform  |  Kenya  |  2026
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Slide 10
+- BUSINESS MODEL & REVENUE
+- How SafariSync Sustains Itself
+- 8â€“12%
+- Transaction Commissions
+- On experience, accommodation, and marketplace bookings. Primary revenue from Month 1 of pilot.
+- SaaS
+- Premium Subscriptions
+- Monthly tier for lodges, operators, and county tourism boards wanting analytics, priority placement.
+- B2B
+- Data Licensing
+- Anonymised tourism flow and impact data licensed to Kenya Tourism Board, development banks, NGOs.
+- Intl
+- White-Label Licensing
+- Platform licensed to Tanzania, Uganda, Rwanda tourism authorities for pan-African expansion.
+- SDG
+- Conservation Fund Mgmt
+- Transparent admin fee on tourist conservation opt-in contributions tied to verified SDG metrics.
+- Corp
+- Corporate & Nomad
+- Enterprise incentive travel accounts. Premium membership for Kenya's growing digital nomad segment.
+- FUNDING MIX  â€”  Ksh 5M Total (â‰ˆ USD 38,759)
+- Government Innovation Grants â€” 40%
+- Development Partners â€” 30%
+- Private & Impact Investors â€” 20%
+- Community Equity â€” 10%
+- SafariSync  |  AI-Powered Community Tourism Platform  |  Kenya  |  2026
 
-Follow these steps:
+## Slide 11
+- RESEARCH OBJECTIVES
+- What SafariSync Sets Out to Prove & Deliver
+- 01
+- Map & Digitise Assets
+- Catalogue community-owned tourism assets across all 47 counties â€” creating Kenya's first complete national tourism knowledge graph.
+- 02
+- Develop & Validate AI
+- Build and validate multi-modal AI recommendation engines tailored to African tourism contexts and low-resource mobile infrastructure.
+- 03
+- Wildlife Intelligence
+- Integrate real-time EarthRanger data into tourist experiences while maintaining conservation integrity and strict privacy protocols.
+- 04
+- Equitable Revenue
+- Design decentralised marketplace mechanics ensuring â‰¥40% direct community revenue capture â€” measurable, verifiable, blockchain-anchored.
+- 05
+- Offline Infrastructure
+- Implement and evaluate offline-first PWA + USSD/SMS stack â€” proven in mHealth, applied to tourism for the first time in Africa.
+- 06
+- Impact Measurement
+- Assess socio-economic, cultural, and environmental impacts using WTTC methodology with independent third-party evaluation at months 18 and 36.
+- SDG ALIGNMENT:
+- SDG 1 â€” No Poverty   Â·   SDG 8 â€” Decent Work   Â·   SDG 10 â€” Reduced Inequalities   Â·   SDG 12 â€” Responsible Consumption   Â·   SDG 15 â€” Life on Land
+- SafariSync  |  AI-Powered Community Tourism Platform  |  Kenya  |  2026
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## Slide 12
+- RISK ASSESSMENT & MITIGATION
+- We Have Thought About What Can Go Wrong
+- HIGH
+- Digital Divide
+- Adoption gap in low-literacy communities
+- â†’
+- Offline-first + USSD/SMS + training academies in every pilot county from Day 1
+- HIGH
+- Data Privacy
+- Sensitive community & wildlife data exposure
+- â†’
+- Community consent engine + local data servers + Kenya Data Protection Act compliance built in
+- MED
+- Operator Resistance
+- Established operators protecting margins
+- â†’
+- Co-design process + operator analytics SaaS tier + community experiences are complementary, not competing
+- MED
+- Wildlife Data Sensitivity
+- Conservation data misuse
+- â†’
+- Strict EarthRanger anonymisation protocols + KWS partnership + no GPS precision to tourists
+- MED
+- Competitor Replication
+- Well-funded outside startup copies model
+- â†’
+- Community relationships & trust are the moat â€” years of local credibility cannot be purchased
+- LOW
+- Content Quality
+- Unverified community-submitted content
+- â†’
+- Community champion peer-review network + automated NLP authenticity detection layer
+- SafariSync  |  AI-Powered Community Tourism Platform  |  Kenya  |  2026
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## Slide 13
+- BUDGET OVERVIEW
+- Ksh 5 Million  (â‰ˆ USD 38,759)  â€”  18-Month Total
+- Personnel & Training
+- Ksh 1.64M
+- Core team, community trainers, field coordinators across all 4 pilot counties
+- Technology Development
+- Ksh 1.48M
+- Platform build, cloud infrastructure, DevOps, security engineering, and testing
+- Community Engagement
+- Ksh 859,357
+- Pilot programmes, co-design workshops, community onboarding, and capacity building
+- AI Model Development
+- Ksh 429,687
+- LLM fine-tuning, EarthRanger integration, knowledge graph, and data pipeline build
+- Monitoring & Evaluation
+- Ksh 351,562
+- Mixed-methods impact studies and independent third-party evaluation at M18 and M36
+- Contingency & Overhead
+- Ksh 234,375
+- Risk management buffer and operational overhead across the 36-month programme
+- TOTAL PROJECT BUDGET  â€”  Ksh  5 Million  â‰ˆ  USD 38,759  |  Agile delivery with quarterly steering committee reviews
+- SafariSync  |  AI-Powered Community Tourism Platform  |  Kenya  |  2026
 
-# Step 3: Install the necessary dependencies.
-npm i
+## Slide 14
+- WHY NOW
+- The Window Is Open â€” And It Won't Stay Open
+- âœ“
+- Kenya's Digital Nomad Permit launched October 2024 â€” a growing high-spend segment with zero platform currently serving them
+- âœ“
+- Visa-free entry expansion is driving 14.7% YoY arrival growth â€” the demand surge is happening right now
+- âœ“
+- EarthRanger has been live in Maasai Mara since 2019 â€” the wildlife data infrastructure already exists and awaits integration
+- âœ“
+- M-Pesa has 90%+ penetration in Kenya â€” the payment rails are already in place for community-direct commerce
+- âœ“
+- Kenya Data Protection Act 2019 provides the governance framework we build on from Day 1
+- âœ“
+- Government's 'Experience Wonder' global campaign creates the international marketing moment SafariSync needs to launch into
+- SafariSync is not a future idea. The infrastructure is ready. The policy window is open. The community need is urgent.
+- SafariSync  |  AI-Powered Community Tourism Platform  |  Kenya  |  2026
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+## Slide 15
+- SafariSync
+- SafariSync is more than a digital platform.
+- It is transformative infrastructure for inclusive, intelligent, and sustainable tourism in Kenya
+- â€” and a replicable model for the African continent.
+- By centring communities, harnessing responsible AI, and embedding transparency and offline resilience,
+- we will unlock economic potential, preserve cultural heritage, protect biodiversity, and position Kenya
+- as the continental leader in next-generation tourism technology.
+- "Discover Kenya with locals, powered by intelligence, leaving measurable positive impact."
+- Research Collaboration
+- Grant & Innovation Funding
+- Technology Partnership
+- Community Investment
+- safarisync.africa  Â·  Kenya  Â·  2026
+- SafariSync  |  Research Collaboration Â· Grant Funding Â· Technology Partnership Â· Community Investment  |  safarisync.africa  |  2026
 
-**Edit a file directly in GitHub**
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
