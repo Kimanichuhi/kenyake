@@ -167,8 +167,12 @@ const Navbar = () => {
             exit={{ height: 0, opacity: 0 }}
             className="md:hidden overflow-hidden glass-card-dark border-t border-primary-foreground/10"
           >
-            <div className="px-4 py-4 flex flex-col gap-3">
-              <div className="flex flex-col gap-1">
+            <div className="px-4 py-4 flex flex-col gap-4 max-h-[calc(100vh-4.5rem)] overflow-y-auto">
+              <div>
+                <div className="text-[11px] uppercase tracking-wide text-primary-foreground/50 px-1">
+                  Main
+                </div>
+                <div className="flex flex-col gap-1 mt-1">
                 {navLinks.map((link) => (
                   <Link
                     key={link.href}
@@ -179,7 +183,9 @@ const Navbar = () => {
                     {link.label}
                   </Link>
                 ))}
+                </div>
               </div>
+              <div className="h-px bg-primary-foreground/10" />
               {moreSections.map((section) => (
                 <div key={section.title} className="pt-1">
                   <div className="text-[11px] uppercase tracking-wide text-primary-foreground/50 px-1">
@@ -199,18 +205,26 @@ const Navbar = () => {
                   </div>
                 </div>
               ))}
+              <div className="h-px bg-primary-foreground/10" />
+              <div className="text-[11px] uppercase tracking-wide text-primary-foreground/50 px-1">
+                Account
+              </div>
               {user ? (
                 <>
-                  <Link to="/profile" onClick={() => setMobileOpen(false)} className="text-sm font-medium py-2 text-primary-foreground/80">
-                    My Profile
+                  <Link to="/profile" onClick={() => setMobileOpen(false)}>
+                    <Button variant="ghost" className="text-primary-foreground/80 hover:text-savannah-gold hover:bg-primary-foreground/10 justify-start w-full px-0">
+                      <User className="h-4 w-4 mr-2" />
+                      {profile?.full_name || "My Profile"}
+                    </Button>
                   </Link>
-                  <Button onClick={() => { signOut(); setMobileOpen(false); }} variant="ghost" className="text-primary-foreground/80 justify-start px-0">
+                  <Button onClick={() => { signOut(); setMobileOpen(false); }} variant="ghost" className="text-primary-foreground/80 hover:text-savannah-gold hover:bg-primary-foreground/10 justify-start px-0 w-full">
                     <LogOut className="h-4 w-4 mr-2" /> Sign Out
                   </Button>
                 </>
               ) : (
                 <Link to="/auth" onClick={() => setMobileOpen(false)}>
                   <Button className="gradient-sunset text-primary-foreground font-medium rounded-full mt-2 border-0 w-full">
+                    <User className="h-4 w-4 mr-2" />
                     Sign In
                   </Button>
                 </Link>
