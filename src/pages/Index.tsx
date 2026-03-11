@@ -8,6 +8,8 @@ import ExperiencesSection from "@/components/ExperiencesSection";
 import WildlifeSection from "@/components/WildlifeSection";
 import CommunitySection from "@/components/CommunitySection";
 import FooterSection from "@/components/FooterSection";
+import FloatingTripPlanner from "@/components/FloatingTripPlanner";
+import PWAInstallBanner from "@/components/PWAInstallBanner";
 
 const quickLinks = [
   { icon: Users, label: "Local Guides", href: "/guides", color: "gradient-safari" },
@@ -39,7 +41,7 @@ const Index = () => (
                 <div className={`h-12 w-12 rounded-xl ${link.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
                   <link.icon className="h-5 w-5 text-primary-foreground" />
                 </div>
-                <span className="text-xs font-body font-medium text-foreground text-center">{link.label}</span>
+                <span className="text-xs font-medium text-foreground text-center">{link.label}</span>
               </Link>
             </motion.div>
           ))}
@@ -57,11 +59,11 @@ const Index = () => (
       <div className="container mx-auto px-4 text-center">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           <Compass className="h-12 w-12 text-sunset-orange mx-auto mb-4" />
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">Ready to Explore Kenya?</h2>
-          <p className="font-body text-muted-foreground max-w-lg mx-auto mb-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Ready to Explore Kenya?</h2>
+          <p className="text-muted-foreground max-w-lg mx-auto mb-8">
             Create your profile to get personalized recommendations, save destinations, and track your travel impact.
           </p>
-          <Link to="/onboard" className="gradient-sunset text-primary-foreground px-10 py-4 rounded-full font-body font-semibold inline-block hover:opacity-90 transition-opacity">
+          <Link to="/onboard" className="gradient-sunset text-primary-foreground px-10 py-4 rounded-full font-semibold inline-block hover:opacity-90 transition-opacity">
             Start Your Journey →
           </Link>
         </motion.div>
@@ -69,6 +71,8 @@ const Index = () => (
     </section>
 
     <FooterSection />
+    <FloatingTripPlanner />
+    <PWAInstallBanner />
   </div>
 );
 
