@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Globe, Heart, User, ChevronDown, LogOut } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
@@ -13,22 +13,42 @@ const navLinks = [
   { label: "Community", href: "/community" },
 ];
 
-const moreLinks = [
-  { label: "🛍️ Marketplace", href: "/marketplace" },
-  { label: "🚗 Transport", href: "/transport" },
-  { label: "🤖 Trip Planner", href: "/trip-planner" },
-  { label: "🐾 Wildlife Intel", href: "/wildlife-intel" },
-  { label: "🧭 Local Guides", href: "/guides" },
-  { label: "🎓 Become a Guide", href: "/guide-register" },
-  { label: "📍 Nearby", href: "/nearby" },
-  { label: "Cultural Events", href: "/events" },
-  { label: "Food & Dining", href: "/food" },
-  { label: "Digital Nomads", href: "/nomads" },
-  { label: "Safety", href: "/safety" },
-  { label: "Your Impact", href: "/impact" },
-  { label: "📚 Cultural Prep", href: "/cultural-prep" },
-  { label: "🇰🇪 Tembea Kenya", href: "/domestic" },
-  { label: "🌍 Heritage & Diaspora", href: "/heritage" },
+const moreSections = [
+  {
+    title: "Plan & Explore",
+    links: [
+      { label: "🤖 Trip Planner", href: "/trip-planner" },
+      { label: "📍 Nearby", href: "/nearby" },
+      { label: "Cultural Events", href: "/events" },
+      { label: "Food & Dining", href: "/food" },
+      { label: "📚 Cultural Prep", href: "/cultural-prep" },
+    ],
+  },
+  {
+    title: "Wildlife & Nature",
+    links: [
+      { label: "🐾 Wildlife Intel", href: "/wildlife-intel" },
+    ],
+  },
+  {
+    title: "People & Community",
+    links: [
+      { label: "🧭 Local Guides", href: "/guides" },
+      { label: "🎓 Become a Guide", href: "/guide-register" },
+      { label: "Your Impact", href: "/impact" },
+    ],
+  },
+  {
+    title: "Travel Services",
+    links: [
+      { label: "🛍️ Marketplace", href: "/marketplace" },
+      { label: "🚗 Transport", href: "/transport" },
+      { label: "Digital Nomads", href: "/nomads" },
+      { label: "🇰🇪 Tembea Kenya", href: "/domestic" },
+      { label: "🌍 Heritage & Diaspora", href: "/heritage" },
+      { label: "Safety", href: "/safety" },
+    ],
+  },
 ];
 
 const Navbar = () => {
@@ -75,17 +95,24 @@ const Navbar = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
-                  className="absolute top-full right-0 mt-2 w-48 glass-card rounded-xl shadow-lg overflow-hidden"
+                  className="absolute top-full right-0 mt-2 w-56 glass-card rounded-xl shadow-lg overflow-hidden max-h-[60vh] overflow-y-auto"
                 >
-                  {moreLinks.map((link) => (
-                    <Link
-                      key={link.href}
-                      to={link.href}
-                      onClick={() => setMoreOpen(false)}
-                      className={`block px-4 py-2.5 text-sm transition-colors ${location.pathname === link.href ? "bg-muted text-foreground" : "text-foreground/80 hover:bg-muted"}`}
-                    >
-                      {link.label}
-                    </Link>
+                  {moreSections.map((section) => (
+                    <div key={section.title} className="py-2">
+                      <div className="px-4 pb-1 text-[11px] uppercase tracking-wide text-muted-foreground">
+                        {section.title}
+                      </div>
+                      {section.links.map((link) => (
+                        <Link
+                          key={link.href}
+                          to={link.href}
+                          onClick={() => setMoreOpen(false)}
+                          className={`block px-4 py-2 text-sm transition-colors ${location.pathname === link.href ? "bg-muted text-foreground" : "text-foreground/80 hover:bg-muted"}`}
+                        >
+                          {link.label}
+                        </Link>
+                      ))}
+                    </div>
                   ))}
                 </motion.div>
               )}
@@ -140,16 +167,37 @@ const Navbar = () => {
             exit={{ height: 0, opacity: 0 }}
             className="md:hidden overflow-hidden glass-card-dark border-t border-primary-foreground/10"
           >
-            <div className="px-4 py-4 flex flex-col gap-2">
-              {[...navLinks, ...moreLinks].map((link) => (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className={`text-sm font-medium py-2 ${location.pathname === link.href ? "text-savannah-gold" : "text-primary-foreground/80"}`}
-                >
-                  {link.label}
-                </Link>
+            <div className="px-4 py-4 flex flex-col gap-3">
+              <div className="flex flex-col gap-1">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    to={link.href}
+                    onClick={() => setMobileOpen(false)}
+                    className={`text-sm font-medium py-2 ${location.pathname.startsWith(link.href) ? "text-savannah-gold" : "text-primary-foreground/80"}`}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+              {moreSections.map((section) => (
+                <div key={section.title} className="pt-1">
+                  <div className="text-[11px] uppercase tracking-wide text-primary-foreground/50 px-1">
+                    {section.title}
+                  </div>
+                  <div className="flex flex-col gap-1 mt-1">
+                    {section.links.map((link) => (
+                      <Link
+                        key={link.href}
+                        to={link.href}
+                        onClick={() => setMobileOpen(false)}
+                        className={`text-sm font-medium py-2 ${location.pathname === link.href ? "text-savannah-gold" : "text-primary-foreground/80"}`}
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
               ))}
               {user ? (
                 <>

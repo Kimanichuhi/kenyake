@@ -1,5 +1,9 @@
 ﻿# SafariSync Pitch Deck 2026
 
+## About
+SafariSync is an AI-powered, community-first tourism intelligence platform for Kenya. It combines trip planning, wildlife intelligence, offline tools, and a marketplace that prioritizes local communities. The goal is to make travel more inclusive, sustainable, and economically fair across all counties.
+
+
 ## Slide 1
 - INNOVATION PROJECT PROPOSAL  â€”  2025
 - SafariSync
