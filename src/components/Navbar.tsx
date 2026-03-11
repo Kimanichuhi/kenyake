@@ -45,8 +45,9 @@ const Navbar = () => {
       className="fixed top-0 left-0 right-0 z-50 glass-card-dark"
     >
       <div className="container mx-auto flex items-center justify-between px-4 py-3 lg:px-8">
-        <Link to="/" className="flex items-center gap-2">
-          <span className="text-2xl font-display font-bold text-savannah-gold">
+        <Link to="/" className="flex items-center gap-2.5">
+          <img src="/icon-192.png" alt="SafariSync" className="h-8 w-8 rounded-lg" />
+          <span className="text-xl font-bold text-savannah-gold tracking-tight">
             Safari<span className="text-primary-foreground">Sync</span>
           </span>
         </Link>
@@ -81,7 +82,7 @@ const Navbar = () => {
                       key={link.href}
                       to={link.href}
                       onClick={() => setMoreOpen(false)}
-                      className={`block px-4 py-2.5 text-sm font-body transition-colors ${location.pathname === link.href ? "bg-muted text-foreground" : "text-foreground/80 hover:bg-muted"}`}
+                      className={`block px-4 py-2.5 text-sm transition-colors ${location.pathname === link.href ? "bg-muted text-foreground" : "text-foreground/80 hover:bg-muted"}`}
                     >
                       {link.label}
                     </Link>

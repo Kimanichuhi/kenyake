@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -58,7 +58,6 @@
     --shadow-card-hover: 0 12px 40px -8px hsla(30, 10%, 15%, 0.15);
     --shadow-glass: 0 8px 32px -4px hsla(30, 10%, 15%, 0.1);
 
-    --font-display: 'Playfair Display', serif;
     --font-body: 'DM Sans', sans-serif;
 
     --sidebar-background: 0 0% 98%;
@@ -81,7 +80,8 @@
     font-family: var(--font-body);
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-display);
+    font-family: var(--font-body);
+    @apply font-bold tracking-tight;
   }
 }
 
