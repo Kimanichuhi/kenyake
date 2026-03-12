@@ -2,6 +2,7 @@ export type Intent =
   | "DESTINATIONS"
   | "WILDLIFE"
   | "CULTURAL_EVENTS"
+  | "HERITAGE"
   | "GUIDES"
   | "EXPERIENCES"
   | "FOOD"
@@ -18,6 +19,9 @@ export const classifyIntent = (prompt: string): Intent => {
   }
   if (/(event|festival|calendar|cultural event|ceremony|celebration)/i.test(q)) {
     return "CULTURAL_EVENTS";
+  }
+  if (/(heritage|diaspora|ancestral|swahili|homecoming)/i.test(q)) {
+    return "HERITAGE";
   }
   if (/(guide|tour guide|local guide|guide me|guided tour)/i.test(q)) {
     return "GUIDES";

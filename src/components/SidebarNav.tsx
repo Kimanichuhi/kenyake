@@ -22,6 +22,7 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Search,
+  CreditCard,
 } from "lucide-react";
 
 const navItems = [
@@ -33,6 +34,7 @@ const navItems = [
   { label: "Local Guides Marketplace", href: "/guides", icon: Users, description: "Verified local guides and experts" },
   { label: "Experiences & Activities", href: "/experiences", icon: Compass, description: "Experiences and activities" },
   { label: "Community Marketplace", href: "/marketplace", icon: Store, description: "Local products and markets" },
+  { label: "Packages & Pricing", href: "/packages", icon: CreditCard, description: "Plans and subscription options" },
   { label: "Transport & Logistics", href: "/transport", icon: Bus, description: "Transport services and logistics" },
   { label: "Routes & Trails", href: "/transport", icon: Route, description: "Trails, routes, and navigation" },
   { label: "Digital Nomad Kenya", href: "/nomads", icon: Laptop, description: "Remote work and nomad hubs" },

@@ -16,6 +16,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { calculateMarketplaceCommission } from "@/lib/marketplace";
+import { formatDualCurrency } from "@/lib/currency";
 
 interface Seller {
   id: string; name: string; slug: string; seller_type: string; bio: string | null; story: string | null;
@@ -85,12 +87,26 @@ const MarketplacePage = () => {
     return matchCat && matchSearch;
   });
 
+  const getOrderTotal = () => {
+    if (!selectedProduct) return 0;
+    const basePrice = selectedProduct.is_custom_commission
+      ? (selectedProduct.commission_starting_price || selectedProduct.price_amount)
+      : selectedProduct.price_amount;
+    return basePrice * qty;
+  };
+
+  const orderTotal = getOrderTotal();
+  const orderTotalUsd = selectedProduct?.price_usd ? selectedProduct.price_usd * qty : undefined;
+  const { commission: platformFee, sellerPayout } = calculateMarketplaceCommission(orderTotal);
+  const platformFeeUsd = typeof orderTotalUsd === "number" ? calculateMarketplaceCommission(orderTotalUsd).commission : undefined;
+  const sellerPayoutUsd = typeof orderTotalUsd === "number" ? calculateMarketplaceCommission(orderTotalUsd).sellerPayout : undefined;
+
   const handleOrder = async () => {
     if (!user) { toast({ title: "Sign in required", variant: "destructive" }); return; }
     if (!selectedProduct || !shippingAddress) return;
     setSubmitting(true);
     const isCustom = !!selectedProduct.is_custom_commission;
-    const total = isCustom ? (selectedProduct.commission_starting_price || selectedProduct.price_amount) * qty : selectedProduct.price_amount * qty;
+    const total = orderTotal;
     const { error } = await supabase.from("marketplace_orders").insert({
       product_id: selectedProduct.id,
       seller_id: selectedProduct.seller_id,
@@ -130,7 +146,7 @@ const MarketplacePage = () => {
             <span className="text-sm font-body font-semibold tracking-widest uppercase text-safari-green">Direct From Artisans</span>
             <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mt-2 mb-3">Community Marketplace</h1>
             <p className="font-body text-muted-foreground max-w-2xl mx-auto">
-              Handcrafted products from verified community artisans and cooperatives. Every purchase goes directly to the maker — no middlemen, no commissions.
+              Handcrafted products from verified community artisans and cooperatives. A 10% platform fee supports community tourism while the seller receives the rest.
             </p>
           </motion.div>
 
@@ -214,7 +230,9 @@ const MarketplacePage = () => {
                           {p.marketplace_sellers?.accepts_mpesa && <span title="M-Pesa accepted" className="h-5 w-5 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-[9px]">📱</span>}
                           {p.marketplace_sellers?.ships_internationally && <span title="Ships worldwide" className="h-5 w-5 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center"><Globe className="h-3 w-3 text-blue-600" /></span>}
                         </div>
-                        <span className="font-body font-bold text-foreground text-sm">{p.price_display}</span>
+                        <span className="font-body font-bold text-foreground text-sm">
+                          {formatDualCurrency(p.price_amount, p.price_usd)}
+                        </span>
                       </div>
                     </div>
                   </motion.div>
@@ -248,7 +266,9 @@ const MarketplacePage = () => {
 
               <div className="space-y-5 mt-4">
                 <div className="flex flex-wrap gap-3 text-sm font-body">
-                  <span className="font-bold text-xl text-foreground">{selectedProduct.price_display}</span>
+                  <span className="font-bold text-xl text-foreground">
+                    {formatDualCurrency(selectedProduct.price_amount, selectedProduct.price_usd)}
+                  </span>
                   {selectedProduct.price_usd && <span className="text-muted-foreground self-end">≈ ${selectedProduct.price_usd} USD</span>}
                   {selectedProduct.in_stock ? (
                     <Badge className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 self-end">{selectedProduct.stock_count ? `${selectedProduct.stock_count} in stock` : "In Stock"}</Badge>
@@ -281,7 +301,7 @@ const MarketplacePage = () => {
                 </div>
 
                 <Button className="w-full gradient-sunset text-primary-foreground font-body font-semibold text-base py-6" onClick={() => setShowOrder(true)} disabled={!selectedProduct.in_stock && !selectedProduct.is_custom_commission}>
-                  {selectedProduct.is_custom_commission ? "Request Custom Commission" : selectedProduct.is_preorder ? "Pre-Order Now" : "Order Now"} — {selectedProduct.price_display}
+                  {selectedProduct.is_custom_commission ? "Request Custom Commission" : selectedProduct.is_preorder ? "Pre-Order Now" : "Order Now"} — {formatDualCurrency(selectedProduct.price_amount, selectedProduct.price_usd)}
                   <ChevronRight className="h-5 w-5 ml-1" />
                 </Button>
               </div>
@@ -297,7 +317,7 @@ const MarketplacePage = () => {
             <>
               <DialogHeader>
                 <DialogTitle className="font-display text-xl">{selectedProduct.is_custom_commission ? "Custom Commission Request" : "Place Order"}</DialogTitle>
-                <p className="text-sm text-muted-foreground font-body">{selectedProduct.title} · {selectedProduct.price_display}</p>
+                <p className="text-sm text-muted-foreground font-body">{selectedProduct.title} · {formatDualCurrency(selectedProduct.price_amount, selectedProduct.price_usd)}</p>
               </DialogHeader>
               <div className="space-y-4 mt-4">
                 {!selectedProduct.is_custom_commission && (
@@ -348,9 +368,25 @@ const MarketplacePage = () => {
                 </div>
 
                 <div className="bg-muted/50 rounded-xl p-4 space-y-2 text-sm font-body">
-                  <div className="flex justify-between"><span className="text-muted-foreground">{selectedProduct.price_display} × {qty}</span><span className="text-foreground">{selectedProduct.price_currency} {selectedProduct.price_amount * qty}</span></div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">
+                      {formatDualCurrency(selectedProduct.price_amount, selectedProduct.price_usd)} × {qty}
+                    </span>
+                    <span className="text-foreground">{formatDualCurrency(orderTotal, orderTotalUsd)}</span>
+                  </div>
                   {shippingCountry !== "Kenya" && <div className="flex justify-between"><span className="text-muted-foreground">International shipping</span><span className="text-muted-foreground">TBD by seller</span></div>}
-                  <div className="border-t border-border pt-2 flex justify-between font-bold"><span>Total</span><span>{selectedProduct.price_currency} {selectedProduct.price_amount * qty}</span></div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Platform fee (10%)</span>
+                    <span className="text-muted-foreground">{formatDualCurrency(platformFee, platformFeeUsd)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Seller receives</span>
+                    <span className="text-foreground">{formatDualCurrency(sellerPayout, sellerPayoutUsd)}</span>
+                  </div>
+                  <div className="border-t border-border pt-2 flex justify-between font-bold">
+                    <span>Total</span>
+                    <span>{formatDualCurrency(orderTotal, orderTotalUsd)}</span>
+                  </div>
                 </div>
 
                 <Button className="w-full gradient-sunset text-primary-foreground font-body font-semibold py-5" disabled={!shippingAddress || submitting || (selectedProduct.is_custom_commission && !customDesc)} onClick={handleOrder}>
@@ -403,7 +439,7 @@ const MarketplacePage = () => {
                     {products.filter(p => p.seller_id === selectedSeller.id).map((p) => (
                       <button key={p.id} onClick={() => { setSelectedSeller(null); setSelectedProduct(p); }} className="bg-card border border-border rounded-xl p-3 text-left hover:shadow-md transition-shadow">
                         <h5 className="font-display text-sm font-semibold text-foreground line-clamp-1">{p.title}</h5>
-                        <p className="text-xs text-muted-foreground font-body mt-0.5">{p.price_display}</p>
+                        <p className="text-xs text-muted-foreground font-body mt-0.5">{formatDualCurrency(p.price_amount, p.price_usd)}</p>
                         <div className="flex items-center gap-1 mt-1">
                           {p.is_authentic_verified && <Shield className="h-3 w-3 text-safari-green" />}
                           {p.in_stock ? <span className="text-[10px] text-green-600 font-body">In Stock</span> : <span className="text-[10px] text-destructive font-body">Sold Out</span>}

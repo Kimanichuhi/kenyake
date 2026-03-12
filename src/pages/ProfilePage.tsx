@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { User, MapPin, Heart, Wallet, Globe, LogOut, Settings, Bookmark, History, Trash2, Calendar, Clock, Users, Loader2, XCircle, Bed, Car } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -285,9 +285,17 @@ const MyBookings = () => {
 };
 
 const ProfilePage = () => {
+  const location = useLocation();
   const { user, profile, signOut } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<"profile" | "saved" | "bookings" | "trips">("profile");
+
+  useEffect(() => {
+    const tab = new URLSearchParams(location.search).get("tab");
+    if (tab === "saved" || tab === "bookings" || tab === "trips" || tab === "profile") {
+      setActiveTab(tab);
+    }
+  }, [location.search]);
 
   const handleSignOut = async () => {
     await signOut();

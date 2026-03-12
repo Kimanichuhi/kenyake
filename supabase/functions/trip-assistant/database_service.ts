@@ -62,6 +62,16 @@ export const queryDatabase = async (
       );
       return { type: "guide_results", results, source: "internal" };
     }
+    case "HERITAGE": {
+      const results = await safeQuery(() =>
+        supabase
+          .from("cultural_programmes")
+          .select("title, description, price_amount, price_currency, start_dates, duration_weeks, slug")
+          .eq("is_published", true)
+          .limit(10),
+      );
+      return { type: "heritage_results", results, source: "internal" };
+    }
     case "EXPERIENCES": {
       const results = await safeQuery(() =>
         supabase
@@ -123,8 +133,13 @@ export const queryDatabase = async (
       return { type: "marketplace_results", results, source: "internal" };
     }
     case "DESTINATIONS": {
-      // Destinations are currently client-side; return empty if not available in DB.
-      return { type: "destination_results", results: [], source: "internal" };
+      const results = await safeQuery(() =>
+        supabase
+          .from("destinations")
+          .select("name, county, category, rating, best_time, price, description, highlights, lat, lng")
+          .limit(10),
+      );
+      return { type: "destination_results", results, source: "internal" };
     }
     default:
       return { type: "unknown_results", results: [], source: "internal" };

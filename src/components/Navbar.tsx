@@ -1,9 +1,11 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Globe, Heart, User, ChevronDown, LogOut } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Menu, X, Heart, User, ChevronDown, LogOut, Search } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { CommandDialog, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem } from "@/components/ui/command";
 import { useAuth } from "@/contexts/AuthContext";
+import { destinations } from "@/data/destinations";
 
 const navLinks = [
   { label: "Destinations", href: "/destinations" },
@@ -22,6 +24,7 @@ const moreSections = [
       { label: "Cultural Events", href: "/events" },
       { label: "Food & Dining", href: "/food" },
       { label: "📚 Cultural Prep", href: "/cultural-prep" },
+      { label: "💳 Packages", href: "/packages" },
     ],
   },
   {
@@ -54,8 +57,31 @@ const moreSections = [
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const location = useLocation();
+  const navigate = useNavigate();
   const { user, profile, signOut } = useAuth();
+
+  const pageItems = [
+    { label: "Home", href: "/" },
+    ...navLinks,
+    ...moreSections.flatMap((s) => s.links),
+    { label: "Packages", href: "/packages" },
+    { label: "Payments", href: "/payments" },
+  ];
+
+  const destinationItems = destinations.map((d) => ({
+    label: d.name,
+    href: `/destinations/${d.id}`,
+    meta: d.county,
+  }));
+
+  const handleSearchSelect = (href: string) => {
+    setSearchOpen(false);
+    setSearchQuery("");
+    navigate(href);
+  };
 
   return (
     <motion.nav
@@ -127,12 +153,19 @@ const Navbar = () => {
         </div>
 
         <div className="hidden md:flex items-center gap-3">
-          <Button variant="ghost" size="icon" className="text-primary-foreground/80 hover:text-savannah-gold hover:bg-primary-foreground/10">
-            <Globe className="h-4 w-4" />
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setSearchOpen(true)}
+            className="text-primary-foreground/80 hover:text-savannah-gold hover:bg-primary-foreground/10"
+          >
+            <Search className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="icon" className="text-primary-foreground/80 hover:text-savannah-gold hover:bg-primary-foreground/10">
-            <Heart className="h-4 w-4" />
-          </Button>
+          <Link to="/profile?tab=saved">
+            <Button variant="ghost" size="icon" className="text-primary-foreground/80 hover:text-savannah-gold hover:bg-primary-foreground/10">
+              <Heart className="h-4 w-4" />
+            </Button>
+          </Link>
           {user ? (
             <div className="flex items-center gap-2">
               <Link to="/profile">
@@ -164,6 +197,42 @@ const Navbar = () => {
           {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
       </div>
+
+      <CommandDialog open={searchOpen} onOpenChange={setSearchOpen}>
+        <CommandInput
+          placeholder="Search pages and destinations..."
+          value={searchQuery}
+          onValueChange={setSearchQuery}
+        />
+        <CommandList>
+          <CommandEmpty>No results found.</CommandEmpty>
+          <CommandGroup heading="Pages">
+            {pageItems.map((item) => (
+              <CommandItem
+                key={item.href}
+                value={`${item.label} ${item.href}`}
+                onSelect={() => handleSearchSelect(item.href)}
+              >
+                {item.label}
+              </CommandItem>
+            ))}
+          </CommandGroup>
+          <CommandGroup heading="Destinations">
+            {destinationItems.map((item) => (
+              <CommandItem
+                key={item.href}
+                value={`${item.label} ${item.meta ?? ""}`}
+                onSelect={() => handleSearchSelect(item.href)}
+              >
+                <div className="flex flex-col">
+                  <span>{item.label}</span>
+                  {item.meta && <span className="text-xs text-muted-foreground">{item.meta}</span>}
+                </div>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </CommandList>
+      </CommandDialog>
 
       <AnimatePresence>
         {mobileOpen && (

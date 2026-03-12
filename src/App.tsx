@@ -28,6 +28,8 @@ import GuideRegisterPage from "./pages/GuideRegisterPage";
 import GuideDashboardPage from "./pages/GuideDashboardPage";
 import AccommodationPage from "./pages/AccommodationPage";
 import MarketplacePage from "./pages/MarketplacePage";
+import PackagesPage from "./pages/PackagesPage";
+import PaymentsPage from "./pages/PaymentsPage";
 import TransportPage from "./pages/TransportPage";
 import DomesticPage from "./pages/DomesticPage";
 import HeritagePage from "./pages/HeritagePage";
@@ -75,6 +77,8 @@ const App = () => (
             <Route path="/guide-dashboard" element={<GuideDashboardPage />} />
             <Route path="/accommodation" element={<AccommodationPage />} />
             <Route path="/marketplace" element={<MarketplacePage />} />
+            <Route path="/packages" element={<PackagesPage />} />
+            <Route path="/payments" element={<PaymentsPage />} />
             <Route path="/transport" element={<TransportPage />} />
             <Route path="/domestic" element={<DomesticPage />} />
             <Route path="/heritage" element={<HeritagePage />} />

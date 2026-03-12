@@ -1,8 +1,46 @@
-﻿import { motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-safari.jpg";
 
 const HeroSection = () => {
+  const ctaText = "Start Tourism Chat About Kenya";
+  const [typedText, setTypedText] = useState("");
+
+  useEffect(() => {
+    let idx = 0;
+    let direction: "forward" | "back" = "forward";
+    let timeout: number | undefined;
+
+    const tick = () => {
+      if (direction === "forward") {
+        idx += 1;
+        setTypedText(ctaText.slice(0, idx));
+        if (idx >= ctaText.length) {
+          direction = "back";
+          timeout = window.setTimeout(tick, 900);
+          return;
+        }
+        timeout = window.setTimeout(tick, 45);
+        return;
+      }
+
+      idx -= 1;
+      setTypedText(ctaText.slice(0, Math.max(0, idx)));
+      if (idx <= 0) {
+        direction = "forward";
+        timeout = window.setTimeout(tick, 350);
+        return;
+      }
+      timeout = window.setTimeout(tick, 25);
+    };
+
+    timeout = window.setTimeout(tick, 200);
+    return () => {
+      if (timeout) window.clearTimeout(timeout);
+    };
+  }, [ctaText]);
+
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
       {/* Background Image */}
@@ -47,14 +85,18 @@ const HeroSection = () => {
             <Link
               to="/trip-planner"
               aria-label="Open SafariSync Assistant"
-              className="group relative inline-flex items-center gap-3 rounded-full border border-primary-foreground/30 bg-primary-foreground/10 px-6 py-3 font-body text-sm md:text-base font-semibold text-primary-foreground shadow-[0_0_30px_rgba(245,166,35,0.35)] transition-all hover:shadow-[0_0_45px_rgba(245,166,35,0.6)] hover:border-primary-foreground/60"
+              className="group relative inline-flex items-center gap-3 rounded-full border border-primary-foreground/30 bg-primary-foreground/10 px-6 py-3 font-body text-sm md:text-base font-semibold text-primary-foreground shadow-[0_0_30px_rgba(245,166,35,0.35)] transition-all hover:shadow-[0_0_55px_rgba(245,166,35,0.65)] hover:border-primary-foreground/60 hover:-translate-y-0.5 hover:scale-[1.02] active:scale-[0.99]"
             >
-              <span className="absolute -inset-1 rounded-full bg-gradient-to-r from-sunset-orange/40 via-savannah-gold/40 to-sunset-orange/40 blur-md opacity-60 group-hover:opacity-90 transition-opacity" />
+              <span className="absolute -inset-1 rounded-full bg-gradient-to-r from-sunset-orange/40 via-savannah-gold/40 to-sunset-orange/40 blur-md opacity-60 group-hover:opacity-95 transition-opacity animate-[pulse_2.4s_ease-in-out_infinite]" />
               <span className="relative inline-flex items-center gap-2">
-                <span className="inline-flex items-center rounded-full bg-savannah-gold/20 px-2 py-0.5 text-xs uppercase tracking-widest text-savannah-gold">
+                <span className="inline-flex items-center rounded-full bg-savannah-gold/20 px-2 py-0.5 text-xs uppercase tracking-widest text-savannah-gold animate-pulse">
                   AI
                 </span>
-                Start AI Tourism Chat
+                <span className="tracking-wide">
+                  {typedText}
+                  <span className="inline-block w-[10px] ml-1 border-r-2 border-primary-foreground/80 animate-pulse" />
+                </span>
+                <span className="text-savannah-gold animate-bounce">→</span>
               </span>
             </Link>
           </motion.div>
