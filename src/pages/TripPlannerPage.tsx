@@ -1,20 +1,26 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+﻿import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Send, Bot, User as UserIcon, Settings2, Sparkles, MapPin, Clock,
-  DollarSign, Users, Dumbbell, UtensilsCrossed, Compass, Mountain,
-  Camera, Tent, Palette, Heart, Baby, Loader2, ChevronDown, X, Sun,
-  Cloud, TreePine, Binoculars
+  Send, Bot, User as UserIcon, Settings2, Sparkles, Users, UtensilsCrossed,
+  Mountain, Camera, Tent, Palette, Heart, Baby, Loader2, X, Sun, TreePine,
+  Binoculars, Calendar, Route, Store, Shield
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import Navbar from "@/components/Navbar";
-import FooterSection from "@/components/FooterSection";
+import SidebarNav from "@/components/SidebarNav";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/trip-assistant`;
+const CLIENT_ID_KEY = "safarisync_client_id";
+const getClientId = () => {
+  const existing = localStorage.getItem(CLIENT_ID_KEY);
+  if (existing) return existing;
+  const id = crypto.randomUUID();
+  localStorage.setItem(CLIENT_ID_KEY, id);
+  return id;
+};
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -44,15 +50,16 @@ const defaultContext: TripContext = {
   timeLeft: "",
 };
 
-const quickActions = [
-  { label: "Plan my trip", prompt: "I want to plan a trip to Kenya. Help me build an itinerary!", icon: <Compass className="h-3.5 w-3.5" /> },
-  { label: "I have 4 hours", prompt: "I have 4 hours left today. What's the best use of my time?", icon: <Clock className="h-3.5 w-3.5" /> },
-  { label: "What should I do today?", prompt: "What should I do today? Give me day-of suggestions based on the current time.", icon: <Sun className="h-3.5 w-3.5" /> },
-  { label: "Pre-arrival briefing", prompt: "I'm arriving in Kenya in 7 days. Give me a pre-arrival intelligence briefing.", icon: <Sparkles className="h-3.5 w-3.5" /> },
-  { label: "Avoid crowds", prompt: "How can I avoid the tourist crowds and see the best of Kenya?", icon: <Users className="h-3.5 w-3.5" /> },
-  { label: "Wildlife calendar", prompt: "What wildlife events are happening this month in Kenya?", icon: <Binoculars className="h-3.5 w-3.5" /> },
-  { label: "Budget tips", prompt: "Give me the best budget tips for traveling in Kenya on a tight budget.", icon: <DollarSign className="h-3.5 w-3.5" /> },
-  { label: "Weather update", prompt: "What's the weather like across Kenya right now and how should I plan around it?", icon: <Cloud className="h-3.5 w-3.5" /> },
+const quickLinks = [
+  { label: "Show wildlife hotspots near me", prompt: "Show wildlife hotspots near me", icon: <Binoculars className="h-3.5 w-3.5" /> },
+  { label: "What cultural events are happening this week?", prompt: "What cultural events are happening this week?", icon: <Calendar className="h-3.5 w-3.5" /> },
+  { label: "Best food experiences in this county", prompt: "Best food experiences in this county", icon: <UtensilsCrossed className="h-3.5 w-3.5" /> },
+  { label: "Find trusted local guides nearby", prompt: "Find trusted local guides nearby", icon: <Users className="h-3.5 w-3.5" /> },
+  { label: "Hidden gems tourists usually miss", prompt: "Hidden gems tourists usually miss", icon: <Sparkles className="h-3.5 w-3.5" /> },
+  { label: "Routes and transport options to my destination", prompt: "Routes and transport options to my destination", icon: <Route className="h-3.5 w-3.5" /> },
+  { label: "Community markets I can visit today", prompt: "Community markets I can visit today", icon: <Store className="h-3.5 w-3.5" /> },
+  { label: "Best photography locations right now", prompt: "Best photography locations right now", icon: <Camera className="h-3.5 w-3.5" /> },
+  { label: "Safety alerts in my current location", prompt: "Safety alerts in my current location", icon: <Shield className="h-3.5 w-3.5" /> },
 ];
 
 const tripTypes = ["leisure", "adventure", "cultural", "honeymoon", "business+leisure"];
@@ -81,7 +88,7 @@ const TripPlannerPage = () => {
   const [tripContext, setTripContext] = useState<TripContext>(defaultContext);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const { toast } = useToast();
 
   const scrollToBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -94,7 +101,7 @@ const TripPlannerPage = () => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
       },
-      body: JSON.stringify({ messages: allMessages, tripContext }),
+      body: JSON.stringify({ messages: allMessages, clientId: getClientId(), userName: profile?.full_name || user?.email || undefined }),
     });
 
     if (resp.status === 429) {
@@ -185,7 +192,16 @@ const TripPlannerPage = () => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(input); }
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleUserPrompt(input); }
+  };
+
+  const handleUserPrompt = (prompt: string) => {
+    send(prompt);
+  };
+
+  const applyPrompt = (prompt: string) => {
+    setInput(prompt);
+    inputRef.current?.focus();
   };
 
   const toggleInterest = (label: string) => {
@@ -205,6 +221,7 @@ const TripPlannerPage = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
+      <SidebarNav />
       <main className="flex-1 pt-16 flex flex-col">
         {/* Header */}
         <div className="gradient-safari px-4 py-6">
@@ -212,10 +229,10 @@ const TripPlannerPage = () => {
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <Bot className="h-5 w-5 text-primary-foreground" />
-                <span className="text-xs font-medium text-primary-foreground/80 uppercase tracking-wider">AI Trip Intelligence</span>
+                <span className="text-xs font-medium text-primary-foreground/80 uppercase tracking-wider">SafariSync Assistant</span>
               </div>
               <h1 className="text-2xl md:text-3xl font-display font-bold text-primary-foreground">
-                Your Kenya Trip <span className="text-savannah-gold">Assistant</span>
+                SafariSync <span className="text-savannah-gold">Assistant</span>
               </h1>
             </div>
             <Button
@@ -224,7 +241,7 @@ const TripPlannerPage = () => {
               onClick={() => setShowSettings(!showSettings)}
               className="border-primary-foreground/30 text-primary-foreground/80 hover:bg-primary-foreground/10"
             >
-              <Settings2 className="h-4 w-4 mr-1" /> Trip Profile
+              <Settings2 className="h-4 w-4 mr-1" /> Visitor Context
             </Button>
           </div>
         </div>
@@ -241,7 +258,7 @@ const TripPlannerPage = () => {
               >
                 <div className="p-4 space-y-4 w-80">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-display font-semibold text-sm">Trip Profile</h3>
+                    <h3 className="font-display font-semibold text-sm">Visitor Context</h3>
                     <button onClick={() => setShowSettings(false)} className="lg:hidden"><X className="h-4 w-4" /></button>
                   </div>
 
@@ -263,7 +280,7 @@ const TripPlannerPage = () => {
 
                   {/* Trip type */}
                   <div>
-                    <label className="text-xs font-medium text-muted-foreground">Trip type</label>
+                    <label className="text-xs font-medium text-muted-foreground">Travel style</label>
                     <div className="flex flex-wrap gap-1.5 mt-1">
                       {tripTypes.map((t) => (
                         <button key={t} onClick={() => setTripContext((p) => ({ ...p, tripType: t }))}
@@ -370,15 +387,15 @@ const TripPlannerPage = () => {
                   <div className="w-16 h-16 rounded-2xl gradient-safari flex items-center justify-center mx-auto mb-4">
                     <Bot className="h-8 w-8 text-primary-foreground" />
                   </div>
-                  <h2 className="font-display text-xl font-bold text-foreground mb-2">Jambo! I'm your Kenya Trip Assistant</h2>
+                  <h2 className="font-display text-xl font-bold text-foreground mb-2">Jambo! I'm your SafariSync Assistant</h2>
                   <p className="text-sm text-muted-foreground max-w-md mx-auto mb-6">
-                    I can plan itineraries, suggest activities, optimize your time, and give insider tips — all personalized to your trip profile.
+                    Ask me about destinations, wildlife sightings, cultural events, local guides, transport routes, markets, and hidden gems across Kenya.
                   </p>
                   <div className="flex flex-wrap justify-center gap-2 max-w-2xl mx-auto">
-                    {quickActions.map((action) => (
+                    {quickLinks.map((action) => (
                       <button
                         key={action.label}
-                        onClick={() => send(action.prompt)}
+                        onClick={() => applyPrompt(action.prompt)}
                         className="flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-full bg-muted hover:bg-muted/80 text-foreground transition-colors"
                       >
                         {action.icon} {action.label}
@@ -436,21 +453,24 @@ const TripPlannerPage = () => {
 
               <div ref={messagesEndRef} />
             </div>
-
-            {/* Quick actions when in conversation */}
-            {messages.length > 0 && !isLoading && (
-              <div className="px-4 pb-2 flex gap-1.5 overflow-x-auto">
-                {quickActions.slice(0, 4).map((a) => (
+            {/* Quick links */}
+            <div className="px-4 pb-2">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[11px] uppercase tracking-wide text-muted-foreground">Quick Links</span>
+                <span className="text-[11px] text-muted-foreground">Click to populate</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {quickLinks.map((a) => (
                   <button
                     key={a.label}
-                    onClick={() => send(a.prompt)}
-                    className="whitespace-nowrap flex items-center gap-1 text-[11px] font-medium px-2.5 py-1.5 rounded-full bg-muted hover:bg-muted/80 text-muted-foreground transition-colors shrink-0"
+                    onClick={() => applyPrompt(a.prompt)}
+                    className="flex items-center gap-1 text-[11px] font-medium px-2.5 py-1.5 rounded-full bg-muted hover:bg-muted/80 text-muted-foreground transition-colors"
                   >
                     {a.icon} {a.label}
                   </button>
                 ))}
               </div>
-            )}
+            </div>
 
             {/* Input */}
             <div className="border-t border-border bg-card px-4 py-3">
@@ -460,13 +480,13 @@ const TripPlannerPage = () => {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="Ask about itineraries, activities, budget tips, wildlife, food..."
+                  placeholder="Ask about wildlife, destinations, culture, guides, transport, or experiences in Kenya."
                   rows={1}
                   className="flex-1 resize-none bg-muted rounded-xl px-4 py-2.5 text-sm border-0 focus:ring-1 focus:ring-primary outline-none max-h-32"
                   style={{ minHeight: "40px" }}
                 />
                 <Button
-                  onClick={() => send(input)}
+                  onClick={() => handleUserPrompt(input)}
                   disabled={!input.trim() || isLoading}
                   size="icon"
                   className="gradient-safari border-0 rounded-xl h-10 w-10 shrink-0"
@@ -483,3 +503,5 @@ const TripPlannerPage = () => {
 };
 
 export default TripPlannerPage;
+
+

@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+﻿import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Users, Utensils, Compass, Shield, Wifi, BookOpen, Award, MapPin } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -18,6 +18,13 @@ const quickLinks = [
   { icon: Wifi, label: "Digital Nomads", href: "/nomads", color: "gradient-sunset" },
   { icon: Shield, label: "Safety", href: "/safety", color: "gradient-safari" },
   { icon: Award, label: "Your Impact", href: "/impact", color: "gradient-sunset" },
+];
+
+const heroStats = [
+  { value: "47", label: "Counties" },
+  { value: "300+", label: "Destinations" },
+  { value: "1,000+", label: "Experiences" },
+  { value: "50+", label: "Communities" },
 ];
 
 const Index = () => (
@@ -64,8 +71,16 @@ const Index = () => (
             Create your profile to get personalized recommendations, save destinations, and track your travel impact.
           </p>
           <Link to="/onboard" className="gradient-sunset text-primary-foreground px-10 py-4 rounded-full font-semibold inline-block hover:opacity-90 transition-opacity">
-            Start Your Journey →
+            Start Your Journey â†’
           </Link>
+          <div className="flex flex-wrap justify-center gap-8 mt-10">
+            {heroStats.map((stat) => (
+              <div key={stat.label} className="text-center">
+                <div className="text-2xl font-display font-bold text-sunset-orange">{stat.value}</div>
+                <div className="text-xs text-muted-foreground font-body uppercase tracking-wide">{stat.label}</div>
+              </div>
+            ))}
+          </div>
         </motion.div>
       </div>
     </section>
@@ -77,3 +92,4 @@ const Index = () => (
 );
 
 export default Index;
+

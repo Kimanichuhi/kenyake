@@ -4,16 +4,25 @@ import { Bot, Send, X, Sparkles, Loader2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/trip-assistant`;
+const CLIENT_ID_KEY = "safarisync_client_id";
+const getClientId = () => {
+  const existing = localStorage.getItem(CLIENT_ID_KEY);
+  if (existing) return existing;
+  const id = crypto.randomUUID();
+  localStorage.setItem(CLIENT_ID_KEY, id);
+  return id;
+};
 
 type Msg = { role: "user" | "assistant"; content: string };
 
 const quickPrompts = [
-  "Plan a 3-day safari trip",
-  "Best budget destinations",
-  "What to do in Nairobi today?",
-  "Wildlife events this month",
+  "Show wildlife hotspots near me",
+  "What cultural events are happening this week?",
+  "Best food experiences in this county",
+  "Safety alerts in my current location",
 ];
 
 const FloatingTripPlanner = () => {
@@ -24,6 +33,7 @@ const FloatingTripPlanner = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const { toast } = useToast();
+  const { user, profile } = useAuth();
 
   const scrollToBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   useEffect(scrollToBottom, [messages]);
@@ -36,7 +46,7 @@ const FloatingTripPlanner = () => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
       },
-      body: JSON.stringify({ messages: allMessages, tripContext: {} }),
+      body: JSON.stringify({ messages: allMessages, clientId: getClientId(), userName: profile?.full_name || user?.email || undefined }),
     });
 
     if (resp.status === 429) { toast({ title: "Rate limited", description: "Please wait a moment.", variant: "destructive" }); return; }
@@ -95,6 +105,11 @@ const FloatingTripPlanner = () => {
     finally { setIsLoading(false); }
   };
 
+  const applyPrompt = (prompt: string) => {
+    setInput(prompt);
+    inputRef.current?.focus();
+  };
+
   return (
     <>
       {/* Floating Button */}
@@ -108,7 +123,7 @@ const FloatingTripPlanner = () => {
             whileTap={{ scale: 0.95 }}
             onClick={() => setOpen(true)}
             className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full gradient-safari shadow-lg flex items-center justify-center group"
-            aria-label="Open AI Trip Planner"
+            aria-label="Open SafariSync Assistant"
           >
             <Bot className="h-6 w-6 text-primary-foreground" />
             <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-accent animate-pulse" />
@@ -133,7 +148,7 @@ const FloatingTripPlanner = () => {
                   <Bot className="h-4 w-4 text-primary-foreground" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold text-primary-foreground">Trip Assistant</h3>
+                  <h3 className="text-sm font-semibold text-primary-foreground">SafariSync Assistant</h3>
                   <p className="text-[10px] text-primary-foreground/70">AI-powered • SafariSync</p>
                 </div>
               </div>
@@ -148,12 +163,12 @@ const FloatingTripPlanner = () => {
                 <div className="text-center py-6">
                   <Sparkles className="h-8 w-8 text-secondary mx-auto mb-2" />
                   <p className="text-sm font-semibold text-foreground">Jambo! How can I help?</p>
-                  <p className="text-xs text-muted-foreground mt-1">Ask me anything about traveling in Kenya</p>
+                  <p className="text-xs text-muted-foreground mt-1">Ask about destinations, wildlife, culture, markets, or safety in Kenya</p>
                   <div className="flex flex-wrap gap-1.5 justify-center mt-4">
                     {quickPrompts.map((p) => (
                       <button
                         key={p}
-                        onClick={() => send(p)}
+                        onClick={() => applyPrompt(p)}
                         className="text-[11px] px-3 py-1.5 rounded-full bg-muted text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
                       >
                         {p}
@@ -197,7 +212,7 @@ const FloatingTripPlanner = () => {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(input); } }}
-                  placeholder="Ask about Kenya..."
+                  placeholder="Ask about wildlife, destinations, culture, guides, transport, or experiences in Kenya."
                   rows={1}
                   className="flex-1 resize-none bg-muted rounded-xl px-3 py-2 text-xs outline-none focus:ring-1 focus:ring-primary text-foreground placeholder:text-muted-foreground"
                 />

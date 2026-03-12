@@ -8,3 +8,6 @@ verify_jwt = false
 
 [functions.wildlife-intel]
 verify_jwt = false
+
+[functions.ai-cache-refresh]
+verify_jwt = false

@@ -68,6 +68,9 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    --sidebar-width: 288px;
+    --sidebar-collapsed-width: 80px;
   }
 }
 
@@ -82,6 +85,15 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-body);
     @apply font-bold tracking-tight;
+  }
+}
+
+@media (min-width: 768px) {
+  body.has-sidebar {
+    padding-left: var(--sidebar-width);
+  }
+  body.has-sidebar.sidebar-collapsed {
+    padding-left: var(--sidebar-collapsed-width);
   }
 }
 

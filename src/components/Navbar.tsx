@@ -73,6 +73,12 @@ const Navbar = () => {
         </Link>
 
         <div className="hidden md:flex items-center gap-6">
+          <Link
+            to="/"
+            className={`text-sm font-medium transition-colors ${location.pathname === "/" ? "text-savannah-gold" : "text-primary-foreground/80 hover:text-savannah-gold"}`}
+          >
+            Home
+          </Link>
           {navLinks.map((link) => (
             <Link
               key={link.label}
@@ -173,6 +179,13 @@ const Navbar = () => {
                   Main
                 </div>
                 <div className="flex flex-col gap-1 mt-1">
+                  <Link
+                    to="/"
+                    onClick={() => setMobileOpen(false)}
+                    className={`text-sm font-medium py-2 ${location.pathname === "/" ? "text-savannah-gold" : "text-primary-foreground/80"}`}
+                  >
+                    Home
+                  </Link>
                 {navLinks.map((link) => (
                   <Link
                     key={link.href}

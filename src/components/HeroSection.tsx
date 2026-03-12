@@ -1,11 +1,8 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Search, MapPin, Calendar, Users } from "lucide-react";
+﻿import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-safari.jpg";
 
 const HeroSection = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
       {/* Background Image */}
@@ -38,62 +35,29 @@ const HeroSection = () => {
             <span className="text-gradient-sunset">Hidden Wonders</span>
           </h1>
           <p className="text-primary-foreground/80 font-body text-lg md:text-xl max-w-2xl mx-auto mb-10">
-            From the great migration to ancient Swahili towns — plan your journey
+            From the great migration to ancient Swahili towns â€” plan your journey
             across all 47 counties with AI-powered travel intelligence.
           </p>
-        </motion.div>
-
-        {/* Search Bar */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="glass-card max-w-4xl mx-auto p-2"
-        >
-          <div className="flex flex-col md:flex-row gap-2">
-            <div className="flex items-center gap-3 flex-1 px-4 py-3 rounded-xl bg-background/60">
-              <MapPin className="h-5 w-5 text-sunset-orange shrink-0" />
-              <input
-                type="text"
-                placeholder="Where do you want to explore?"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-transparent text-foreground placeholder:text-muted-foreground text-sm outline-none font-body"
-              />
-            </div>
-            <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-background/60">
-              <Calendar className="h-5 w-5 text-sunset-orange shrink-0" />
-              <span className="text-sm text-muted-foreground font-body whitespace-nowrap">Any dates</span>
-            </div>
-            <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-background/60">
-              <Users className="h-5 w-5 text-sunset-orange shrink-0" />
-              <span className="text-sm text-muted-foreground font-body whitespace-nowrap">Travelers</span>
-            </div>
-            <button className="gradient-sunset text-primary-foreground rounded-xl px-8 py-3 font-body font-semibold text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
-              <Search className="h-4 w-4" />
-              Search
-            </button>
-          </div>
-        </motion.div>
-
-        {/* Quick Stats */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="flex flex-wrap justify-center gap-8 mt-10"
-        >
-          {[
-            { value: "47", label: "Counties" },
-            { value: "300+", label: "Destinations" },
-            { value: "1,000+", label: "Experiences" },
-            { value: "50+", label: "Communities" },
-          ].map((stat) => (
-            <div key={stat.label} className="text-center">
-              <div className="text-2xl font-display font-bold text-savannah-gold">{stat.value}</div>
-              <div className="text-xs text-primary-foreground/60 font-body uppercase tracking-wide">{stat.label}</div>
-            </div>
-          ))}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.4 }}
+            className="flex justify-center mb-10"
+          >
+            <Link
+              to="/trip-planner"
+              aria-label="Open SafariSync Assistant"
+              className="group relative inline-flex items-center gap-3 rounded-full border border-primary-foreground/30 bg-primary-foreground/10 px-6 py-3 font-body text-sm md:text-base font-semibold text-primary-foreground shadow-[0_0_30px_rgba(245,166,35,0.35)] transition-all hover:shadow-[0_0_45px_rgba(245,166,35,0.6)] hover:border-primary-foreground/60"
+            >
+              <span className="absolute -inset-1 rounded-full bg-gradient-to-r from-sunset-orange/40 via-savannah-gold/40 to-sunset-orange/40 blur-md opacity-60 group-hover:opacity-90 transition-opacity" />
+              <span className="relative inline-flex items-center gap-2">
+                <span className="inline-flex items-center rounded-full bg-savannah-gold/20 px-2 py-0.5 text-xs uppercase tracking-widest text-savannah-gold">
+                  AI
+                </span>
+                Start AI Tourism Chat
+              </span>
+            </Link>
+          </motion.div>
         </motion.div>
       </div>
     </section>
@@ -101,3 +65,5 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
+
+
