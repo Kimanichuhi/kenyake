@@ -94,8 +94,8 @@
     "vitest": "^3.2.4"
   },
   "overrides": {
-    "glob": "^10.4.5",          // or "^11.x" / "^13.x" — pick a modern safe version
-    "inflight": "^1.0.6",       // newer maintained fork if needed, but usually glob fix clears it
+    "glob": "^10.4.5",
+    "inflight": "^1.0.6",
     "rimraf": "^5.0.0"
   }
 }
