@@ -39,7 +39,7 @@ export default defineConfig(({ mode }) => ({
             },
           },
         ],
-        maximumFileSizeToCacheInBytes: 3 * 1024 * 1024, // 3 MB
+        maximumFileSizeToCacheInBytes: 3000000,
       },
       manifest: {
         name: "SafariSync — Explore Kenya",
