@@ -188,13 +188,15 @@ const FloatingTripPlanner = () => {
             {/* Messages */}
             <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 min-h-0 bg-gradient-to-b from-muted/30 to-transparent">
               {messages.length === 0 ? (
-                <ChatEmptyState prompts={quickPrompts} onPromptClick={applyPrompt} compact />
+                <ChatEmptyState prompts={quickPrompts} onPromptClick={applyPrompt} compact firstName={firstName} />
               ) : (
                 <ChatMessages
                   messages={messages}
                   isLoading={isLoading}
                   density="compact"
                   onRegenerate={handleRegenerate}
+                  onEdit={handleEdit}
+                  onFollowUp={send}
                 />
               )}
               <div ref={messagesEndRef} />
