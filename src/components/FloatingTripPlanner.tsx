@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bot, Send, X, Sparkles, Loader2 } from "lucide-react";
-import ReactMarkdown from "react-markdown";
+import { Bot, Send, X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import ChatMessages, { type ChatMsg } from "@/components/chat/ChatMessages";
+import ChatEmptyState from "@/components/chat/ChatEmptyState";
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/trip-assistant`;
 const CLIENT_ID_KEY = "safarisync_client_id";
@@ -16,13 +17,13 @@ const getClientId = () => {
   return id;
 };
 
-type Msg = { role: "user" | "assistant"; content: string };
+type Msg = ChatMsg;
 
 const quickPrompts = [
-  "Show me hidden gems",
-  "Cultural experiences available",
-  "Community-led tours",
-  "Featured destinations",
+  "Hidden gems",
+  "Wildlife safaris",
+  "Cultural events",
+  "Community guides",
 ];
 
 const FloatingTripPlanner = () => {
