@@ -125,20 +125,16 @@ What would you like to discover today? 😊`;
 
     const structuredData = await routeQuery(supabase, intent);
 
-    if (!structuredData || structuredData.length === 0) {
+    const hasResults =
+      structuredData &&
+      Array.isArray((structuredData as any).results) &&
+      (structuredData as any).results.length > 0;
 
+    if (!hasResults) {
       console.warn("No tourism data found for intent:", intent);
-
-      return generateAIResponse(
-        apiKey,
-        prompt,
-        {
-          message:
-            "Sorry, I could not find tourism information for that request. Try asking about parks, wildlife, culture, or destinations in Kenya.",
-        },
-        userName,
-        conversationHistory
-      );
+      // Fall through with empty results so the AI can still respond using
+      // general knowledge about Kenyan tourism, while being transparent that
+      // SafariSync has no specific listings for this query yet.
     }
 
     /* =============================
