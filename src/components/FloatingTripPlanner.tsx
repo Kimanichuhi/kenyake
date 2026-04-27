@@ -19,10 +19,10 @@ const getClientId = () => {
 type Msg = { role: "user" | "assistant"; content: string };
 
 const quickPrompts = [
-  "Show wildlife hotspots near me",
-  "What cultural events are happening this week?",
-  "Best food experiences in this county",
-  "Safety alerts in my current location",
+  "Show me hidden gems",
+  "Cultural experiences available",
+  "Community-led tours",
+  "Featured destinations",
 ];
 
 const FloatingTripPlanner = () => {
@@ -139,37 +139,43 @@ const FloatingTripPlanner = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed bottom-6 right-6 z-50 w-[380px] max-w-[calc(100vw-2rem)] h-[520px] max-h-[calc(100vh-6rem)] bg-card rounded-2xl shadow-2xl border border-border flex flex-col overflow-hidden"
+            className="fixed bottom-6 right-6 z-50 w-[400px] max-w-[calc(100vw-2rem)] h-[560px] max-h-[calc(100vh-6rem)] bg-card/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-border/60 flex flex-col overflow-hidden"
           >
             {/* Header */}
-            <div className="gradient-safari px-4 py-3 flex items-center justify-between shrink-0">
-              <div className="flex items-center gap-2">
-                <div className="h-8 w-8 rounded-full bg-primary-foreground/20 flex items-center justify-center">
-                  <Bot className="h-4 w-4 text-primary-foreground" />
+            <div className="relative gradient-safari px-4 py-3.5 flex items-center justify-between shrink-0 overflow-hidden">
+              <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.4),transparent_60%)]" />
+              <div className="relative flex items-center gap-2.5">
+                <div className="h-9 w-9 rounded-full bg-primary-foreground/20 backdrop-blur flex items-center justify-center ring-1 ring-primary-foreground/30">
+                  <Bot className="h-4.5 w-4.5 text-primary-foreground" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold text-primary-foreground">SafariSync Assistant</h3>
-                  <p className="text-[10px] text-primary-foreground/70">AI-powered • SafariSync</p>
+                  <h3 className="text-sm font-semibold text-primary-foreground tracking-tight">SafariSync AI</h3>
+                  <p className="text-[10px] text-primary-foreground/80 flex items-center gap-1">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 animate-pulse" />
+                    Grounded in SafariSync listings
+                  </p>
                 </div>
               </div>
-              <button onClick={() => setOpen(false)} className="text-primary-foreground/70 hover:text-primary-foreground transition-colors">
-                <X className="h-5 w-5" />
+              <button onClick={() => setOpen(false)} className="relative text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10 rounded-full p-1 transition-colors">
+                <X className="h-4.5 w-4.5" />
               </button>
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3 min-h-0">
+            <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 min-h-0 bg-gradient-to-b from-muted/30 to-transparent">
               {messages.length === 0 && (
-                <div className="text-center py-6">
-                  <Sparkles className="h-8 w-8 text-secondary mx-auto mb-2" />
-                  <p className="text-sm font-semibold text-foreground">Jambo! How can I help?</p>
-                  <p className="text-xs text-muted-foreground mt-1">Ask about destinations, wildlife, culture, markets, or safety in Kenya</p>
+                <div className="text-center py-4">
+                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl gradient-safari shadow-md mb-3">
+                    <Sparkles className="h-5 w-5 text-primary-foreground" />
+                  </div>
+                  <p className="text-sm font-semibold text-foreground">Karibu to SafariSync</p>
+                  <p className="text-xs text-muted-foreground mt-1 px-2">Ask about destinations, communities, hidden gems, and experiences in our listings.</p>
                   <div className="flex flex-wrap gap-1.5 justify-center mt-4">
                     {quickPrompts.map((p) => (
                       <button
                         key={p}
                         onClick={() => applyPrompt(p)}
-                        className="text-[11px] px-3 py-1.5 rounded-full bg-muted text-muted-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
+                        className="text-[11px] px-3 py-1.5 rounded-full bg-card border border-border text-foreground/80 hover:border-primary hover:text-primary hover:shadow-sm transition-all"
                       >
                         {p}
                       </button>
@@ -179,14 +185,19 @@ const FloatingTripPlanner = () => {
               )}
 
               {messages.map((msg, i) => (
-                <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                  <div className={`max-w-[85%] rounded-2xl px-3 py-2 text-xs leading-relaxed ${
+                <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} items-end gap-1.5`}>
+                  {msg.role === "assistant" && (
+                    <div className="h-6 w-6 rounded-full gradient-safari flex items-center justify-center shrink-0 mb-0.5">
+                      <Bot className="h-3 w-3 text-primary-foreground" />
+                    </div>
+                  )}
+                  <div className={`max-w-[82%] rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed shadow-sm ${
                     msg.role === "user"
-                      ? "gradient-safari text-primary-foreground rounded-br-md"
-                      : "bg-muted text-foreground rounded-bl-md"
+                      ? "bg-card border border-border text-foreground rounded-br-md"
+                      : "bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 border border-primary/15 text-foreground rounded-bl-md"
                   }`}>
                     {msg.role === "assistant" ? (
-                      <div className="prose prose-xs max-w-none [&_p]:mb-1 [&_li]:mb-0.5 [&_h1]:text-sm [&_h2]:text-xs [&_h3]:text-xs [&_ul]:pl-3 [&_ol]:pl-3">
+                      <div className="prose prose-xs max-w-none [&_p]:mb-1 [&_li]:mb-0.5 [&_h1]:text-sm [&_h2]:text-xs [&_h3]:text-xs [&_ul]:pl-3 [&_ol]:pl-3 [&_a]:text-primary">
                         <ReactMarkdown>{msg.content}</ReactMarkdown>
                       </div>
                     ) : msg.content}
@@ -195,9 +206,14 @@ const FloatingTripPlanner = () => {
               ))}
 
               {isLoading && messages[messages.length - 1]?.role !== "assistant" && (
-                <div className="flex justify-start">
-                  <div className="bg-muted rounded-2xl rounded-bl-md px-3 py-2">
-                    <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                <div className="flex justify-start items-end gap-1.5">
+                  <div className="h-6 w-6 rounded-full gradient-safari flex items-center justify-center shrink-0">
+                    <Bot className="h-3 w-3 text-primary-foreground" />
+                  </div>
+                  <div className="bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/15 rounded-2xl rounded-bl-md px-3.5 py-3 flex items-center gap-1">
+                    <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce [animation-delay:-0.3s]" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce [animation-delay:-0.15s]" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce" />
                   </div>
                 </div>
               )}
@@ -205,26 +221,27 @@ const FloatingTripPlanner = () => {
             </div>
 
             {/* Input */}
-            <div className="border-t border-border p-3 shrink-0">
-              <div className="flex items-end gap-2">
+            <div className="border-t border-border/60 p-3 shrink-0 bg-card/80 backdrop-blur">
+              <div className="flex items-end gap-2 bg-muted/60 rounded-2xl p-1.5 border border-border/40 focus-within:border-primary/50 focus-within:bg-card transition-colors">
                 <textarea
                   ref={inputRef}
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(input); } }}
-                  placeholder="Ask about wildlife, destinations, culture, guides, transport, or experiences in Kenya."
+                  placeholder="Ask about SafariSync listings…"
                   rows={1}
-                  className="flex-1 resize-none bg-muted rounded-xl px-3 py-2 text-xs outline-none focus:ring-1 focus:ring-primary text-foreground placeholder:text-muted-foreground"
+                  className="flex-1 resize-none bg-transparent px-2.5 py-1.5 text-xs outline-none text-foreground placeholder:text-muted-foreground"
                 />
                 <Button
                   size="icon"
                   onClick={() => send(input)}
                   disabled={!input.trim() || isLoading}
-                  className="gradient-safari h-8 w-8 rounded-xl shrink-0 border-0"
+                  className="gradient-safari h-8 w-8 rounded-xl shrink-0 border-0 shadow-sm"
                 >
-                  <Send className="h-3.5 w-3.5 text-primary-foreground" />
+                  {isLoading ? <Loader2 className="h-3.5 w-3.5 text-primary-foreground animate-spin" /> : <Send className="h-3.5 w-3.5 text-primary-foreground" />}
                 </Button>
               </div>
+              <p className="text-[9px] text-muted-foreground/70 text-center mt-1.5">Answers grounded only in SafariSync content</p>
             </div>
           </motion.div>
         )}
