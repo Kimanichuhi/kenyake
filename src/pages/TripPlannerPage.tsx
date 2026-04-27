@@ -353,13 +353,15 @@ const TripPlannerPage = () => {
             <div className="flex-1 overflow-y-auto px-4 py-6">
               <div className="max-w-3xl mx-auto space-y-4">
                 {messages.length === 0 ? (
-                  <ChatEmptyState prompts={quickPrompts} onPromptClick={applyPrompt} />
+                  <ChatEmptyState prompts={quickPrompts} onPromptClick={applyPrompt} firstName={firstName} />
                 ) : (
                   <ChatMessages
                     messages={messages}
                     isLoading={isLoading}
                     density="comfortable"
                     onRegenerate={handleRegenerate}
+                    onEdit={handleEdit}
+                    onFollowUp={send}
                   />
                 )}
 
