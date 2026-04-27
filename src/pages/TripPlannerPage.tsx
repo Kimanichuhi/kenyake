@@ -1,7 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, User as UserIcon, History, Plus, Sparkles, Loader2 } from "lucide-react";
-import ReactMarkdown from "react-markdown";
+import { Send, History, Plus, Sparkles, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import SidebarNav from "@/components/SidebarNav";
@@ -9,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { ToastAction } from "@/components/ui/toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import ChatMessages, { type ChatMsg } from "@/components/chat/ChatMessages";
+import ChatEmptyState from "@/components/chat/ChatEmptyState";
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/trip-assistant`;
 const CLIENT_ID_KEY = "safarisync_client_id";
@@ -20,7 +21,7 @@ const getClientId = () => {
   return id;
 };
 
-type Msg = { role: "user" | "assistant"; content: string };
+type Msg = ChatMsg;
 type ChatSession = { id: string; title: string; updatedAt: number; messages: Msg[] };
 
 const CHAT_HISTORY_KEY = "safarisync_trip_chat_history";
@@ -49,12 +50,10 @@ const getSessionTitle = (msgs: Msg[]) => {
 };
 
 const quickPrompts = [
-  "Top destinations in Kenya 🗺️",
-  "Wildlife safaris 🦁",
-  "Cultural experiences 🪘",
   "Hidden gems 💎",
-  "Food & dining 🍲",
-  "Entry requirements ✈️",
+  "Wildlife safaris 🦁",
+  "Cultural events 🪘",
+  "Community guides 🧭",
 ];
 
 const TripPlannerPage = () => {
