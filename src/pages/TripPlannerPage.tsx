@@ -335,77 +335,15 @@ const TripPlannerPage = () => {
             {/* Messages */}
             <div className="flex-1 overflow-y-auto px-4 py-6">
               <div className="max-w-3xl mx-auto space-y-4">
-                {messages.length === 0 && (
-                  <div className="text-center py-16">
-                    <div className="w-14 h-14 rounded-2xl gradient-safari flex items-center justify-center mx-auto mb-4 shadow-md">
-                      <Sparkles className="h-6 w-6 text-primary-foreground" />
-                    </div>
-                    <h2 className="font-display text-xl font-semibold text-foreground mb-2">
-                      Karibu! How can I help?
-                    </h2>
-                    <p className="text-sm text-muted-foreground max-w-md mx-auto mb-6">
-                      Ask anything about destinations, wildlife, communities, and experiences on SafariSync. Multilingual.
-                    </p>
-                    <div className="flex flex-wrap gap-2 justify-center max-w-lg mx-auto">
-                      {quickPrompts.map((p) => (
-                        <button
-                          key={p}
-                          onClick={() => applyPrompt(p)}
-                          className="text-xs px-3 py-1.5 rounded-full bg-card border border-border text-foreground/80 hover:border-primary hover:text-primary hover:shadow-sm transition-all"
-                        >
-                          {p}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {messages.map((msg, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className={`flex gap-2.5 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-                  >
-                    {msg.role === "assistant" && (
-                      <div className="w-7 h-7 rounded-lg gradient-safari flex items-center justify-center shrink-0 mt-0.5">
-                        <Sparkles className="h-3.5 w-3.5 text-primary-foreground" />
-                      </div>
-                    )}
-                    <div
-                      className={`max-w-[80%] rounded-2xl px-4 py-2.5 ${
-                        msg.role === "user"
-                          ? "bg-primary text-primary-foreground rounded-br-sm"
-                          : "bg-muted/60 border border-border/60 text-foreground rounded-bl-sm"
-                      }`}
-                    >
-                      {msg.role === "assistant" ? (
-                        <div className="prose prose-sm max-w-none text-foreground [&_p]:mb-2 [&_p:last-child]:mb-0 [&_ul]:mb-2 [&_ol]:mb-2 [&_h1]:font-display [&_h2]:font-display [&_h3]:font-display [&_h1]:text-base [&_h2]:text-sm [&_h3]:text-sm [&_li]:text-sm [&_p]:text-sm [&_a]:text-primary">
-                          <ReactMarkdown>{msg.content}</ReactMarkdown>
-                        </div>
-                      ) : (
-                        <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
-                      )}
-                    </div>
-                    {msg.role === "user" && (
-                      <div className="w-7 h-7 rounded-lg bg-muted flex items-center justify-center shrink-0 mt-0.5">
-                        <UserIcon className="h-3.5 w-3.5 text-muted-foreground" />
-                      </div>
-                    )}
-                  </motion.div>
-                ))}
-
-                {isLoading && messages[messages.length - 1]?.role !== "assistant" && (
-                  <div className="flex gap-2.5">
-                    <div className="w-7 h-7 rounded-lg gradient-safari flex items-center justify-center shrink-0">
-                      <Sparkles className="h-3.5 w-3.5 text-primary-foreground" />
-                    </div>
-                    <div className="bg-muted/60 border border-border/60 rounded-2xl rounded-bl-sm px-4 py-3 flex items-center gap-1.5">
-                      <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce [animation-delay:-0.3s]" />
-                      <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce [animation-delay:-0.15s]" />
-                      <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce" />
-                    </div>
-                  </div>
+                {messages.length === 0 ? (
+                  <ChatEmptyState prompts={quickPrompts} onPromptClick={applyPrompt} />
+                ) : (
+                  <ChatMessages
+                    messages={messages}
+                    isLoading={isLoading}
+                    density="comfortable"
+                    onRegenerate={handleRegenerate}
+                  />
                 )}
 
                 <div ref={messagesEndRef} />
