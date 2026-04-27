@@ -107,9 +107,19 @@ const FloatingTripPlanner = () => {
   };
 
   const applyPrompt = (prompt: string) => {
-    setInput(prompt);
-    inputRef.current?.focus();
+    send(prompt);
   };
+
+  const handleRegenerate = useCallback(async (assistantIndex: number) => {
+    if (isLoading) return;
+    const trimmed = messages.slice(0, assistantIndex);
+    if (trimmed.length === 0 || trimmed[trimmed.length - 1].role !== "user") return;
+    setMessages(trimmed);
+    setIsLoading(true);
+    try { await streamChat(trimmed); }
+    catch (e: any) { toast({ title: "Error", description: e.message, variant: "destructive" }); }
+    finally { setIsLoading(false); }
+  }, [isLoading, messages, streamChat, toast]);
 
   return (
     <>
@@ -164,59 +174,15 @@ const FloatingTripPlanner = () => {
 
             {/* Messages */}
             <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 min-h-0 bg-gradient-to-b from-muted/30 to-transparent">
-              {messages.length === 0 && (
-                <div className="text-center py-4">
-                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl gradient-safari shadow-md mb-3">
-                    <Sparkles className="h-5 w-5 text-primary-foreground" />
-                  </div>
-                  <p className="text-sm font-semibold text-foreground">Karibu to SafariSync</p>
-                  <p className="text-xs text-muted-foreground mt-1 px-2">Ask about destinations, communities, hidden gems, and experiences in our listings.</p>
-                  <div className="flex flex-wrap gap-1.5 justify-center mt-4">
-                    {quickPrompts.map((p) => (
-                      <button
-                        key={p}
-                        onClick={() => applyPrompt(p)}
-                        className="text-[11px] px-3 py-1.5 rounded-full bg-card border border-border text-foreground/80 hover:border-primary hover:text-primary hover:shadow-sm transition-all"
-                      >
-                        {p}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {messages.map((msg, i) => (
-                <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} items-end gap-1.5`}>
-                  {msg.role === "assistant" && (
-                    <div className="h-6 w-6 rounded-full gradient-safari flex items-center justify-center shrink-0 mb-0.5">
-                      <Bot className="h-3 w-3 text-primary-foreground" />
-                    </div>
-                  )}
-                  <div className={`max-w-[82%] rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed shadow-sm ${
-                    msg.role === "user"
-                      ? "bg-card border border-border text-foreground rounded-br-md"
-                      : "bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 border border-primary/15 text-foreground rounded-bl-md"
-                  }`}>
-                    {msg.role === "assistant" ? (
-                      <div className="prose prose-xs max-w-none [&_p]:mb-1 [&_li]:mb-0.5 [&_h1]:text-sm [&_h2]:text-xs [&_h3]:text-xs [&_ul]:pl-3 [&_ol]:pl-3 [&_a]:text-primary">
-                        <ReactMarkdown>{msg.content}</ReactMarkdown>
-                      </div>
-                    ) : msg.content}
-                  </div>
-                </div>
-              ))}
-
-              {isLoading && messages[messages.length - 1]?.role !== "assistant" && (
-                <div className="flex justify-start items-end gap-1.5">
-                  <div className="h-6 w-6 rounded-full gradient-safari flex items-center justify-center shrink-0">
-                    <Bot className="h-3 w-3 text-primary-foreground" />
-                  </div>
-                  <div className="bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/15 rounded-2xl rounded-bl-md px-3.5 py-3 flex items-center gap-1">
-                    <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce [animation-delay:-0.3s]" />
-                    <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce [animation-delay:-0.15s]" />
-                    <span className="h-1.5 w-1.5 rounded-full bg-primary animate-bounce" />
-                  </div>
-                </div>
+              {messages.length === 0 ? (
+                <ChatEmptyState prompts={quickPrompts} onPromptClick={applyPrompt} compact />
+              ) : (
+                <ChatMessages
+                  messages={messages}
+                  isLoading={isLoading}
+                  density="compact"
+                  onRegenerate={handleRegenerate}
+                />
               )}
               <div ref={messagesEndRef} />
             </div>
