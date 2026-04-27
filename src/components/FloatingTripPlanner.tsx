@@ -121,6 +121,19 @@ const FloatingTripPlanner = () => {
     finally { setIsLoading(false); }
   }, [isLoading, messages, streamChat, toast]);
 
+  const handleEdit = useCallback(async (userIndex: number, newContent: string) => {
+    if (isLoading) return;
+    if (messages[userIndex]?.role !== "user") return;
+    const trimmed: Msg[] = [...messages.slice(0, userIndex), { role: "user", content: newContent }];
+    setMessages(trimmed);
+    setIsLoading(true);
+    try { await streamChat(trimmed); }
+    catch (e: any) { toast({ title: "Error", description: e.message, variant: "destructive" }); }
+    finally { setIsLoading(false); }
+  }, [isLoading, messages, streamChat, toast]);
+
+  const firstName = (profile?.full_name || user?.email || "").split(/[\s@]/)[0] || null;
+
   return (
     <>
       {/* Floating Button */}
