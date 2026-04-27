@@ -14,8 +14,9 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
+    const history = Array.isArray(messages) ? messages.slice(0, -1) : [];
     const userPrompt = messages?.[messages.length - 1]?.content ?? "";
-    const response = await handleUserPrompt(userPrompt, LOVABLE_API_KEY, clientId || "anonymous", userName);
+    const response = await handleUserPrompt(userPrompt, LOVABLE_API_KEY, clientId || "anonymous", userName, history);
 
     if (!response.ok) {
       const text = await response.text();
