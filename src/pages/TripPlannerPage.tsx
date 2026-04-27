@@ -243,6 +243,22 @@ const TripPlannerPage = () => {
     send(prompt);
   };
 
+  const handleRegenerate = useCallback(async (assistantIndex: number) => {
+    if (isLoading) return;
+    // Strip the assistant message we want to regenerate, keep history up to it.
+    const trimmed = messages.slice(0, assistantIndex);
+    if (trimmed.length === 0 || trimmed[trimmed.length - 1].role !== "user") return;
+    setMessages(trimmed);
+    setIsLoading(true);
+    try {
+      await streamChat(trimmed);
+    } catch (e: any) {
+      toast({ title: "Error", description: e.message || "Something went wrong", variant: "destructive" });
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isLoading, messages, streamChat, toast]);
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
