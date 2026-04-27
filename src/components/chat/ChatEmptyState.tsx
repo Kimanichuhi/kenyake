@@ -4,9 +4,11 @@ interface ChatEmptyStateProps {
   prompts: string[];
   onPromptClick: (prompt: string) => void;
   compact?: boolean;
+  firstName?: string | null;
 }
 
-const ChatEmptyState = ({ prompts, onPromptClick, compact = false }: ChatEmptyStateProps) => {
+const ChatEmptyState = ({ prompts, onPromptClick, compact = false, firstName }: ChatEmptyStateProps) => {
+  const name = firstName?.trim() ? `, ${firstName.trim()}` : "";
   return (
     <div className={`text-center ${compact ? "py-4" : "py-12"}`}>
       <div
@@ -19,10 +21,10 @@ const ChatEmptyState = ({ prompts, onPromptClick, compact = false }: ChatEmptySt
         <Sparkles className={`${compact ? "h-5 w-5" : "h-6 w-6"} text-primary-foreground`} />
       </div>
       <p className={`font-display ${compact ? "text-sm" : "text-xl"} font-semibold text-foreground mb-1.5`}>
-        How can I help you explore?
+        Welcome to SafariSync AI{name}
       </p>
       <p className={`${compact ? "text-xs" : "text-sm"} text-muted-foreground max-w-md mx-auto mb-4`}>
-        Ask anything about SafariSync listings — destinations, wildlife, culture, food and more.
+        How can I help you today?
       </p>
       <div className="flex flex-wrap gap-1.5 justify-center max-w-lg mx-auto">
         {prompts.map((p) => (

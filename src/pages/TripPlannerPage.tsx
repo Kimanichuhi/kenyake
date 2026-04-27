@@ -259,6 +259,23 @@ const TripPlannerPage = () => {
     }
   }, [isLoading, messages, streamChat, toast]);
 
+  const handleEdit = useCallback(async (userIndex: number, newContent: string) => {
+    if (isLoading) return;
+    if (messages[userIndex]?.role !== "user") return;
+    const trimmed = [...messages.slice(0, userIndex), { role: "user", content: newContent } as Msg];
+    setMessages(trimmed);
+    setIsLoading(true);
+    try {
+      await streamChat(trimmed);
+    } catch (e: any) {
+      toast({ title: "Error", description: e.message || "Something went wrong", variant: "destructive" });
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isLoading, messages, streamChat, toast]);
+
+  const firstName = (profile?.full_name || user?.email || "").split(/[\s@]/)[0] || null;
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
@@ -336,13 +353,15 @@ const TripPlannerPage = () => {
             <div className="flex-1 overflow-y-auto px-4 py-6">
               <div className="max-w-3xl mx-auto space-y-4">
                 {messages.length === 0 ? (
-                  <ChatEmptyState prompts={quickPrompts} onPromptClick={applyPrompt} />
+                  <ChatEmptyState prompts={quickPrompts} onPromptClick={applyPrompt} firstName={firstName} />
                 ) : (
                   <ChatMessages
                     messages={messages}
                     isLoading={isLoading}
                     density="comfortable"
                     onRegenerate={handleRegenerate}
+                    onEdit={handleEdit}
+                    onFollowUp={send}
                   />
                 )}
 
