@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { CommandDialog, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem } from "@/components/ui/command";
 import { useAuth } from "@/contexts/AuthContext";
 import { destinations } from "@/data/destinations";
+import CurrencyToggle from "@/components/CurrencyToggle";
 
 const navLinks = [
   { label: "Destinations", href: "/destinations" },
@@ -45,6 +46,7 @@ const moreSections = [
     title: "Travel Services",
     links: [
       { label: "🛍️ Marketplace", href: "/marketplace" },
+      { label: "💬 Group Chat", href: "/group-chat" },
       { label: "🚗 Transport", href: "/transport" },
       { label: "Digital Nomads", href: "/nomads" },
       { label: "🇰🇪 Tembea Kenya", href: "/domestic" },
@@ -153,6 +155,7 @@ const Navbar = () => {
         </div>
 
         <div className="hidden md:flex items-center gap-3">
+          <CurrencyToggle dark />
           <Button
             variant="ghost"
             size="icon"
