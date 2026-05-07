@@ -288,6 +288,7 @@ export type Database = {
           itinerary: Json | null
           meals_included: boolean | null
           price_kes: number
+          price_usd: number | null
           rating: number | null
           review_count: number | null
           slug: string
@@ -315,6 +316,7 @@ export type Database = {
           itinerary?: Json | null
           meals_included?: boolean | null
           price_kes?: number
+          price_usd?: number | null
           rating?: number | null
           review_count?: number | null
           slug: string
@@ -342,6 +344,7 @@ export type Database = {
           itinerary?: Json | null
           meals_included?: boolean | null
           price_kes?: number
+          price_usd?: number | null
           rating?: number | null
           review_count?: number | null
           slug?: string
@@ -406,6 +409,109 @@ export type Database = {
           title?: string
           tons_available?: number | null
           tons_offset_total?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      chat_room_members: {
+        Row: {
+          display_name: string | null
+          id: string
+          joined_at: string
+          role: string
+          room_id: string
+          user_id: string
+        }
+        Insert: {
+          display_name?: string | null
+          id?: string
+          joined_at?: string
+          role?: string
+          room_id: string
+          user_id: string
+        }
+        Update: {
+          display_name?: string | null
+          id?: string
+          joined_at?: string
+          role?: string
+          room_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_room_members_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "chat_rooms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_room_messages: {
+        Row: {
+          content: string
+          created_at: string
+          display_name: string | null
+          id: string
+          room_id: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          room_id: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          room_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_room_messages_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "chat_rooms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_rooms: {
+        Row: {
+          created_at: string
+          created_by: string
+          description: string | null
+          id: string
+          invite_code: string
+          is_private: boolean
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          description?: string | null
+          id?: string
+          invite_code: string
+          is_private?: boolean
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          id?: string
+          invite_code?: string
+          is_private?: boolean
+          name?: string
           updated_at?: string
         }
         Relationships: []
@@ -4405,6 +4511,10 @@ export type Database = {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
+        Returns: boolean
+      }
+      is_chat_room_member: {
+        Args: { _room_id: string; _user_id: string }
         Returns: boolean
       }
     }
