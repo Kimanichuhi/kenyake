@@ -41,6 +41,8 @@ import CountyAnalyticsDashboardPage from "./pages/CountyAnalyticsDashboardPage";
 import PlatformAdminDashboardPage from "./pages/PlatformAdminDashboardPage";
 import PWAInstallPage from "./pages/PWAInstallPage";
 import CommunityRegisterPage from "./pages/CommunityRegisterPage";
+import GroupChatPage from "./pages/GroupChatPage";
+import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -52,6 +54,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
+          <CurrencyProvider>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/destinations" element={<DestinationsPage />} />
@@ -89,9 +92,11 @@ const App = () => (
             <Route path="/county-analytics" element={<CountyAnalyticsDashboardPage />} />
             <Route path="/platform-admin" element={<PlatformAdminDashboardPage />} />
             <Route path="/install" element={<PWAInstallPage />} />
+            <Route path="/group-chat" element={<GroupChatPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <OfflineStatusBar />
+          </CurrencyProvider>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
