@@ -1,4 +1,4 @@
-import { Check, Sparkles, Users } from "lucide-react";
+import { Check, Sparkles, Users, CreditCard, Smartphone, Wallet } from "lucide-react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import SidebarNav from "@/components/SidebarNav";
