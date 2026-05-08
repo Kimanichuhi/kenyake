@@ -144,14 +144,16 @@ const PackagesPage = () => {
         </section>
 
         <section className="container mx-auto px-4 py-10">
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {plans.map((plan) => {
-              const priceLabel = plan.priceKes === null ? "Free" : `${format(plan.priceKes)} / mo`;
-              const altCurrency = plan.priceKes === null
+              const PlanIcon = plan.icon;
+              const priceKes = plan.priceUsd === null ? null : plan.priceUsd * 130;
+              const priceLabel = plan.priceUsd === null ? "Free" : `${format(priceKes, plan.priceUsd)} / mo`;
+              const altCurrency = plan.priceUsd === null
                 ? null
                 : currency === "KES"
-                  ? `${format(undefined, plan.priceKes / 130)}`
-                  : `${format(plan.priceKes, undefined)}`;
+                  ? `${format(undefined, plan.priceUsd)}`
+                  : `${format(priceKes, undefined)}`;
               return (
                 <div
                   key={plan.name}
@@ -159,13 +161,13 @@ const PackagesPage = () => {
                     plan.highlight ? "ring-2 ring-savannah-gold/60" : ""
                   }`}
                 >
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
-                      {plan.name === "Family" && <Users className="h-4 w-4 text-safari-green" />}
-                      <h2 className="font-display text-xl font-bold text-foreground">{plan.name}</h2>
+                      {PlanIcon && <PlanIcon className="h-4 w-4 text-safari-green" />}
+                      <h2 className="font-display text-lg font-bold text-foreground">{plan.name}</h2>
                     </div>
                     {plan.badge && (
-                      <span className="text-xs font-medium bg-savannah-gold/20 text-savannah-gold px-2 py-1 rounded-full">
+                      <span className="text-[10px] font-medium bg-savannah-gold/20 text-savannah-gold px-2 py-1 rounded-full whitespace-nowrap">
                         {plan.badge}
                       </span>
                     )}
@@ -182,7 +184,7 @@ const PackagesPage = () => {
                   <div className="mt-5 space-y-2 text-sm flex-1">
                     {plan.features.map((feature) => (
                       <div key={feature} className="flex items-start gap-2">
-                        <Check className="h-4 w-4 text-safari-green mt-0.5" />
+                        <Check className="h-4 w-4 text-safari-green mt-0.5 shrink-0" />
                         <span className="text-muted-foreground">{feature}</span>
                       </div>
                     ))}
@@ -198,6 +200,36 @@ const PackagesPage = () => {
                 </div>
               );
             })}
+          </div>
+        </section>
+
+        <section className="container mx-auto px-4 pb-12">
+          <div className="bg-muted/40 border border-border rounded-2xl p-6 md:p-8">
+            <h3 className="font-display text-lg font-semibold text-foreground">
+              Accepted payment methods
+            </h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Safari Sync will support multiple payment options at checkout. These are described here for transparency — implementation is in progress.
+            </p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {paymentMethods.map((method) => {
+                const Icon = method.icon;
+                return (
+                  <div key={method.name} className="bg-card rounded-xl border border-border p-4 flex gap-3">
+                    <div className="h-9 w-9 rounded-full bg-safari-green/10 flex items-center justify-center shrink-0">
+                      <Icon className="h-4 w-4 text-safari-green" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-sm text-foreground">{method.name}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">{method.description}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <p className="mt-4 text-xs text-muted-foreground">
+              Note: Payment integrations are not yet active. M-Pesa is currently simulated via mock STK push for demo purposes.
+            </p>
           </div>
         </section>
 
