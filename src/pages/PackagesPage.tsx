@@ -9,7 +9,7 @@ import { useCurrency } from "@/contexts/CurrencyContext";
 
 type Plan = {
   name: string;
-  priceKes: number | null; // null = free
+  priceUsd: number | null; // null = free
   tagline: string;
   features: string[];
   cta: string;
@@ -17,32 +17,34 @@ type Plan = {
   highlight?: boolean;
   badge?: string;
   href: string;
+  icon?: typeof Users;
 };
 
 const plans: Plan[] = [
   {
     name: "Free",
-    priceKes: null,
-    tagline: "Explore Kenya with essential guidance.",
+    priceUsd: null,
+    tagline: "Explore Kenya with essential SafariSync guidance.",
     features: [
       "20 AI questions per user",
-      "Basic tourism recommendations",
-      "Access to the discovery platform",
+      "Browse destinations, wildlife & community listings",
+      "Read multi-dimensional reviews",
+      "Offline-first PWA with low-data mode",
     ],
     cta: "Start Free",
     variant: "outline",
     href: "/trip-planner",
   },
   {
-    name: "Safari Sync Pro",
-    priceKes: 1500,
-    tagline: "Unlimited planning and deeper insights.",
+    name: "Pro Individual",
+    priceUsd: 3,
+    tagline: "Unlimited AI planning for solo travellers.",
     features: [
       "Unlimited AI questions",
-      "Advanced travel planning",
       "Personalized itinerary recommendations",
-      "Deeper tourism insights",
       "Priority response speed",
+      "Carbon footprint estimator",
+      "Safety alerts & 1-tap SOS",
     ],
     cta: "Upgrade to Pro",
     variant: "default",
@@ -51,20 +53,66 @@ const plans: Plan[] = [
     href: "/payments",
   },
   {
-    name: "Family",
-    priceKes: 3500,
-    tagline: "For families & friend groups travelling together.",
+    name: "Pro Family of 4",
+    priceUsd: 7,
+    tagline: "For families travelling together — up to 4 members.",
     features: [
-      "Up to 6 members on one plan",
-      "Shared group chat for trip planning",
-      "Family-friendly itinerary recommendations",
+      "Everything in Pro Individual",
+      "Up to 4 members on one plan",
+      "Shared real-time group chat",
+      "Family-friendly itineraries",
       "Priority booking on family packages",
-      "Unlimited AI questions per member",
     ],
-    cta: "Get Family Plan",
+    cta: "Get Family of 4",
     variant: "default",
-    badge: "New",
+    badge: "Family",
+    icon: Users,
     href: "/payments",
+  },
+  {
+    name: "Pro Family of 8",
+    priceUsd: 12,
+    tagline: "For extended families & friend groups — up to 8 members.",
+    features: [
+      "Everything in Family of 4",
+      "Up to 8 members on one plan",
+      "Multi-guide coordination support",
+      "Group impact & sponsorship tracking",
+      "Priority diaspora & heritage bookings",
+    ],
+    cta: "Get Family of 8",
+    variant: "default",
+    badge: "Best for groups",
+    icon: Users,
+    href: "/payments",
+  },
+];
+
+const paymentMethods = [
+  {
+    name: "M-Pesa",
+    icon: Smartphone,
+    description: "Pay via Safaricom STK push — the most popular mobile money option in Kenya.",
+  },
+  {
+    name: "Airtel Money",
+    icon: Smartphone,
+    description: "Mobile money payments for Airtel Kenya subscribers via USSD prompt.",
+  },
+  {
+    name: "Stripe",
+    icon: CreditCard,
+    description: "Secure international card processing for Visa, Mastercard and Amex.",
+  },
+  {
+    name: "Card",
+    icon: CreditCard,
+    description: "Direct credit & debit card payments processed through our secure gateway.",
+  },
+  {
+    name: "PayPal",
+    icon: Wallet,
+    description: "Familiar wallet checkout for diaspora travellers paying from abroad.",
   },
 ];
 
