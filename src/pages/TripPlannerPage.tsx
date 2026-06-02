@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, History, Plus, Sparkles, Loader2 } from "lucide-react";
+import { Send, History, Plus, Sparkles, Loader2, Bookmark, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import SidebarNav from "@/components/SidebarNav";
@@ -23,8 +23,10 @@ const getClientId = () => {
 
 type Msg = ChatMsg;
 type ChatSession = { id: string; title: string; updatedAt: number; messages: Msg[] };
+type SavedItinerary = { id: string; title: string; savedAt: number; messages: Msg[] };
 
 const CHAT_HISTORY_KEY = "safarisync_trip_chat_history";
+const ITINERARIES_KEY = "safarisync_saved_itineraries";
 const MAX_CHAT_HISTORY = 20;
 
 const STOP_WORDS = new Set([
