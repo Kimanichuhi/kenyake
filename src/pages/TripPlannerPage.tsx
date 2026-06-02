@@ -63,7 +63,9 @@ const TripPlannerPage = () => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
+  const [historyTab, setHistoryTab] = useState<"chats" | "itineraries">("chats");
   const [chatSessions, setChatSessions] = useState<ChatSession[]>([]);
+  const [itineraries, setItineraries] = useState<SavedItinerary[]>([]);
   const [activeChatId, setActiveChatId] = useState<string>(() => crypto.randomUUID());
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
