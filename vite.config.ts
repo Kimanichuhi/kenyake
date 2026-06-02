@@ -42,8 +42,8 @@ export default defineConfig(({ mode }) => ({
         maximumFileSizeToCacheInBytes: 3000000, // 3MB
       },
       manifest: {
-        name: "SafariSync — Explore Kenya",
-        short_name: "SafariSync",
+        name: "Sync Safaris — Explore Kenya",
+        short_name: "Sync Safaris",
         description: "AI-powered, community-centric tourism intelligence platform",
         theme_color: "#2d6a4f",
         background_color: "#faf8f5",
