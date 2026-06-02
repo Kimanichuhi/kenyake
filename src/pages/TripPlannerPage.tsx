@@ -132,6 +132,48 @@ const TripPlannerPage = () => {
     } catch { /* noop */ }
   }, [chatSessions]);
 
+  // Load saved itineraries
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(ITINERARIES_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw) as SavedItinerary[];
+      if (Array.isArray(parsed)) setItineraries(parsed);
+    } catch { /* noop */ }
+  }, []);
+
+  const persistItineraries = (next: SavedItinerary[]) => {
+    setItineraries(next);
+    try { localStorage.setItem(ITINERARIES_KEY, JSON.stringify(next)); } catch { /* noop */ }
+  };
+
+  const saveAsItinerary = () => {
+    if (messages.length === 0) return;
+    const title = getSessionTitle(messages) || "Untitled itinerary";
+    const entry: SavedItinerary = {
+      id: crypto.randomUUID(),
+      title,
+      savedAt: Date.now(),
+      messages,
+    };
+    persistItineraries([entry, ...itineraries].slice(0, 50));
+    toast({ title: "Itinerary saved", description: title });
+  };
+
+  const openItinerary = (id: string) => {
+    const it = itineraries.find((x) => x.id === id);
+    if (!it) return;
+    const newId = crypto.randomUUID();
+    setActiveChatId(newId);
+    setMessages(it.messages);
+    setShowHistory(false);
+  };
+
+  const deleteItinerary = (id: string) => {
+    persistItineraries(itineraries.filter((x) => x.id !== id));
+  };
+
+
   const streamChat = useCallback(async (allMessages: Msg[]) => {
     const resp = await fetch(CHAT_URL, {
       method: "POST",
