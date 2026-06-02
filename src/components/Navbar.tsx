@@ -132,7 +132,7 @@ const Navbar = () => {
       transition={{ duration: 0.6 }}
       className="fixed top-0 left-0 right-0 z-50 glass-card-dark"
     >
-      <div className="container mx-auto flex items-center justify-between px-4 py-3 lg:px-8">
+      <div ref={navRef} className="container mx-auto flex items-center justify-between px-4 py-3 lg:px-8">
         <Link to="/" className="flex items-center gap-2.5">
           <img src="/icon-192.png" alt="Sync Safaris" className="h-8 w-8 rounded-lg" />
           <span className="text-xl font-bold text-savannah-gold tracking-tight">
@@ -143,7 +143,8 @@ const Navbar = () => {
         <div className="hidden md:flex items-center gap-5">
           <Link
             to="/"
-            className={`text-sm font-medium transition-colors ${
+            aria-current={location.pathname === "/" ? "page" : undefined}
+            className={`text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-savannah-gold rounded ${
               location.pathname === "/"
                 ? "text-savannah-gold"
                 : "text-primary-foreground/80 hover:text-savannah-gold"
@@ -153,6 +154,7 @@ const Navbar = () => {
           </Link>
           {navGroups.map((group) => {
             const active = isGroupActive(group);
+            const isOpen = openGroup === group.label;
             return (
               <div
                 key={group.label}
@@ -161,43 +163,62 @@ const Navbar = () => {
                 onMouseLeave={() => setOpenGroup((g) => (g === group.label ? null : g))}
               >
                 <button
-                  onClick={() => setOpenGroup(openGroup === group.label ? null : group.label)}
-                  className={`text-sm font-medium transition-colors flex items-center gap-1 ${
+                  type="button"
+                  aria-haspopup="menu"
+                  aria-expanded={isOpen}
+                  aria-current={active ? "page" : undefined}
+                  onClick={() => setOpenGroup(isOpen ? null : group.label)}
+                  onKeyDown={(e) => {
+                    if (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setOpenGroup(group.label);
+                    }
+                    if (e.key === "Escape") setOpenGroup(null);
+                  }}
+                  className={`text-sm font-medium transition-colors flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-savannah-gold rounded px-1 ${
                     active
                       ? "text-savannah-gold"
                       : "text-primary-foreground/80 hover:text-savannah-gold"
                   }`}
                 >
                   {group.label}
+                  {active && (
+                    <span className="absolute -bottom-1 left-1 right-4 h-0.5 rounded-full bg-savannah-gold" />
+                  )}
                   <ChevronDown
-                    className={`h-3 w-3 transition-transform ${
-                      openGroup === group.label ? "rotate-180" : ""
-                    }`}
+                    className={`h-3 w-3 transition-transform ${isOpen ? "rotate-180" : ""}`}
                   />
                 </button>
                 <AnimatePresence>
-                  {openGroup === group.label && group.children && (
+                  {isOpen && group.children && (
                     <motion.div
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 8 }}
                       transition={{ duration: 0.15 }}
+                      role="menu"
+                      aria-label={group.label}
                       className="absolute top-full left-0 mt-2 w-56 glass-card rounded-xl shadow-lg overflow-hidden py-1.5"
                     >
-                      {group.children.map((child) => (
-                        <Link
-                          key={child.href}
-                          to={child.href}
-                          onClick={() => setOpenGroup(null)}
-                          className={`block px-4 py-2 text-sm transition-colors ${
-                            location.pathname === child.href
-                              ? "bg-muted text-foreground"
-                              : "text-foreground/80 hover:bg-muted"
-                          }`}
-                        >
-                          {child.label}
-                        </Link>
-                      ))}
+                      {group.children.map((child) => {
+                        const isActive = location.pathname === child.href;
+                        return (
+                          <Link
+                            key={child.href}
+                            to={child.href}
+                            role="menuitem"
+                            aria-current={isActive ? "page" : undefined}
+                            onClick={() => setOpenGroup(null)}
+                            className={`block px-4 py-2 text-sm transition-colors focus-visible:outline-none focus-visible:bg-muted ${
+                              isActive
+                                ? "bg-muted text-foreground font-medium border-l-2 border-savannah-gold"
+                                : "text-foreground/80 hover:bg-muted"
+                            }`}
+                          >
+                            {child.label}
+                          </Link>
+                        );
+                      })}
                     </motion.div>
                   )}
                 </AnimatePresence>
