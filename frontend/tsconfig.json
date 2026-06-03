@@ -1,0 +1,42 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "noImplicitAny": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "paths": {
+      "@/components/chat/*": [
+        "./src/domains/chat/components/*"
+      ],
+      "@/components/*": [
+        "./src/shared/components/*"
+      ],
+      "@/contexts/*": [
+        "./src/app/providers/*"
+      ],
+      "@/hooks/*": [
+        "./src/shared/hooks/*"
+      ],
+      "@/integrations/*": [
+        "./src/shared/services/*"
+      ],
+      "@/lib/*": [
+        "./src/shared/utils/*"
+      ],
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "skipLibCheck": true,
+    "strictNullChecks": false
+  },
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
+}

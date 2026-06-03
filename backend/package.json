@@ -1,0 +1,11 @@
+{
+  "name": "@kenyake/backend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/server.ts",
+    "build": "tsc --noEmit",
+    "test": "echo \"No backend tests configured yet\""
+  }
+}
