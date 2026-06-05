@@ -2,6 +2,7 @@
   "name": "kenyake",
   "private": true,
   "version": "0.0.0",
+  "packageManager": "npm@11.13.0",
   "type": "module",
   "workspaces": [
     "frontend",
@@ -16,5 +17,8 @@
     "preview": "npm --prefix frontend run preview --",
     "test": "npm --prefix frontend run test",
     "test:watch": "npm --prefix frontend run test:watch"
+  },
+  "devDependencies": {
+    "turbo": "^2.7.4"
   }
 }
