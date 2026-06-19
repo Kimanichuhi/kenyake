@@ -1,7 +1,7 @@
-﻿# SafariSync User Guide
+﻿# Sync Safaris User Guide
 
-## What SafariSync is
-SafariSync is a Kenya tourism intelligence platform that combines destinations, community content, AI trip planning, and offline tools.
+## What Sync Safaris is
+Sync Safaris is a Kenya tourism intelligence platform that combines destinations, community content, AI trip planning, and offline tools.
 
 ## Getting started
 - Open the site in your browser.
@@ -36,13 +36,13 @@ Wildlife Intelligence combines live sightings with AI insights.
 - Reporting a sighting requires sign-in.
 
 ## Offline and low data tools
-SafariSync includes offline-first features.
+Sync Safaris includes offline-first features.
 - Offline Settings lets you download maps and destination packs.
 - Low Data Mode reduces media usage and auto-loading.
 - Pending actions are queued and synced when you are back online.
 
 ## Install the PWA
-You can install SafariSync as an app.
+You can install SyncSafaris as an app.
 - Visit the Install page at /install.
 - Follow device-specific steps for Android, iOS, or desktop.
 - If the install prompt is not available, use the manual steps shown on the page.

@@ -44,6 +44,14 @@ import CommunityRegisterPage from "./routes/CommunityRegisterPage";
 import GroupChatPage from "./routes/GroupChatPage";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import NotFound from "./routes/NotFound";
+import { AdminLayout } from "@/admin/layouts/AdminLayout";
+import {
+  AdminDashboard,
+  CommunitiesPage,
+  CommunityDetailPage,
+  ExperiencesPage as AdminExperiencesPage,
+  BookingsPage,
+} from "@/admin/pages";
 
 const queryClient = new QueryClient();
 
@@ -93,6 +101,11 @@ const App = () => (
             <Route path="/platform-admin" element={<PlatformAdminDashboardPage />} />
             <Route path="/install" element={<PWAInstallPage />} />
             <Route path="/group-chat" element={<GroupChatPage />} />
+            <Route path="/admin" element={<AdminLayout><AdminDashboard /></AdminLayout>} />
+            <Route path="/admin/communities" element={<AdminLayout><CommunitiesPage /></AdminLayout>} />
+            <Route path="/admin/communities/:id" element={<AdminLayout><CommunityDetailPage /></AdminLayout>} />
+            <Route path="/admin/experiences" element={<AdminLayout><AdminExperiencesPage /></AdminLayout>} />
+            <Route path="/admin/bookings" element={<AdminLayout><BookingsPage /></AdminLayout>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <OfflineStatusBar />
