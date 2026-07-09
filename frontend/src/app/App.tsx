@@ -44,6 +44,28 @@ import CommunityRegisterPage from "./routes/CommunityRegisterPage";
 import GroupChatPage from "./routes/GroupChatPage";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import NotFound from "./routes/NotFound";
+import RequireRole from "@/components/RequireRole";
+import AdminLayout from "@/domains/admin/components/AdminLayout";
+import AdminDashboardHome from "@/domains/admin/pages/AdminDashboardHome";
+import MediaLibraryPage from "@/domains/admin/pages/media/MediaLibraryPage";
+import WildlifeListPage from "@/domains/admin/pages/wildlife/WildlifeListPage";
+import WildlifeFormPage from "@/domains/admin/pages/wildlife/WildlifeFormPage";
+import CommunitiesListPage from "@/domains/admin/pages/communities/CommunitiesListPage";
+import CommunityFormPage from "@/domains/admin/pages/communities/CommunityFormPage";
+import GuidesListPage from "@/domains/admin/pages/guides/GuidesListPage";
+import GuideFormPage from "@/domains/admin/pages/guides/GuideFormPage";
+import ExperiencesListPage from "@/domains/admin/pages/experiences/ExperiencesListPage";
+import ExperienceFormPage from "@/domains/admin/pages/experiences/ExperienceFormPage";
+import DestinationsListPage from "@/domains/admin/pages/destinations/DestinationsListPage";
+import DestinationFormPage from "@/domains/admin/pages/destinations/DestinationFormPage";
+import BlogListPage from "@/domains/admin/pages/blog/BlogListPage";
+import BlogFormPage from "@/domains/admin/pages/blog/BlogFormPage";
+import BlogCategoriesPage from "@/domains/admin/pages/blog/BlogCategoriesPage";
+import BlogPage from "./routes/BlogPage";
+import BlogDetailPage from "./routes/BlogDetailPage";
+import PagesListPage from "@/domains/admin/pages/pages/PagesListPage";
+import PageFormPage from "@/domains/admin/pages/pages/PageFormPage";
+import AuditLogsPage from "@/domains/admin/pages/audit/AuditLogsPage";
 
 const queryClient = new QueryClient();
 
@@ -93,6 +115,49 @@ const App = () => (
             <Route path="/platform-admin" element={<PlatformAdminDashboardPage />} />
             <Route path="/install" element={<PWAInstallPage />} />
             <Route path="/group-chat" element={<GroupChatPage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/blog/:slug" element={<BlogDetailPage />} />
+            <Route
+              path="/admin"
+              element={
+                <RequireRole anyOf={["admin", "content_manager", "editor"]}>
+                  <AdminLayout />
+                </RequireRole>
+              }
+            >
+              <Route index element={<AdminDashboardHome />} />
+              <Route path="wildlife" element={<WildlifeListPage />} />
+              <Route path="wildlife/new" element={<WildlifeFormPage />} />
+              <Route path="wildlife/:id" element={<WildlifeFormPage />} />
+              <Route path="communities" element={<CommunitiesListPage />} />
+              <Route path="communities/new" element={<CommunityFormPage />} />
+              <Route path="communities/:id" element={<CommunityFormPage />} />
+              <Route path="guides" element={<GuidesListPage />} />
+              <Route path="guides/new" element={<GuideFormPage />} />
+              <Route path="guides/:id" element={<GuideFormPage />} />
+              <Route path="experiences" element={<ExperiencesListPage />} />
+              <Route path="experiences/new" element={<ExperienceFormPage />} />
+              <Route path="experiences/:id" element={<ExperienceFormPage />} />
+              <Route path="destinations" element={<DestinationsListPage />} />
+              <Route path="destinations/new" element={<DestinationFormPage />} />
+              <Route path="destinations/:id" element={<DestinationFormPage />} />
+              <Route path="blog/categories" element={<BlogCategoriesPage />} />
+              <Route path="blog" element={<BlogListPage />} />
+              <Route path="blog/new" element={<BlogFormPage />} />
+              <Route path="blog/:id" element={<BlogFormPage />} />
+              <Route path="pages" element={<PagesListPage />} />
+              <Route path="pages/new" element={<PageFormPage />} />
+              <Route path="pages/:id" element={<PageFormPage />} />
+              <Route path="media" element={<MediaLibraryPage />} />
+              <Route
+                path="audit-logs"
+                element={
+                  <RequireRole anyOf={["admin"]}>
+                    <AuditLogsPage />
+                  </RequireRole>
+                }
+              />
+            </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
           <OfflineStatusBar />

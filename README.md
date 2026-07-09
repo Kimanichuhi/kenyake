@@ -5,7 +5,7 @@ SafariSync is an AI-powered, community-first tourism intelligence platform for K
 
 
 ## Slide 1
-- INNOVATION PROJECT PROPOSAL  â€”  2025
+- INNOVATION PROJECT PROPOSAL  2025
 - SafariSync
 - An AI-Powered, Community-Centric Tourism Intelligence Platform
 - for Sustainable and Inclusive Tourism Development in Kenya

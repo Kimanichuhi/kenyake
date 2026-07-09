@@ -1,7 +1,8 @@
 import { useParams, Link } from "react-router-dom";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, MapPin, Star, Camera, Shield, Accessibility, Users, Clock, Heart, ChevronLeft, ChevronRight, Check } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { ArrowLeft, MapPin, Star, Camera, Shield, Accessibility, Users, Clock, Heart, ChevronLeft, ChevronRight, Check, Loader2 } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
@@ -9,7 +10,34 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import FooterSection from "@/components/FooterSection";
-import { destinations, experiences, reviews } from "@/data/destinations";
+import { supabase } from "@/integrations/supabase/client";
+import { Tables } from "@/integrations/supabase/types";
+import { Destination, experiences, reviews } from "@/data/destinations";
+
+type DestinationRow = Tables<"destinations">;
+
+function mapDestinationRow(row: DestinationRow): Destination {
+  return {
+    id: row.slug,
+    name: row.name,
+    county: row.county,
+    image: row.cover_image ?? "",
+    gallery: row.gallery_images ?? [],
+    category: row.category,
+    rating: row.rating ?? 0,
+    reviews: row.review_count ?? 0,
+    crowdLevel: row.crowd_level ?? "",
+    bestTime: row.best_time ?? "",
+    price: row.price_display ?? "",
+    description: row.description ?? "",
+    highlights: row.highlights ?? [],
+    safetyRating: row.safety_rating ?? 0,
+    accessibilityRating: row.accessibility_rating ?? 0,
+    photographyScore: row.photography_score ?? 0,
+    lat: row.lat ?? 0,
+    lng: row.lng ?? 0,
+  };
+}
 
 const RatingDots = ({ value, max = 5 }: { value: number; max?: number }) => (
   <div className="flex gap-1">
@@ -27,10 +55,28 @@ const RatingDots = ({ value, max = 5 }: { value: number; max?: number }) => (
 
 const DestinationDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const dest = destinations.find((d) => d.id === id);
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [date, setDate] = useState<Date>();
   const [guests, setGuests] = useState(2);
+
+  const { data: dest, isLoading } = useQuery({
+    queryKey: ["public-destination", id],
+    queryFn: async () => {
+      if (!id) return null;
+      const { data, error } = await supabase.from("destinations").select("*").eq("slug", id).maybeSingle();
+      if (error) throw error;
+      return data ? mapDestinationRow(data) : null;
+    },
+    enabled: !!id,
+  });
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
 
   if (!dest) {
     return (

@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate, Link, useLocation } from "react-router-dom";
-import { User, MapPin, Heart, Wallet, Globe, LogOut, Settings, Bookmark, History, Trash2, Calendar, Clock, Users, Loader2, XCircle, Bed, Car } from "lucide-react";
+import { User, MapPin, Heart, Wallet, Globe, LogOut, Settings, Bookmark, History, Trash2, Calendar, Clock, Users, Loader2, XCircle, Bed, Car, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
+import { useUserRoles } from "@/hooks/useUserRoles";
 import { useFavorites } from "@/hooks/useFavorites";
 import { destinations } from "@/data/destinations";
 import { supabase } from "@/integrations/supabase/client";
@@ -287,8 +288,10 @@ const MyBookings = () => {
 const ProfilePage = () => {
   const location = useLocation();
   const { user, profile, signOut } = useAuth();
+  const { hasAnyRole } = useUserRoles();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<"profile" | "saved" | "bookings" | "trips">("profile");
+  const canAccessAdmin = hasAnyRole(["admin", "content_manager", "editor"]);
 
   useEffect(() => {
     const tab = new URLSearchParams(location.search).get("tab");
@@ -326,6 +329,11 @@ const ProfilePage = () => {
                 )}
               </div>
               <div className="flex gap-2">
+                {canAccessAdmin && (
+                  <Button variant="outline" size="sm" onClick={() => navigate("/admin")} className="text-sm">
+                    <ShieldCheck className="h-4 w-4 mr-1" /> Admin Panel
+                  </Button>
+                )}
                 <Button variant="outline" size="sm" onClick={() => navigate("/onboard")} className="text-sm"><Settings className="h-4 w-4 mr-1" /> Edit Preferences</Button>
                 <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-destructive hover:text-destructive"><LogOut className="h-4 w-4 mr-1" /> Sign Out</Button>
               </div>

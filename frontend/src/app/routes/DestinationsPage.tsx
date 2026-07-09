@@ -1,20 +1,58 @@
 import { useState, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { MapPin, Star, Users, Camera, Search, SlidersHorizontal, Map, Grid3X3 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import FooterSection from "@/components/FooterSection";
 import FavoriteButton from "@/components/FavoriteButton";
-import { destinations } from "@/data/destinations";
+import { Skeleton } from "@/components/ui/skeleton";
+import { supabase } from "@/integrations/supabase/client";
+import { Tables } from "@/integrations/supabase/types";
+import { Destination } from "@/data/destinations";
 
 const DestinationMap = lazy(() => import("@/components/DestinationMap"));
 
 const categories = ["All", "Wildlife Safari", "Wildlife & Mountains", "Beach & Marine", "Adventure & Hiking", "Birdwatching", "Culture & Heritage"];
 
+type DestinationRow = Tables<"destinations">;
+
+function mapDestinationRow(row: DestinationRow): Destination {
+  return {
+    id: row.slug,
+    name: row.name,
+    county: row.county,
+    image: row.cover_image ?? "",
+    gallery: row.gallery_images ?? [],
+    category: row.category,
+    rating: row.rating ?? 0,
+    reviews: row.review_count ?? 0,
+    crowdLevel: row.crowd_level ?? "",
+    bestTime: row.best_time ?? "",
+    price: row.price_display ?? "",
+    description: row.description ?? "",
+    highlights: row.highlights ?? [],
+    safetyRating: row.safety_rating ?? 0,
+    accessibilityRating: row.accessibility_rating ?? 0,
+    photographyScore: row.photography_score ?? 0,
+    lat: row.lat ?? 0,
+    lng: row.lng ?? 0,
+  };
+}
+
 const DestinationsPage = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [view, setView] = useState<"grid" | "map">("grid");
+
+  const { data: destinations = [], isLoading } = useQuery({
+    queryKey: ["public-destinations"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("destinations").select("*");
+      if (error) throw error;
+      return (data ?? []).map(mapDestinationRow);
+    },
+  });
 
   const filtered = destinations.filter((d) => {
     const matchCategory = selectedCategory === "All" || d.category === selectedCategory;
@@ -96,6 +134,27 @@ const DestinationsPage = () => {
                 <DestinationMap />
               </Suspense>
             </motion.div>
+          ) : isLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="rounded-2xl overflow-hidden bg-card shadow-[var(--shadow-card)]">
+                  <Skeleton className="h-56 w-full rounded-none" />
+                  <div className="p-5 space-y-3">
+                    <Skeleton className="h-5 w-2/3" />
+                    <Skeleton className="h-4 w-1/2" />
+                    <Skeleton className="h-4 w-full" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : filtered.length === 0 ? (
+            <div className="text-center py-20">
+              <p className="font-body text-muted-foreground">
+                {destinations.length === 0
+                  ? "No destinations are published yet. Check back soon."
+                  : "No destinations match your search."}
+              </p>
+            </div>
           ) : (
             <>
               <p className="font-body text-sm text-muted-foreground mb-6">{filtered.length} destinations found</p>

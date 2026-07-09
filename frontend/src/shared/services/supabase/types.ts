@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.1"
+    PostgrestVersion: "14.5"
   }
   public: {
     Tables: {
@@ -216,6 +216,77 @@ export type Database = {
           },
         ]
       }
+      admin_audit_logs: {
+        Row: {
+          action: string
+          admin_id: string | null
+          created_at: string
+          id: string
+          new_values: Json | null
+          old_values: Json | null
+          record_id: string | null
+          table_name: string
+        }
+        Insert: {
+          action: string
+          admin_id?: string | null
+          created_at?: string
+          id?: string
+          new_values?: Json | null
+          old_values?: Json | null
+          record_id?: string | null
+          table_name: string
+        }
+        Update: {
+          action?: string
+          admin_id?: string | null
+          created_at?: string
+          id?: string
+          new_values?: Json | null
+          old_values?: Json | null
+          record_id?: string | null
+          table_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "admin_audit_logs_admin_id_fkey"
+            columns: ["admin_id"]
+            isOneToOne: false
+            referencedRelation: "admin_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      admin_users: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean | null
+          permissions: Json | null
+          role: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          permissions?: Json | null
+          role: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          permissions?: Json | null
+          role?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ancestral_visit_requests: {
         Row: {
           community_id: string | null
@@ -268,6 +339,167 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      audit_logs: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          diff: Json | null
+          id: string
+          resource_id: string | null
+          resource_type: string
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          diff?: Json | null
+          id?: string
+          resource_id?: string | null
+          resource_type: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          diff?: Json | null
+          id?: string
+          resource_id?: string | null
+          resource_type?: string
+        }
+        Relationships: []
+      }
+      blog_categories: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          slug: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          slug: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          slug?: string
+        }
+        Relationships: []
+      }
+      blog_post_tags: {
+        Row: {
+          post_id: string
+          tag_id: string
+        }
+        Insert: {
+          post_id: string
+          tag_id: string
+        }
+        Update: {
+          post_id?: string
+          tag_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blog_post_tags_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "blog_posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "blog_post_tags_tag_id_fkey"
+            columns: ["tag_id"]
+            isOneToOne: false
+            referencedRelation: "blog_tags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      blog_posts: {
+        Row: {
+          author_id: string | null
+          body_blocks: Json
+          category_id: string | null
+          cover_image: string | null
+          created_at: string
+          excerpt: string | null
+          id: string
+          meta_description: string | null
+          meta_title: string | null
+          published_at: string | null
+          slug: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_id?: string | null
+          body_blocks?: Json
+          category_id?: string | null
+          cover_image?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          meta_description?: string | null
+          meta_title?: string | null
+          published_at?: string | null
+          slug: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string | null
+          body_blocks?: Json
+          category_id?: string | null
+          cover_image?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          meta_description?: string | null
+          meta_title?: string | null
+          published_at?: string | null
+          slug?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blog_posts_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "blog_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      blog_tags: {
+        Row: {
+          id: string
+          name: string
+          slug: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          slug: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          slug?: string
+        }
+        Relationships: []
       }
       budget_packages: {
         Row: {
@@ -537,6 +769,8 @@ export type Database = {
           lng: number | null
           managed_by: string | null
           max_daily_visitors: number | null
+          meta_description: string | null
+          meta_title: string | null
           name: string
           origin_story: string | null
           population: number | null
@@ -567,6 +801,8 @@ export type Database = {
           lng?: number | null
           managed_by?: string | null
           max_daily_visitors?: number | null
+          meta_description?: string | null
+          meta_title?: string | null
           name: string
           origin_story?: string | null
           population?: number | null
@@ -597,6 +833,8 @@ export type Database = {
           lng?: number | null
           managed_by?: string | null
           max_daily_visitors?: number | null
+          meta_description?: string | null
+          meta_title?: string | null
           name?: string
           origin_story?: string | null
           population?: number | null
@@ -966,6 +1204,36 @@ export type Database = {
           },
         ]
       }
+      content_versions: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          resource_id: string
+          resource_type: string
+          snapshot: Json
+          version_number: number
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          resource_id: string
+          resource_type: string
+          snapshot: Json
+          version_number: number
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          resource_id?: string
+          resource_type?: string
+          snapshot?: Json
+          version_number?: number
+        }
+        Relationships: []
+      }
       coworking_spaces: {
         Row: {
           address: string | null
@@ -1135,6 +1403,90 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      destinations: {
+        Row: {
+          accessibility_rating: number | null
+          best_time: string | null
+          category: string
+          county: string
+          cover_image: string | null
+          created_at: string
+          crowd_level: string | null
+          description: string | null
+          gallery_images: string[] | null
+          highlights: string[] | null
+          id: string
+          lat: number | null
+          lng: number | null
+          meta_description: string | null
+          meta_title: string | null
+          name: string
+          photography_score: number | null
+          price_display: string | null
+          published_at: string | null
+          rating: number | null
+          review_count: number | null
+          safety_rating: number | null
+          slug: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          accessibility_rating?: number | null
+          best_time?: string | null
+          category: string
+          county: string
+          cover_image?: string | null
+          created_at?: string
+          crowd_level?: string | null
+          description?: string | null
+          gallery_images?: string[] | null
+          highlights?: string[] | null
+          id?: string
+          lat?: number | null
+          lng?: number | null
+          meta_description?: string | null
+          meta_title?: string | null
+          name: string
+          photography_score?: number | null
+          price_display?: string | null
+          published_at?: string | null
+          rating?: number | null
+          review_count?: number | null
+          safety_rating?: number | null
+          slug: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          accessibility_rating?: number | null
+          best_time?: string | null
+          category?: string
+          county?: string
+          cover_image?: string | null
+          created_at?: string
+          crowd_level?: string | null
+          description?: string | null
+          gallery_images?: string[] | null
+          highlights?: string[] | null
+          id?: string
+          lat?: number | null
+          lng?: number | null
+          meta_description?: string | null
+          meta_title?: string | null
+          name?: string
+          photography_score?: number | null
+          price_display?: string | null
+          published_at?: string | null
+          rating?: number | null
+          review_count?: number | null
+          safety_rating?: number | null
+          slug?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       education_lessons: {
         Row: {
@@ -1455,6 +1807,8 @@ export type Database = {
           lng: number | null
           location_name: string | null
           max_guests: number | null
+          meta_description: string | null
+          meta_title: string | null
           min_guests: number | null
           price_amount: number
           price_currency: string | null
@@ -1494,6 +1848,8 @@ export type Database = {
           lng?: number | null
           location_name?: string | null
           max_guests?: number | null
+          meta_description?: string | null
+          meta_title?: string | null
           min_guests?: number | null
           price_amount?: number
           price_currency?: string | null
@@ -1533,6 +1889,8 @@ export type Database = {
           lng?: number | null
           location_name?: string | null
           max_guests?: number | null
+          meta_description?: string | null
+          meta_title?: string | null
           min_guests?: number | null
           price_amount?: number
           price_currency?: string | null
@@ -2237,6 +2595,8 @@ export type Database = {
           lat: number | null
           lng: number | null
           location: string | null
+          meta_description: string | null
+          meta_title: string | null
           name: string
           photo_url: string | null
           price_currency: string | null
@@ -2266,6 +2626,8 @@ export type Database = {
           lat?: number | null
           lng?: number | null
           location?: string | null
+          meta_description?: string | null
+          meta_title?: string | null
           name: string
           photo_url?: string | null
           price_currency?: string | null
@@ -2295,6 +2657,8 @@ export type Database = {
           lat?: number | null
           lng?: number | null
           location?: string | null
+          meta_description?: string | null
+          meta_title?: string | null
           name?: string
           photo_url?: string | null
           price_currency?: string | null
@@ -3061,6 +3425,63 @@ export type Database = {
           },
         ]
       }
+      media_library: {
+        Row: {
+          alt_text: string | null
+          caption: string | null
+          created_at: string
+          file_name: string
+          folder: string | null
+          height: number | null
+          id: string
+          mime_type: string
+          public_url: string
+          size_bytes: number | null
+          storage_bucket: string
+          storage_path: string
+          title: string | null
+          updated_at: string
+          uploaded_by: string | null
+          width: number | null
+        }
+        Insert: {
+          alt_text?: string | null
+          caption?: string | null
+          created_at?: string
+          file_name: string
+          folder?: string | null
+          height?: number | null
+          id?: string
+          mime_type: string
+          public_url: string
+          size_bytes?: number | null
+          storage_bucket?: string
+          storage_path: string
+          title?: string | null
+          updated_at?: string
+          uploaded_by?: string | null
+          width?: number | null
+        }
+        Update: {
+          alt_text?: string | null
+          caption?: string | null
+          created_at?: string
+          file_name?: string
+          folder?: string | null
+          height?: number | null
+          id?: string
+          mime_type?: string
+          public_url?: string
+          size_bytes?: number | null
+          storage_bucket?: string
+          storage_path?: string
+          title?: string | null
+          updated_at?: string
+          uploaded_by?: string | null
+          width?: number | null
+        }
+        Relationships: []
+      }
       medical_facilities: {
         Row: {
           county: string
@@ -3471,6 +3892,45 @@ export type Database = {
           total_revenue?: number | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      pages: {
+        Row: {
+          body_blocks: Json
+          created_at: string
+          id: string
+          meta_description: string | null
+          meta_title: string | null
+          published_at: string | null
+          slug: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          body_blocks?: Json
+          created_at?: string
+          id?: string
+          meta_description?: string | null
+          meta_title?: string | null
+          published_at?: string | null
+          slug: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          body_blocks?: Json
+          created_at?: string
+          id?: string
+          meta_description?: string | null
+          meta_title?: string | null
+          published_at?: string | null
+          slug?: string
+          status?: string
+          title?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -4460,6 +4920,7 @@ export type Database = {
           photo_url: string | null
           species: string
           species_category: string
+          status: string
           user_id: string
           verified: boolean | null
         }
@@ -4476,6 +4937,7 @@ export type Database = {
           photo_url?: string | null
           species: string
           species_category?: string
+          status?: string
           user_id: string
           verified?: boolean | null
         }
@@ -4492,6 +4954,7 @@ export type Database = {
           photo_url?: string | null
           species?: string
           species_category?: string
+          status?: string
           user_id?: string
           verified?: boolean | null
         }
@@ -4526,6 +4989,8 @@ export type Database = {
         | "operator"
         | "gov_official"
         | "user"
+        | "content_manager"
+        | "editor"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -4660,6 +5125,8 @@ export const Constants = {
         "operator",
         "gov_official",
         "user",
+        "content_manager",
+        "editor",
       ],
     },
   },

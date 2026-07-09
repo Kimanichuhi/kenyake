@@ -2,7 +2,15 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 
-export type AppRole = 'admin' | 'community_admin' | 'guide' | 'operator' | 'gov_official' | 'user';
+export type AppRole =
+  | 'admin'
+  | 'community_admin'
+  | 'guide'
+  | 'operator'
+  | 'gov_official'
+  | 'user'
+  | 'content_manager'
+  | 'editor';
 
 export function useUserRoles() {
   const { user } = useAuth();
@@ -27,12 +35,28 @@ export function useUserRoles() {
     fetchRoles();
   }, [fetchRoles]);
 
+  const hasAnyRole = useCallback((allowed: AppRole[]) => allowed.some((role) => roles.includes(role)), [roles]);
   const hasRole = useCallback((role: AppRole) => roles.includes(role), [roles]);
   const isAdmin = roles.includes('admin');
   const isCommunityAdmin = roles.includes('community_admin');
   const isGuide = roles.includes('guide');
   const isOperator = roles.includes('operator');
   const isGovOfficial = roles.includes('gov_official');
+  const isContentManager = roles.includes('content_manager');
+  const isEditor = roles.includes('editor');
 
-  return { roles, loading, hasRole, isAdmin, isCommunityAdmin, isGuide, isOperator, isGovOfficial, refreshRoles: fetchRoles };
+  return {
+    roles,
+    loading,
+    hasRole,
+    hasAnyRole,
+    isAdmin,
+    isCommunityAdmin,
+    isGuide,
+    isOperator,
+    isGovOfficial,
+    isContentManager,
+    isEditor,
+    refreshRoles: fetchRoles,
+  };
 }
