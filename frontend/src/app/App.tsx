@@ -66,6 +66,20 @@ import BlogDetailPage from "./routes/BlogDetailPage";
 import PagesListPage from "@/domains/admin/pages/pages/PagesListPage";
 import PageFormPage from "@/domains/admin/pages/pages/PageFormPage";
 import AuditLogsPage from "@/domains/admin/pages/audit/AuditLogsPage";
+import PartnersPage from "./routes/PartnersPage";
+import PartnersDetailPage from "./routes/PartnersDetailPage";
+import RequirePartnerBusiness from "@/components/RequirePartnerBusiness";
+import BecomeAPartnerPage from "@/domains/partners/pages/BecomeAPartnerPage";
+import PartnerRegisterPage from "@/domains/partners/pages/PartnerRegisterPage";
+import PartnerDashboardPage from "@/domains/partners/pages/PartnerDashboardPage";
+import PartnerDashboardLayout from "@/domains/partners/components/dashboard/PartnerDashboardLayout";
+import { BusinessProfileEditForm } from "@/domains/partners/components/dashboard/BusinessProfileEditForm";
+import { BusinessDocumentsPanel } from "@/domains/partners/components/dashboard/BusinessDocumentsPanel";
+import { BusinessMediaPanel } from "@/domains/partners/components/dashboard/BusinessMediaPanel";
+import PartnerApplicationsQueue from "@/domains/admin/pages/partners/PartnerApplicationsQueue";
+import PartnerApplicationDetail from "@/domains/admin/pages/partners/PartnerApplicationDetail";
+import TransportDashboardPage from "./routes/TransportDashboardPage";
+import BookingsQueue from "@/domains/admin/pages/bookings/BookingsQueue";
 
 const queryClient = new QueryClient();
 
@@ -100,6 +114,7 @@ const App = () => (
             <Route path="/cultural-prep" element={<CulturalPrepPage />} />
             <Route path="/guide-register" element={<GuideRegisterPage />} />
             <Route path="/guide-dashboard" element={<GuideDashboardPage />} />
+            <Route path="/transport-dashboard" element={<TransportDashboardPage />} />
             <Route path="/accommodation" element={<AccommodationPage />} />
             <Route path="/marketplace" element={<MarketplacePage />} />
             <Route path="/packages" element={<PackagesPage />} />
@@ -117,6 +132,23 @@ const App = () => (
             <Route path="/group-chat" element={<GroupChatPage />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/:slug" element={<BlogDetailPage />} />
+            <Route path="/partners" element={<PartnersPage />} />
+            <Route path="/partners/:slug" element={<PartnersDetailPage />} />
+            <Route path="/become-a-partner" element={<BecomeAPartnerPage />} />
+            <Route path="/partner/register" element={<PartnerRegisterPage />} />
+            <Route
+              path="/partner"
+              element={
+                <RequirePartnerBusiness>
+                  <PartnerDashboardLayout />
+                </RequirePartnerBusiness>
+              }
+            >
+              <Route index element={<PartnerDashboardPage />} />
+              <Route path="profile" element={<BusinessProfileEditForm />} />
+              <Route path="documents" element={<BusinessDocumentsPanel />} />
+              <Route path="media" element={<BusinessMediaPanel />} />
+            </Route>
             <Route
               path="/admin"
               element={
@@ -149,11 +181,28 @@ const App = () => (
               <Route path="pages/new" element={<PageFormPage />} />
               <Route path="pages/:id" element={<PageFormPage />} />
               <Route path="media" element={<MediaLibraryPage />} />
+              <Route path="bookings" element={<BookingsQueue />} />
               <Route
                 path="audit-logs"
                 element={
                   <RequireRole anyOf={["admin"]}>
                     <AuditLogsPage />
+                  </RequireRole>
+                }
+              />
+              <Route
+                path="partners"
+                element={
+                  <RequireRole anyOf={["admin"]}>
+                    <PartnerApplicationsQueue />
+                  </RequireRole>
+                }
+              />
+              <Route
+                path="partners/:id"
+                element={
+                  <RequireRole anyOf={["admin"]}>
+                    <PartnerApplicationDetail />
                   </RequireRole>
                 }
               />

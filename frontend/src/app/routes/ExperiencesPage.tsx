@@ -9,13 +9,10 @@ import Navbar from "@/components/Navbar";
 import FooterSection from "@/components/FooterSection";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { BookingFlow } from "@/domains/bookings/components/BookingFlow/BookingFlow";
 
 interface Experience {
   id: string;
@@ -79,13 +76,7 @@ const ExperiencesPage = () => {
   const [search, setSearch] = useState("");
   const [selectedExp, setSelectedExp] = useState<Experience | null>(null);
   const [showBooking, setShowBooking] = useState(false);
-  const [bookingDate, setBookingDate] = useState("");
-  const [bookingTime, setBookingTime] = useState("");
-  const [guestCount, setGuestCount] = useState(1);
-  const [specialRequests, setSpecialRequests] = useState("");
-  const [submitting, setSubmitting] = useState(false);
   const { user } = useAuth();
-  const { toast } = useToast();
 
   useEffect(() => {
     const fetchExperiences = async () => {
@@ -111,36 +102,6 @@ const ExperiencesPage = () => {
       (e.county || "").toLowerCase().includes(search.toLowerCase());
     return matchCat && matchSearch;
   });
-
-  const handleBook = async () => {
-    if (!user) {
-      toast({ title: "Sign in required", description: "Please sign in to book an experience.", variant: "destructive" });
-      return;
-    }
-    if (!selectedExp || !bookingDate) return;
-    setSubmitting(true);
-    const { error } = await supabase.from("experience_bookings").insert({
-      experience_id: selectedExp.id,
-      user_id: user.id,
-      booking_date: bookingDate,
-      start_time: bookingTime || (selectedExp.start_times?.[0] ?? "09:00"),
-      guest_count: guestCount,
-      total_price: selectedExp.price_amount * guestCount,
-      special_requests: specialRequests || null,
-    });
-    setSubmitting(false);
-    if (error) {
-      toast({ title: "Booking failed", description: error.message, variant: "destructive" });
-    } else {
-      toast({ title: "Booking submitted! ✨", description: `Your ${selectedExp.title} booking is pending confirmation.` });
-      setShowBooking(false);
-      setSelectedExp(null);
-      setBookingDate("");
-      setBookingTime("");
-      setGuestCount(1);
-      setSpecialRequests("");
-    }
-  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -400,76 +361,24 @@ const ExperiencesPage = () => {
                 <p className="text-sm text-muted-foreground font-body">{selectedExp.price_display}/person · {formatDuration(selectedExp.duration_minutes)}</p>
               </DialogHeader>
 
-              <div className="space-y-4 mt-4">
-                <div>
-                  <Label className="font-body">Date *</Label>
-                  <Input type="date" value={bookingDate} onChange={(e) => setBookingDate(e.target.value)} min={new Date().toISOString().split("T")[0]} />
-                </div>
-
-                {selectedExp.start_times && selectedExp.start_times.length > 0 && (
-                  <div>
-                    <Label className="font-body">Start Time</Label>
-                    <div className="flex gap-2 mt-1">
-                      {selectedExp.start_times.map((t) => (
-                        <button
-                          key={t}
-                          onClick={() => setBookingTime(t)}
-                          className={`px-4 py-2 rounded-lg text-sm font-body border transition-colors ${
-                            bookingTime === t ? "bg-primary text-primary-foreground border-primary" : "border-border text-muted-foreground hover:bg-muted"
-                          }`}
-                        >
-                          {t}
-                        </button>
-                      ))}
-                    </div>
+              <div className="mt-4">
+                {!user ? (
+                  <div className="text-center py-8">
+                    <p className="text-sm text-muted-foreground font-body mb-3">Sign in to book this experience</p>
+                    <Button asChild className="rounded-full">
+                      <a href="/auth">Sign In</a>
+                    </Button>
                   </div>
-                )}
-
-                <div>
-                  <Label className="font-body">Number of Guests</Label>
-                  <div className="flex items-center gap-3 mt-1">
-                    <Button variant="outline" size="sm" onClick={() => setGuestCount(Math.max(1, guestCount - 1))}>−</Button>
-                    <span className="font-body font-semibold text-foreground w-8 text-center">{guestCount}</span>
-                    <Button variant="outline" size="sm" onClick={() => setGuestCount(Math.min(selectedExp.max_guests || 10, guestCount + 1))}>+</Button>
-                    <span className="text-xs text-muted-foreground font-body">max {selectedExp.max_guests}</span>
-                  </div>
-                </div>
-
-                <div>
-                  <Label className="font-body">Special Requests (optional)</Label>
-                  <Textarea
-                    value={specialRequests}
-                    onChange={(e) => setSpecialRequests(e.target.value)}
-                    placeholder="Dietary needs, accessibility requirements, questions..."
-                    className="mt-1"
-                    rows={3}
+                ) : (
+                  <BookingFlow
+                    resourceType="experience"
+                    resource={selectedExp}
+                    onComplete={() => {
+                      setShowBooking(false);
+                      setSelectedExp(null);
+                    }}
                   />
-                </div>
-
-                {/* Price summary */}
-                <div className="bg-muted/50 rounded-xl p-4 space-y-2">
-                  <div className="flex justify-between text-sm font-body">
-                    <span className="text-muted-foreground">{selectedExp.price_display} × {guestCount} guest{guestCount > 1 ? "s" : ""}</span>
-                    <span className="text-foreground">${selectedExp.price_amount * guestCount}</span>
-                  </div>
-                  <div className="border-t border-border pt-2 flex justify-between font-body font-bold">
-                    <span>Total</span>
-                    <span className="text-foreground">${selectedExp.price_amount * guestCount}</span>
-                  </div>
-                </div>
-
-                <Button
-                  className="w-full gradient-sunset text-primary-foreground font-body font-semibold py-5"
-                  disabled={!bookingDate || submitting}
-                  onClick={handleBook}
-                >
-                  {submitting ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : null}
-                  {submitting ? "Submitting..." : "Confirm Booking"}
-                </Button>
-
-                <p className="text-xs text-muted-foreground font-body text-center">
-                  You won't be charged yet. The host will confirm your booking.
-                </p>
+                )}
               </div>
             </>
           )}

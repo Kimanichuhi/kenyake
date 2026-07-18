@@ -14,6 +14,7 @@ import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { BookingFlow } from "@/domains/bookings/components/BookingFlow/BookingFlow";
 
 interface Guide {
   id: string;
@@ -84,9 +85,7 @@ const GuidesPage = () => {
   const [selectedSpec, setSelectedSpec] = useState("All");
   const [selectedGuide, setSelectedGuide] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"about" | "reviews" | "availability" | "book">("about");
-  const [bookingForm, setBookingForm] = useState({ startDate: "", endDate: "", groupSize: 1, message: "" });
   const [loading, setLoading] = useState(true);
-  const [bookingLoading, setBookingLoading] = useState(false);
   const [sortBy, setSortBy] = useState<"rating" | "price" | "experience" | "response">("rating");
   const [selectedForGroup, setSelectedForGroup] = useState<string[]>([]);
   const [groupTripForm, setGroupTripForm] = useState({ title: "", description: "", startDate: "", endDate: "", groupSize: 1 });
@@ -144,46 +143,8 @@ const GuidesPage = () => {
   const openGuideProfile = (guideId: string) => {
     setSelectedGuide(guideId);
     setActiveTab("about");
-    setBookingForm({ startDate: "", endDate: "", groupSize: 1, message: "" });
     fetchReviews(guideId);
     fetchAvailability(guideId);
-  };
-
-  const submitBooking = async () => {
-    if (!user) {
-      toast({ title: "Sign in required", description: "Please sign in to book a guide." });
-      return;
-    }
-    if (!selectedGuide || !bookingForm.startDate || !bookingForm.endDate) {
-      toast({ title: "Missing dates", description: "Please select start and end dates.", variant: "destructive" });
-      return;
-    }
-    const guide = guides.find((g) => g.id === selectedGuide);
-    if (!guide) return;
-
-    const days = Math.max(1, Math.ceil(
-      (new Date(bookingForm.endDate).getTime() - new Date(bookingForm.startDate).getTime()) / 86400000
-    ) + 1);
-    const totalPrice = (guide.price_per_day || 0) * days;
-
-    setBookingLoading(true);
-    const { error } = await supabase.from("guide_bookings").insert({
-      guide_id: selectedGuide,
-      tourist_id: user.id,
-      start_date: bookingForm.startDate,
-      end_date: bookingForm.endDate,
-      group_size: bookingForm.groupSize,
-      total_price: totalPrice,
-      message: bookingForm.message || null,
-    });
-    setBookingLoading(false);
-
-    if (error) {
-      toast({ title: "Booking failed", description: error.message, variant: "destructive" });
-    } else {
-      toast({ title: "🎉 Booking request sent!", description: `${guide.name} will respond within ${formatResponseTime(guide.response_time_minutes)}.` });
-      setActiveTab("about");
-    }
   };
 
   const toggleGroupSelect = (guideId: string) => {
@@ -761,89 +722,11 @@ const GuidesPage = () => {
                           <p className="text-xs text-muted-foreground font-body">Price set by guide · No platform fees</p>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-3">
-                          <div>
-                            <label className="text-xs font-body font-medium text-foreground mb-1 block">Start Date</label>
-                            <input
-                              type="date"
-                              value={bookingForm.startDate}
-                              onChange={(e) => setBookingForm((p) => ({ ...p, startDate: e.target.value }))}
-                              min={new Date().toISOString().split("T")[0]}
-                              className="w-full border border-border rounded-lg px-3 py-2 text-sm font-body bg-background text-foreground"
-                            />
-                          </div>
-                          <div>
-                            <label className="text-xs font-body font-medium text-foreground mb-1 block">End Date</label>
-                            <input
-                              type="date"
-                              value={bookingForm.endDate}
-                              onChange={(e) => setBookingForm((p) => ({ ...p, endDate: e.target.value }))}
-                              min={bookingForm.startDate || new Date().toISOString().split("T")[0]}
-                              className="w-full border border-border rounded-lg px-3 py-2 text-sm font-body bg-background text-foreground"
-                            />
-                          </div>
-                        </div>
-
-                        <div>
-                          <label className="text-xs font-body font-medium text-foreground mb-1 block">Group Size</label>
-                          <div className="flex items-center gap-3">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => setBookingForm((p) => ({ ...p, groupSize: Math.max(1, p.groupSize - 1) }))}
-                            >
-                              -
-                            </Button>
-                            <span className="font-display font-bold text-foreground w-8 text-center">{bookingForm.groupSize}</span>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => setBookingForm((p) => ({ ...p, groupSize: Math.min(20, p.groupSize + 1) }))}
-                            >
-                              +
-                            </Button>
-                            <span className="text-xs text-muted-foreground font-body">people</span>
-                          </div>
-                        </div>
-
-                        <div>
-                          <label className="text-xs font-body font-medium text-foreground mb-1 block">Message to Guide (optional)</label>
-                          <textarea
-                            value={bookingForm.message}
-                            onChange={(e) => setBookingForm((p) => ({ ...p, message: e.target.value }))}
-                            placeholder="Tell the guide about your interests, experience level, or special requests..."
-                            rows={3}
-                            className="w-full border border-border rounded-lg px-3 py-2 text-sm font-body bg-background text-foreground resize-none"
-                          />
-                        </div>
-
-                        {bookingForm.startDate && bookingForm.endDate && (
-                          <div className="bg-secondary/10 rounded-lg p-4 border border-secondary/25">
-                            <div className="flex justify-between text-sm font-body">
-                              <span className="text-foreground">
-                                ${selectedGuideData.price_per_day} ×{" "}
-                                {Math.max(1, Math.ceil((new Date(bookingForm.endDate).getTime() - new Date(bookingForm.startDate).getTime()) / 86400000) + 1)} days
-                              </span>
-                              <span className="font-display font-bold text-foreground">
-                                ${(selectedGuideData.price_per_day || 0) * Math.max(1, Math.ceil((new Date(bookingForm.endDate).getTime() - new Date(bookingForm.startDate).getTime()) / 86400000) + 1)}
-                              </span>
-                            </div>
-                            <p className="text-[10px] text-muted-foreground font-body mt-1">Payment handled directly with guide</p>
-                          </div>
-                        )}
-
-                        <Button
-                          className="w-full rounded-full"
-                          onClick={submitBooking}
-                          disabled={bookingLoading || !bookingForm.startDate || !bookingForm.endDate}
-                        >
-                          {bookingLoading ? (
-                            <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                          ) : (
-                            <Send className="h-4 w-4 mr-2" />
-                          )}
-                          Send Booking Request
-                        </Button>
+                        <BookingFlow
+                          resourceType="guide"
+                          resource={selectedGuideData}
+                          onComplete={() => setActiveTab("about")}
+                        />
 
                         <p className="text-[10px] text-center text-muted-foreground font-body">
                           Expected response: {formatResponseTime(selectedGuideData.response_time_minutes)}

@@ -8,14 +8,11 @@ import Navbar from "@/components/Navbar";
 import FooterSection from "@/components/FooterSection";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { BookingFlow } from "@/domains/bookings/components/BookingFlow/BookingFlow";
 
 interface Accommodation {
   id: string;
@@ -92,14 +89,7 @@ const AccommodationPage = () => {
   const [groupSize, setGroupSize] = useState<number | null>(null);
   const [selected, setSelected] = useState<Accommodation | null>(null);
   const [showBooking, setShowBooking] = useState(false);
-  const [checkIn, setCheckIn] = useState("");
-  const [checkOut, setCheckOut] = useState("");
-  const [guests, setGuests] = useState(1);
-  const [rooms, setRooms] = useState(1);
-  const [specialReqs, setSpecialReqs] = useState("");
-  const [submitting, setSubmitting] = useState(false);
   const { user } = useAuth();
-  const { toast } = useToast();
 
   useEffect(() => {
     const fetch = async () => {
@@ -128,31 +118,6 @@ const AccommodationPage = () => {
       if (sortBy === "price-high") return b.price_per_night - a.price_per_night;
       return (Number(b.rating) || 0) - (Number(a.rating) || 0);
     });
-
-  const nights = checkIn && checkOut ? Math.max(1, Math.ceil((new Date(checkOut).getTime() - new Date(checkIn).getTime()) / 86400000)) : 0;
-
-  const handleBook = async () => {
-    if (!user) { toast({ title: "Sign in required", description: "Please sign in to book.", variant: "destructive" }); return; }
-    if (!selected || !checkIn || !checkOut) return;
-    setSubmitting(true);
-    const { error } = await supabase.from("accommodation_bookings").insert({
-      accommodation_id: selected.id,
-      user_id: user.id,
-      check_in: checkIn,
-      check_out: checkOut,
-      guest_count: guests,
-      rooms,
-      total_price: selected.price_per_night * nights * rooms,
-      special_requests: specialReqs || null,
-    });
-    setSubmitting(false);
-    if (error) {
-      toast({ title: "Booking failed", description: error.message, variant: "destructive" });
-    } else {
-      toast({ title: "Booking submitted! 🏡", description: `Your stay at ${selected.name} is pending confirmation.` });
-      setShowBooking(false); setSelected(null); setCheckIn(""); setCheckOut(""); setGuests(1); setRooms(1); setSpecialReqs("");
-    }
-  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -387,41 +352,21 @@ const AccommodationPage = () => {
                 <p className="text-sm text-muted-foreground font-body">{selected.price_display}/night · {selected.property_type.replace("-", " ")}</p>
               </DialogHeader>
               <div className="space-y-4 mt-4">
-                <div className="grid grid-cols-2 gap-3">
-                  <div><Label className="font-body">Check-in *</Label><Input type="date" value={checkIn} onChange={(e) => setCheckIn(e.target.value)} min={new Date().toISOString().split("T")[0]} /></div>
-                  <div><Label className="font-body">Check-out *</Label><Input type="date" value={checkOut} onChange={(e) => setCheckOut(e.target.value)} min={checkIn || new Date().toISOString().split("T")[0]} /></div>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <Label className="font-body">Guests</Label>
-                    <div className="flex items-center gap-2 mt-1">
-                      <Button variant="outline" size="sm" onClick={() => setGuests(Math.max(1, guests - 1))}>−</Button>
-                      <span className="font-body font-semibold w-6 text-center">{guests}</span>
-                      <Button variant="outline" size="sm" onClick={() => setGuests(Math.min(selected.max_guests || 4, guests + 1))}>+</Button>
-                    </div>
+                {!user ? (
+                  <div className="text-center py-8">
+                    <Shield className="h-8 w-8 mx-auto text-muted-foreground mb-3" />
+                    <p className="text-sm text-muted-foreground font-body mb-3">Sign in to book this stay</p>
+                    <Button asChild className="rounded-full">
+                      <a href="/auth">Sign In</a>
+                    </Button>
                   </div>
-                  <div>
-                    <Label className="font-body">Rooms</Label>
-                    <div className="flex items-center gap-2 mt-1">
-                      <Button variant="outline" size="sm" onClick={() => setRooms(Math.max(1, rooms - 1))}>−</Button>
-                      <span className="font-body font-semibold w-6 text-center">{rooms}</span>
-                      <Button variant="outline" size="sm" onClick={() => setRooms(Math.min(selected.rooms_available || 1, rooms + 1))}>+</Button>
-                    </div>
-                  </div>
-                </div>
-                <div><Label className="font-body">Special Requests (optional)</Label><Textarea value={specialReqs} onChange={(e) => setSpecialReqs(e.target.value)} placeholder="Early check-in, dietary needs, accessibility..." rows={3} className="mt-1" /></div>
-
-                {nights > 0 && (
-                  <div className="bg-muted/50 rounded-xl p-4 space-y-2 text-sm font-body">
-                    <div className="flex justify-between"><span className="text-muted-foreground">{selected.price_display} × {nights} night{nights > 1 ? "s" : ""} × {rooms} room{rooms > 1 ? "s" : ""}</span><span className="text-foreground">${selected.price_per_night * nights * rooms}</span></div>
-                    <div className="border-t border-border pt-2 flex justify-between font-bold"><span>Total</span><span>${selected.price_per_night * nights * rooms}</span></div>
-                  </div>
+                ) : (
+                  <BookingFlow
+                    resourceType="accommodation"
+                    resource={selected}
+                    onComplete={() => { setShowBooking(false); setSelected(null); }}
+                  />
                 )}
-
-                <Button className="w-full gradient-sunset text-primary-foreground font-body font-semibold py-5" disabled={!checkIn || !checkOut || nights < 1 || submitting} onClick={handleBook}>
-                  {submitting ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : null}
-                  {submitting ? "Submitting..." : "Confirm Booking"}
-                </Button>
                 <p className="text-xs text-muted-foreground font-body text-center">{selected.cancellation_policy}</p>
               </div>
             </>

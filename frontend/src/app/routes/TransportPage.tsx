@@ -3,20 +3,17 @@ import { motion } from "framer-motion";
 import {
   Search, Star, MapPin, Users, Car, Truck, Plane, Bus, Bike, Footprints,
   Clock, ChevronRight, Loader2, Check, BadgeCheck, Fuel, AlertTriangle,
-  Navigation, Calendar, Phone, DollarSign, Mountain, Route
+  Navigation, Calendar, Phone, DollarSign, Mountain, Route, Shield
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import FooterSection from "@/components/FooterSection";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { BookingFlow } from "@/domains/bookings/components/BookingFlow/BookingFlow";
 
 interface Driver {
   id: string; name: string; slug: string; photo_url: string | null; bio: string | null;
@@ -87,17 +84,7 @@ const TransportPage = () => {
   const [selectedRoute, setSelectedRoute] = useState<TransportRoute | null>(null);
   const [selectedDriver, setSelectedDriver] = useState<Driver | null>(null);
   const [showBooking, setShowBooking] = useState(false);
-  const [pickupDate, setPickupDate] = useState("");
-  const [returnDate, setReturnDate] = useState("");
-  const [pickupLocation, setPickupLocation] = useState("");
-  const [dropoffLocation, setDropoffLocation] = useState("");
-  const [pickupTime, setPickupTime] = useState("08:00");
-  const [passengers, setPassengers] = useState(1);
-  const [specialReqs, setSpecialReqs] = useState("");
-  const [contactPhone, setContactPhone] = useState("");
-  const [submitting, setSubmitting] = useState(false);
   const { user } = useAuth();
-  const { toast } = useToast();
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -117,36 +104,6 @@ const TransportPage = () => {
     };
     fetchAll();
   }, []);
-
-  const days = pickupDate && returnDate ? Math.max(1, Math.ceil((new Date(returnDate).getTime() - new Date(pickupDate).getTime()) / 86400000)) : 1;
-
-  const handleBook = async () => {
-    if (!user) { toast({ title: "Sign in required", variant: "destructive" }); return; }
-    if (!selectedVehicle || !pickupDate || !pickupLocation) return;
-    setSubmitting(true);
-    const { error } = await supabase.from("transport_bookings").insert({
-      user_id: user.id,
-      driver_id: selectedVehicle.driver_id,
-      vehicle_id: selectedVehicle.id,
-      booking_type: "vehicle-hire",
-      pickup_location: pickupLocation,
-      dropoff_location: dropoffLocation || null,
-      pickup_date: pickupDate,
-      pickup_time: pickupTime,
-      return_date: returnDate || null,
-      passenger_count: passengers,
-      total_price: selectedVehicle.price_per_day * days,
-      price_currency: "USD",
-      special_requests: specialReqs || null,
-      contact_phone: contactPhone || null,
-    });
-    setSubmitting(false);
-    if (error) { toast({ title: "Booking failed", description: error.message, variant: "destructive" }); }
-    else {
-      toast({ title: "Booking submitted! 🚗", description: `Your ${selectedVehicle.name} booking is pending confirmation.` });
-      setShowBooking(false); setSelectedVehicle(null); setPickupDate(""); setReturnDate(""); setPickupLocation(""); setDropoffLocation(""); setSpecialReqs(""); setContactPhone("");
-    }
-  };
 
   const filteredVehicles = vehicles.filter((v) => !search || v.name.toLowerCase().includes(search.toLowerCase()) || (v.transport_drivers?.name || "").toLowerCase().includes(search.toLowerCase()) || (v.make || "").toLowerCase().includes(search.toLowerCase()));
   const filteredRoutes = routes.filter((r) => !search || r.name.toLowerCase().includes(search.toLowerCase()) || r.origin.toLowerCase().includes(search.toLowerCase()) || r.destination.toLowerCase().includes(search.toLowerCase()));
@@ -417,43 +374,29 @@ const TransportPage = () => {
 
       {/* Booking Modal */}
       <Dialog open={showBooking} onOpenChange={(o) => { if (!o) setShowBooking(false); }}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
           {selectedVehicle && (
             <>
               <DialogHeader>
                 <DialogTitle className="font-display text-xl">Book: {selectedVehicle.name}</DialogTitle>
                 <p className="text-sm text-muted-foreground font-body">{selectedVehicle.price_display}</p>
               </DialogHeader>
-              <div className="space-y-4 mt-4">
-                <div className="grid grid-cols-2 gap-3">
-                  <div><Label className="font-body">Pickup Date *</Label><Input type="date" value={pickupDate} onChange={(e) => setPickupDate(e.target.value)} min={new Date().toISOString().split("T")[0]} className="mt-1" /></div>
-                  <div><Label className="font-body">Return Date</Label><Input type="date" value={returnDate} onChange={(e) => setReturnDate(e.target.value)} min={pickupDate || new Date().toISOString().split("T")[0]} className="mt-1" /></div>
-                </div>
-                <div><Label className="font-body">Pickup Time</Label><Input type="time" value={pickupTime} onChange={(e) => setPickupTime(e.target.value)} className="mt-1" /></div>
-                <div><Label className="font-body">Pickup Location *</Label><Input value={pickupLocation} onChange={(e) => setPickupLocation(e.target.value)} placeholder="Hotel name, airport, address..." className="mt-1" /></div>
-                <div><Label className="font-body">Drop-off Location (if different)</Label><Input value={dropoffLocation} onChange={(e) => setDropoffLocation(e.target.value)} placeholder="Final destination..." className="mt-1" /></div>
-                <div>
-                  <Label className="font-body">Passengers</Label>
-                  <div className="flex items-center gap-2 mt-1">
-                    <Button variant="outline" size="sm" onClick={() => setPassengers(Math.max(1, passengers - 1))}>−</Button>
-                    <span className="font-body font-semibold w-6 text-center">{passengers}</span>
-                    <Button variant="outline" size="sm" onClick={() => setPassengers(Math.min(selectedVehicle.capacity || 8, passengers + 1))}>+</Button>
+              <div className="mt-4">
+                {!user ? (
+                  <div className="text-center py-8">
+                    <Shield className="h-8 w-8 mx-auto text-muted-foreground mb-3" />
+                    <p className="text-sm text-muted-foreground font-body mb-3">Sign in to book this vehicle</p>
+                    <Button asChild className="rounded-full">
+                      <a href="/auth">Sign In</a>
+                    </Button>
                   </div>
-                </div>
-                <div><Label className="font-body">Your Phone (for driver contact)</Label><Input value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} placeholder="+254..." className="mt-1" /></div>
-                <div><Label className="font-body">Special Requests</Label><Textarea value={specialReqs} onChange={(e) => setSpecialReqs(e.target.value)} placeholder="Child seats, extra stops, luggage notes..." rows={2} className="mt-1" /></div>
-
-                {days > 0 && (
-                  <div className="bg-muted/50 rounded-xl p-4 space-y-2 text-sm font-body">
-                    <div className="flex justify-between"><span className="text-muted-foreground">${selectedVehicle.price_per_day}/day × {days} day{days > 1 ? "s" : ""}</span><span className="text-foreground">${selectedVehicle.price_per_day * days}</span></div>
-                    <div className="border-t border-border pt-2 flex justify-between font-bold"><span>Total</span><span>${selectedVehicle.price_per_day * days}</span></div>
-                  </div>
+                ) : (
+                  <BookingFlow
+                    resourceType="transport"
+                    resource={selectedVehicle}
+                    onComplete={() => { setShowBooking(false); setSelectedVehicle(null); }}
+                  />
                 )}
-
-                <Button className="w-full gradient-sunset text-primary-foreground font-body font-semibold py-5" disabled={!pickupDate || !pickupLocation || submitting} onClick={handleBook}>
-                  {submitting ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : null}
-                  {submitting ? "Submitting..." : "Confirm Booking"}
-                </Button>
               </div>
             </>
           )}

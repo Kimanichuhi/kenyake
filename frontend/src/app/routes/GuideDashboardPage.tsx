@@ -14,6 +14,10 @@ import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { useTransitionBookingStatus } from "@/domains/bookings/hooks/useTransitionBookingStatus";
+import { useVerifyBookingPayment } from "@/domains/bookings/hooks/useBookingPayments";
+import { PaymentStatusBadge } from "@/domains/bookings/components/BookingStatusBadge";
+import { BookingStatus } from "@/domains/bookings/types/booking";
 
 interface GuideProfile {
   id: string;
@@ -46,6 +50,7 @@ interface Booking {
   group_size: number;
   total_price: number | null;
   status: string;
+  payment_status: string;
   message: string | null;
   created_at: string;
 }
@@ -77,6 +82,8 @@ const GuideDashboardPage = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const transitionBookingStatus = useTransitionBookingStatus();
+  const verifyPayment = useVerifyBookingPayment();
   const [guide, setGuide] = useState<GuideProfile | null>(null);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [groupAssignments, setGroupAssignments] = useState<GroupTripAssignment[]>([]);
@@ -149,15 +156,31 @@ const GuideDashboardPage = () => {
     }
   };
 
-  const updateBookingStatus = async (bookingId: string, status: string) => {
-    const { error } = await supabase
-      .from("guide_bookings")
-      .update({ status })
-      .eq("id", bookingId);
-    if (!error) {
-      toast({ title: `Booking ${status}` });
+  const updateBookingStatus = async (bookingId: string, status: BookingStatus) => {
+    try {
+      await transitionBookingStatus.mutateAsync({ resourceType: "guide", bookingId, newStatus: status });
       if (guide) fetchBookings(guide.id);
+    } catch {
+      // useTransitionBookingStatus already surfaces a toast on error
     }
+  };
+
+  const handleVerifyPayment = async (bookingId: string) => {
+    const { data } = await supabase
+      .from("booking_payments")
+      .select("id")
+      .eq("resource_type", "guide")
+      .eq("booking_id", bookingId)
+      .eq("status", "pending_verification")
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (!data) {
+      toast({ title: "No pending payment found for this booking" });
+      return;
+    }
+    await verifyPayment.mutateAsync({ paymentId: data.id, approve: true });
+    if (guide) fetchBookings(guide.id);
   };
 
   const addAvailability = async () => {
@@ -359,7 +382,7 @@ const GuideDashboardPage = () => {
                           )}
                         </div>
                         <div className="flex gap-2">
-                          <Button size="sm" variant="outline" onClick={() => updateBookingStatus(booking.id, "declined")} className="text-xs">
+                          <Button size="sm" variant="outline" onClick={() => updateBookingStatus(booking.id, "rejected")} className="text-xs">
                             Decline
                           </Button>
                           <Button size="sm" onClick={() => updateBookingStatus(booking.id, "confirmed")} className="text-xs">
@@ -418,6 +441,9 @@ const GuideDashboardPage = () => {
                           }`}>
                             {booking.status}
                           </Badge>
+                          {booking.payment_status && booking.payment_status !== "unpaid" && (
+                            <PaymentStatusBadge status={booking.payment_status} />
+                          )}
                           <span className="text-xs text-muted-foreground font-body">
                             {new Date(booking.created_at).toLocaleDateString()}
                           </span>
@@ -432,15 +458,22 @@ const GuideDashboardPage = () => {
                           <p className="text-xs text-muted-foreground font-body mt-2 bg-muted/50 rounded-lg p-2">"{booking.message}"</p>
                         )}
                       </div>
-                      {booking.status === "pending" && (
-                        <div className="flex gap-2">
-                          <Button size="sm" variant="outline" onClick={() => updateBookingStatus(booking.id, "declined")} className="text-xs">Decline</Button>
-                          <Button size="sm" onClick={() => updateBookingStatus(booking.id, "confirmed")} className="text-xs">Accept</Button>
-                        </div>
-                      )}
-                      {booking.status === "confirmed" && (
-                        <Button size="sm" onClick={() => updateBookingStatus(booking.id, "completed")} className="text-xs">Mark Complete</Button>
-                      )}
+                      <div className="flex flex-col items-end gap-2">
+                        {booking.status === "pending" && (
+                          <div className="flex gap-2">
+                            <Button size="sm" variant="outline" onClick={() => updateBookingStatus(booking.id, "rejected")} className="text-xs">Decline</Button>
+                            <Button size="sm" onClick={() => updateBookingStatus(booking.id, "confirmed")} className="text-xs">Accept</Button>
+                          </div>
+                        )}
+                        {booking.status === "confirmed" && (
+                          <Button size="sm" onClick={() => updateBookingStatus(booking.id, "completed")} className="text-xs">Mark Complete</Button>
+                        )}
+                        {booking.payment_status === "pending_verification" && (
+                          <Button size="sm" variant="outline" onClick={() => handleVerifyPayment(booking.id)} className="text-xs">
+                            Verify Payment
+                          </Button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 ))

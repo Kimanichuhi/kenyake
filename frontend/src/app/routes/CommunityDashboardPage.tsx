@@ -15,6 +15,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useUserRoles } from '@/hooks/useUserRoles';
+import { useOwnerBookings } from '@/domains/bookings/hooks/useOwnerBookings';
+import { useTransitionBookingStatus } from '@/domains/bookings/hooks/useTransitionBookingStatus';
+import { useVerifyBookingPayment } from '@/domains/bookings/hooks/useBookingPayments';
+import { BookingCard } from '@/domains/bookings/components/BookingCard';
+import { BookingStatus } from '@/domains/bookings/types/booking';
 
 interface CommunityStats {
   totalVisitors: number;
@@ -46,6 +51,32 @@ export default function CommunityDashboardPage() {
   const [events, setEvents] = useState<any[]>([]);
   const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const ownerBookings = useOwnerBookings('experience');
+  const transitionBookingStatus = useTransitionBookingStatus();
+  const verifyPayment = useVerifyBookingPayment();
+
+  const updateBookingStatus = async (bookingId: string, status: BookingStatus) => {
+    try {
+      await transitionBookingStatus.mutateAsync({ resourceType: 'experience', bookingId, newStatus: status });
+    } catch {
+      // useTransitionBookingStatus already surfaces a toast on error
+    }
+  };
+
+  const handleVerifyPayment = async (bookingId: string) => {
+    const { data } = await supabase
+      .from('booking_payments')
+      .select('id')
+      .eq('resource_type', 'experience')
+      .eq('booking_id', bookingId)
+      .eq('status', 'pending_verification')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (!data) return;
+    await verifyPayment.mutateAsync({ paymentId: data.id, approve: true });
+  };
 
   useEffect(() => {
     if (user && !rolesLoading) fetchData();
@@ -179,6 +210,7 @@ export default function CommunityDashboardPage() {
           <Tabs defaultValue="overview">
             <TabsList className="mb-6">
               <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="bookings">Bookings</TabsTrigger>
               <TabsTrigger value="events">Events</TabsTrigger>
               <TabsTrigger value="reviews">Reviews</TabsTrigger>
               <TabsTrigger value="visitors">Visitors</TabsTrigger>
@@ -232,6 +264,60 @@ export default function CommunityDashboardPage() {
                     )}
                   </CardContent>
                 </Card>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="bookings">
+              <div className="space-y-4">
+                {ownerBookings.isLoading ? (
+                  <div className="flex justify-center py-12">
+                    <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+                  </div>
+                ) : !ownerBookings.data || ownerBookings.data.length === 0 ? (
+                  <Card>
+                    <CardContent className="p-6">
+                      <p className="text-center text-muted-foreground py-8">No bookings yet for your experiences.</p>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  ownerBookings.data.map((booking: any) => (
+                    <BookingCard
+                      key={booking.id}
+                      title={booking.experiences?.title || 'Experience'}
+                      subtitle={booking.experiences?.location_name || undefined}
+                      dateLabel={`${booking.booking_date}${booking.start_time ? ' · ' + booking.start_time : ''}`}
+                      guestLabel={`${booking.guest_count} guest${booking.guest_count === 1 ? '' : 's'}`}
+                      price={booking.total_price != null ? `$${booking.total_price}` : undefined}
+                      status={booking.status}
+                      paymentStatus={booking.payment_status}
+                      notes={booking.special_requests || undefined}
+                      actions={
+                        <>
+                          {booking.status === 'pending' && (
+                            <>
+                              <Button size="sm" variant="outline" onClick={() => updateBookingStatus(booking.id, 'rejected')} className="text-xs">
+                                Decline
+                              </Button>
+                              <Button size="sm" onClick={() => updateBookingStatus(booking.id, 'confirmed')} className="text-xs">
+                                Accept
+                              </Button>
+                            </>
+                          )}
+                          {booking.status === 'confirmed' && (
+                            <Button size="sm" onClick={() => updateBookingStatus(booking.id, 'completed')} className="text-xs">
+                              Mark Complete
+                            </Button>
+                          )}
+                          {booking.payment_status === 'pending_verification' && (
+                            <Button size="sm" variant="outline" onClick={() => handleVerifyPayment(booking.id)} className="text-xs">
+                              Verify Payment
+                            </Button>
+                          )}
+                        </>
+                      }
+                    />
+                  ))
+                )}
               </div>
             </TabsContent>
 

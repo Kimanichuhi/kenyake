@@ -9,6 +9,8 @@ import {
   Image,
   FileText,
   History,
+  Building2,
+  CalendarCheck,
 } from "lucide-react";
 import { AppRole } from "@/hooks/useUserRoles";
 
@@ -30,6 +32,8 @@ export const adminNavItems: AdminNavItem[] = [
   { label: "Experiences", path: "/admin/experiences", icon: Sparkles },
   { label: "Blog", path: "/admin/blog", icon: Newspaper },
   { label: "Pages", path: "/admin/pages", icon: FileText },
+  { label: "Bookings", path: "/admin/bookings", icon: CalendarCheck },
   { label: "Media Library", path: "/admin/media", icon: Image },
+  { label: "Partner Applications", path: "/admin/partners", icon: Building2, roles: ["admin"] },
   { label: "Audit Logs", path: "/admin/audit-logs", icon: History, roles: ["admin"] },
 ];

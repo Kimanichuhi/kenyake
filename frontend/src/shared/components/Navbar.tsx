@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/command";
 import { useAuth } from "@/contexts/AuthContext";
 import { destinations } from "@/data/destinations";
+import { NotificationBell } from "@/domains/bookings/components/NotificationBell";
 
 type NavChild = { label: string; href: string };
 type NavGroup = { label: string; href?: string; children?: NavChild[] };
@@ -228,6 +229,7 @@ const Navbar = () => {
         </div>
 
         <div className="hidden md:flex items-center gap-2">
+          {user && <NotificationBell />}
           <Button
             variant="ghost"
             size="icon"
@@ -368,6 +370,9 @@ const Navbar = () => {
               <div className="h-px bg-primary-foreground/10 my-2" />
               {user ? (
                 <>
+                  <div className="px-0">
+                    <NotificationBell />
+                  </div>
                   <Link to="/profile" onClick={() => setMobileOpen(false)}>
                     <Button
                       variant="ghost"
