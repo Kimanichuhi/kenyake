@@ -77,6 +77,7 @@ import { BusinessProfileEditForm } from "@/domains/partners/components/dashboard
 import { BusinessDocumentsPanel } from "@/domains/partners/components/dashboard/BusinessDocumentsPanel";
 import { BusinessMediaPanel } from "@/domains/partners/components/dashboard/BusinessMediaPanel";
 import PartnerApplicationsQueue from "@/domains/admin/pages/partners/PartnerApplicationsQueue";
+import ManageAdminsPage from "@/domains/admin/pages/admins/ManageAdminsPage";
 import PartnerApplicationDetail from "@/domains/admin/pages/partners/PartnerApplicationDetail";
 import TransportDashboardPage from "./routes/TransportDashboardPage";
 import BookingsQueue from "@/domains/admin/pages/bookings/BookingsQueue";
@@ -203,6 +204,14 @@ const App = () => (
                 element={
                   <RequireRole anyOf={["admin"]}>
                     <PartnerApplicationDetail />
+                  </RequireRole>
+                }
+              />
+              <Route
+                path="admins"
+                element={
+                  <RequireRole anyOf={["super_admin"]}>
+                    <ManageAdminsPage />
                   </RequireRole>
                 }
               />

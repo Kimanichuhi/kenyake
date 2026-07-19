@@ -11,6 +11,7 @@ import {
   History,
   Building2,
   CalendarCheck,
+  ShieldCheck,
 } from "lucide-react";
 import { AppRole } from "@/hooks/useUserRoles";
 
@@ -36,4 +37,5 @@ export const adminNavItems: AdminNavItem[] = [
   { label: "Media Library", path: "/admin/media", icon: Image },
   { label: "Partner Applications", path: "/admin/partners", icon: Building2, roles: ["admin"] },
   { label: "Audit Logs", path: "/admin/audit-logs", icon: History, roles: ["admin"] },
+  { label: "Manage Admins", path: "/admin/admins", icon: ShieldCheck, roles: ["super_admin"] },
 ];

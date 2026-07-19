@@ -10,7 +10,8 @@ export type AppRole =
   | 'gov_official'
   | 'user'
   | 'content_manager'
-  | 'editor';
+  | 'editor'
+  | 'super_admin';
 
 export function useUserRoles() {
   const { user } = useAuth();
@@ -44,6 +45,7 @@ export function useUserRoles() {
   const isGovOfficial = roles.includes('gov_official');
   const isContentManager = roles.includes('content_manager');
   const isEditor = roles.includes('editor');
+  const isSuperAdmin = roles.includes('super_admin');
 
   return {
     roles,
@@ -57,6 +59,7 @@ export function useUserRoles() {
     isGovOfficial,
     isContentManager,
     isEditor,
+    isSuperAdmin,
     refreshRoles: fetchRoles,
   };
 }
