@@ -48,7 +48,7 @@ const SavedDestinations = () => {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       {savedDestinations.map((dest) => (
-        <Link key={dest.id} to={`/destination/${dest.id}`} className="group">
+        <Link key={dest.id} to={`/destinations/${dest.id}`} className="group">
           <div className="glass-card rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
             <div className="relative h-40">
               <img src={dest.image} alt={dest.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
