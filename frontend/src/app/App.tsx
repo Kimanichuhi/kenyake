@@ -18,6 +18,7 @@ import ImpactPage from "./routes/ImpactPage";
 import NomadsPage from "./routes/NomadsPage";
 import OnboardingPage from "./routes/OnboardingPage";
 import AuthPage from "./routes/AuthPage";
+import AdminInviteSignupPage from "./routes/AdminInviteSignupPage";
 import ProfilePage from "./routes/ProfilePage";
 import NearbyPage from "./routes/NearbyPage";
 import TripPlannerPage from "./routes/TripPlannerPage";
@@ -108,6 +109,7 @@ const App = () => (
             <Route path="/nomads" element={<NomadsPage />} />
             <Route path="/onboard" element={<OnboardingPage />} />
             <Route path="/auth" element={<AuthPage />} />
+            <Route path="/admin-signup" element={<AdminInviteSignupPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/nearby" element={<NearbyPage />} />
             <Route path="/trip-planner" element={<TripPlannerPage />} />
