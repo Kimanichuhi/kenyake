@@ -17,9 +17,13 @@ export function Dropzone({ folder, accept = "image/*", onUploaded, className }: 
 
   const handleFiles = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
-    for (const file of Array.from(files)) {
-      const item = await uploadMedia.mutateAsync({ file, folder });
-      onUploaded(item);
+    try {
+      for (const file of Array.from(files)) {
+        const item = await uploadMedia.mutateAsync({ file, folder });
+        onUploaded(item);
+      }
+    } finally {
+      if (inputRef.current) inputRef.current.value = "";
     }
   };
 

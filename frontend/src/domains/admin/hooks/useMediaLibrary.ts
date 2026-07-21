@@ -38,9 +38,16 @@ export function useUploadMedia() {
       const dimensions = await new Promise<{ width: number | null; height: number | null }>((resolve) => {
         if (!file.type.startsWith("image/")) return resolve({ width: null, height: null });
         const img = new Image();
-        img.onload = () => resolve({ width: img.width, height: img.height });
-        img.onerror = () => resolve({ width: null, height: null });
-        img.src = URL.createObjectURL(file);
+        const objectUrl = URL.createObjectURL(file);
+        img.onload = () => {
+          URL.revokeObjectURL(objectUrl);
+          resolve({ width: img.width, height: img.height });
+        };
+        img.onerror = () => {
+          URL.revokeObjectURL(objectUrl);
+          resolve({ width: null, height: null });
+        };
+        img.src = objectUrl;
       });
 
       const { data, error } = await supabase
@@ -66,7 +73,7 @@ export function useUploadMedia() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-media-library"] });
     },
-    onError: (error: Error) => toast.error(error.message || "Upload failed"),
+    onError: (error: Error, variables) => toast.error(`Upload failed for ${variables.file.name}: ${error.message || "Supabase rejected the file"}`),
   });
 }
 
