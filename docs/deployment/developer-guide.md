@@ -36,7 +36,7 @@ Supabase Edge Functions require:
 - frontend/src/app/providers: auth and currency providers
 - frontend/src/shared/services/supabase: Supabase client and generated types
 - frontend/public: PWA icons and static assets
-- backend/src/ai: Supabase edge function source
+- database/supabase/functions: Supabase edge function source (deployed via `supabase functions deploy <name>` from database/supabase, which is where config.toml and project_id live)
 - database/migrations: database schema changes
 
 ## Routes
@@ -89,10 +89,12 @@ Realtime
 - Wildlife sightings subscribe to inserts on wildlife_sightings.
 
 ## Edge functions
-Functions live in backend/src/ai and are invoked through Supabase-compatible handlers.
+Functions live in database/supabase/functions and are declared in database/supabase/config.toml (project_id = bsfpnpnwrvyorkfercfb). Deploy with `supabase functions deploy <name>` run from database/supabase, or `supabase functions deploy` with no name to deploy all of them. All are currently configured with verify_jwt = false.
 - trip-assistant: streaming chat completion for the AI trip planner.
 - nearby-discover: AI discovery data near the user location.
 - wildlife-intel: AI wildlife intelligence for multiple tabs.
+- ai-cache-refresh: refreshes cached AI query results.
+- admin-accept-invite: validates an admin invite token and creates the account + admin role (used by /admin-signup).
 
 ## Offline and PWA
 - Vite PWA plugin registers a service worker and app manifest.
