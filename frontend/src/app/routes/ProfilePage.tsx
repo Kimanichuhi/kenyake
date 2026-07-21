@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRoles } from "@/hooks/useUserRoles";
 import { useFavorites } from "@/hooks/useFavorites";
-import { destinations } from "@/data/destinations";
+import { useDestinations } from "@/hooks/useDestinations";
 import Navbar from "@/components/Navbar";
 import FooterSection from "@/components/FooterSection";
 import { MyBookingsPanel } from "@/domains/bookings/components/MyBookingsPanel";
@@ -31,8 +31,19 @@ const budgetLabels: Record<string, string> = {
 
 const SavedDestinations = () => {
   const { favorites, toggleFavorite, loading } = useFavorites();
+  const { data: destinations = [], isLoading: destinationsLoading } = useDestinations();
   const navigate = useNavigate();
   const savedDestinations = destinations.filter((d) => favorites.includes(d.id));
+
+  if (destinationsLoading) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {Array.from({ length: 2 }).map((_, i) => (
+          <div key={i} className="glass-card rounded-2xl h-52 animate-pulse" />
+        ))}
+      </div>
+    );
+  }
 
   if (savedDestinations.length === 0) {
     return (

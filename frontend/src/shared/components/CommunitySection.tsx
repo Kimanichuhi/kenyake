@@ -1,21 +1,35 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Shield, TrendingUp, Users, Heart } from "lucide-react";
+import { usePlatformStats } from "@/hooks/usePlatformStats";
 
-const stats = [
-  { icon: Users, value: "50+", label: "Partner Communities" },
-  { icon: TrendingUp, value: "$2.4M", label: "Revenue to Communities" },
-  { icon: Shield, value: "12,000", label: "Hectares Conserved" },
-  { icon: Heart, value: "98%", label: "Traveler Satisfaction" },
-];
+interface CommunitySectionProps {
+  eyebrow?: string;
+  heading?: string;
+  subheading?: string;
+}
 
-const CommunitySection = () => (
+const CommunitySection = ({
+  eyebrow = "Community Impact",
+  heading = "Tourism That Gives Back",
+  subheading = "Every booking directly supports local communities, funds conservation, and preserves cultural heritage.",
+}: CommunitySectionProps) => {
+  const { data: platformStats } = usePlatformStats();
+
+  const stats = [
+    { icon: Users, value: `${platformStats?.communities ?? 0}+`, label: "Partner Communities" },
+    { icon: TrendingUp, value: "$2.4M", label: "Revenue to Communities" },
+    { icon: Shield, value: "12,000", label: "Hectares Conserved" },
+    { icon: Heart, value: "98%", label: "Traveler Satisfaction" },
+  ];
+
+  return (
   <section id="community" className="py-20 lg:py-28 bg-muted/30">
     <div className="container mx-auto px-4">
       <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-14">
-        <span className="text-sm font-body font-semibold tracking-widest uppercase text-safari-green">Community Impact</span>
-        <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground mt-2 mb-4">Tourism That Gives Back</h2>
-        <p className="text-muted-foreground font-body max-w-xl mx-auto">Every booking directly supports local communities, funds conservation, and preserves cultural heritage.</p>
+        <span className="text-sm font-body font-semibold tracking-widest uppercase text-safari-green">{eyebrow}</span>
+        <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground mt-2 mb-4">{heading}</h2>
+        <p className="text-muted-foreground font-body max-w-xl mx-auto">{subheading}</p>
       </motion.div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -37,6 +51,7 @@ const CommunitySection = () => (
       </div>
     </div>
   </section>
-);
+  );
+};
 
 export default CommunitySection;

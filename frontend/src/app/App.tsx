@@ -1,9 +1,12 @@
+import { useEffect } from "react";
+import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 import Index from "./routes/Index";
 import DestinationsPage from "./routes/DestinationsPage";
 import DestinationDetail from "./routes/DestinationDetail";
@@ -66,6 +69,19 @@ import BlogPage from "./routes/BlogPage";
 import BlogDetailPage from "./routes/BlogDetailPage";
 import PagesListPage from "@/domains/admin/pages/pages/PagesListPage";
 import PageFormPage from "@/domains/admin/pages/pages/PageFormPage";
+import ReviewsListPage from "@/domains/admin/pages/reviews/ReviewsListPage";
+import ReviewFormPage from "@/domains/admin/pages/reviews/ReviewFormPage";
+import WildlifeSpeciesListPage from "@/domains/admin/pages/wildlife-species/WildlifeSpeciesListPage";
+import WildlifeSpeciesFormPage from "@/domains/admin/pages/wildlife-species/WildlifeSpeciesFormPage";
+import MigrationEventsListPage from "@/domains/admin/pages/migration-calendar/MigrationEventsListPage";
+import MigrationEventFormPage from "@/domains/admin/pages/migration-calendar/MigrationEventFormPage";
+import PageDetailPage from "./routes/PageDetailPage";
+import SettingsPage from "@/domains/admin/pages/settings/SettingsPage";
+import NavItemsListPage from "@/domains/admin/pages/navigation/NavItemsListPage";
+import NavItemFormPage from "@/domains/admin/pages/navigation/NavItemFormPage";
+import FooterLinksListPage from "@/domains/admin/pages/footer-links/FooterLinksListPage";
+import FooterLinkFormPage from "@/domains/admin/pages/footer-links/FooterLinkFormPage";
+import HomepageSectionsPage from "@/domains/admin/pages/homepage/HomepageSectionsPage";
 import AuditLogsPage from "@/domains/admin/pages/audit/AuditLogsPage";
 import PartnersPage from "./routes/PartnersPage";
 import PartnersDetailPage from "./routes/PartnersDetailPage";
@@ -85,11 +101,35 @@ import BookingsQueue from "@/domains/admin/pages/bookings/BookingsQueue";
 
 const queryClient = new QueryClient();
 
+const AnalyticsInjector = () => {
+  const { data: settings } = useSiteSettings();
+
+  useEffect(() => {
+    const gaId = settings?.google_analytics_id;
+    if (!gaId || document.getElementById("ga-script")) return;
+
+    const loader = document.createElement("script");
+    loader.id = "ga-script";
+    loader.async = true;
+    loader.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
+    document.head.appendChild(loader);
+
+    const inline = document.createElement("script");
+    inline.id = "ga-inline";
+    inline.innerHTML = `window.dataLayer = window.dataLayer || [];\nfunction gtag(){dataLayer.push(arguments);}\ngtag('js', new Date());\ngtag('config', '${gaId}');`;
+    document.head.appendChild(inline);
+  }, [settings?.google_analytics_id]);
+
+  return null;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
+    <HelmetProvider>
     <TooltipProvider>
       <Toaster />
       <Sonner />
+      <AnalyticsInjector />
       <BrowserRouter>
         <AuthProvider>
           <CurrencyProvider>
@@ -183,6 +223,30 @@ const App = () => (
               <Route path="pages" element={<PagesListPage />} />
               <Route path="pages/new" element={<PageFormPage />} />
               <Route path="pages/:id" element={<PageFormPage />} />
+              <Route path="reviews" element={<ReviewsListPage />} />
+              <Route path="reviews/new" element={<ReviewFormPage />} />
+              <Route path="reviews/:id" element={<ReviewFormPage />} />
+              <Route path="wildlife-species" element={<WildlifeSpeciesListPage />} />
+              <Route path="wildlife-species/new" element={<WildlifeSpeciesFormPage />} />
+              <Route path="wildlife-species/:id" element={<WildlifeSpeciesFormPage />} />
+              <Route path="migration-calendar" element={<MigrationEventsListPage />} />
+              <Route path="migration-calendar/new" element={<MigrationEventFormPage />} />
+              <Route path="migration-calendar/:id" element={<MigrationEventFormPage />} />
+              <Route path="navigation" element={<NavItemsListPage />} />
+              <Route path="navigation/new" element={<NavItemFormPage />} />
+              <Route path="navigation/:id" element={<NavItemFormPage />} />
+              <Route path="footer-links" element={<FooterLinksListPage />} />
+              <Route path="footer-links/new" element={<FooterLinkFormPage />} />
+              <Route path="footer-links/:id" element={<FooterLinkFormPage />} />
+              <Route path="homepage" element={<HomepageSectionsPage />} />
+              <Route
+                path="settings"
+                element={
+                  <RequireRole anyOf={["admin"]}>
+                    <SettingsPage />
+                  </RequireRole>
+                }
+              />
               <Route path="media" element={<MediaLibraryPage />} />
               <Route path="bookings" element={<BookingsQueue />} />
               <Route
@@ -218,6 +282,7 @@ const App = () => (
                 }
               />
             </Route>
+            <Route path="/:slug" element={<PageDetailPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <OfflineStatusBar />
@@ -225,6 +290,7 @@ const App = () => (
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
+    </HelmetProvider>
   </QueryClientProvider>
 );
 

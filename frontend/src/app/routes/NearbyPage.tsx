@@ -8,7 +8,7 @@ import Navbar from "@/components/Navbar";
 import FooterSection from "@/components/FooterSection";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { destinations } from "@/data/destinations";
+import { useDestinations } from "@/hooks/useDestinations";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -124,6 +124,7 @@ const NearbyPage = () => {
   const [activeTab, setActiveTab] = useState<"gems" | "alerts" | "detours" | "tips">("gems");
   const [showOverlay, setShowOverlay] = useState({ gems: true, alerts: true, detours: true });
   const { toast } = useToast();
+  const { data: destinations = [] } = useDestinations();
 
   // Auto-detect location
   useEffect(() => {
@@ -164,7 +165,7 @@ const NearbyPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [userLocation, radiusHours, toast]);
+  }, [userLocation, radiusHours, toast, destinations]);
 
   // Fetch on location or radius change
   useEffect(() => {

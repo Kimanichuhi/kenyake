@@ -12,67 +12,10 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 import { useAuth } from "@/contexts/AuthContext";
-import { destinations } from "@/data/destinations";
+import { useDestinations } from "@/hooks/useDestinations";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { useNavGroups, NavGroup } from "@/hooks/useNavigation";
 import { NotificationBell } from "@/domains/bookings/components/NotificationBell";
-
-type NavChild = { label: string; href: string };
-type NavGroup = { label: string; href?: string; children?: NavChild[] };
-
-const navGroups: NavGroup[] = [
-  {
-    label: "Destinations",
-    children: [
-      { label: "All Destinations", href: "/destinations" },
-      { label: "Nearby", href: "/nearby" },
-      { label: "Tembea Kenya", href: "/domestic" },
-    ],
-  },
-  {
-    label: "Experiences",
-    children: [
-      { label: "Experiences", href: "/experiences" },
-      { label: "Cultural Events", href: "/events" },
-      { label: "Food & Dining", href: "/food" },
-      { label: "Cultural Prep", href: "/cultural-prep" },
-    ],
-  },
-  {
-    label: "Stay & Travel",
-    children: [
-      { label: "Accommodation", href: "/accommodation" },
-      { label: "Transport", href: "/transport" },
-      { label: "Digital Nomads", href: "/nomads" },
-      { label: "Safety", href: "/safety" },
-    ],
-  },
-  {
-    label: "Wildlife",
-    children: [
-      { label: "Wildlife", href: "/wildlife" },
-      { label: "Wildlife Intel", href: "/wildlife-intel" },
-    ],
-  },
-  {
-    label: "Community",
-    children: [
-      { label: "Community", href: "/community" },
-      { label: "Local Guides", href: "/guides" },
-      { label: "Become a Guide", href: "/guide-register" },
-      { label: "Group Chat", href: "/group-chat" },
-      { label: "Marketplace", href: "/marketplace" },
-      { label: "Heritage & Diaspora", href: "/heritage" },
-      { label: "Your Impact", href: "/impact" },
-    ],
-  },
-  {
-    label: "Plan",
-    children: [
-      { label: "Trip Planner", href: "/trip-planner" },
-      { label: "Packages", href: "/packages" },
-      { label: "Payments", href: "/payments" },
-    ],
-  },
-];
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -83,6 +26,12 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { user, profile, signOut } = useAuth();
   const navRef = useRef<HTMLDivElement>(null);
+  const { data: destinations = [] } = useDestinations();
+  const { groups: navGroups } = useNavGroups();
+  const { data: settings } = useSiteSettings();
+  const companyName = settings?.company_name ?? "Sync Safaris";
+  const [brandFirst, ...brandRest] = companyName.split(" ");
+  const brandSecond = brandRest.join(" ");
 
   // Close dropdown on route change
   useEffect(() => {
@@ -135,9 +84,9 @@ const Navbar = () => {
     >
       <div ref={navRef} className="container mx-auto flex items-center justify-between px-4 py-3 lg:px-8">
         <Link to="/" className="flex items-center gap-2.5">
-          <img src="/icon-192.png" alt="Sync Safaris" className="h-8 w-8 rounded-lg" />
+          <img src={settings?.logo_url || "/icon-192.png"} alt={companyName} className="h-8 w-8 rounded-lg" />
           <span className="text-xl font-bold text-savannah-gold tracking-tight">
-            Sync<span className="text-primary-foreground"> Safaris</span>
+            {brandFirst}{brandSecond && <span className="text-primary-foreground"> {brandSecond}</span>}
           </span>
         </Link>
 

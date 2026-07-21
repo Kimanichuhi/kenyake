@@ -1,9 +1,23 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Clock, Star, Heart } from "lucide-react";
-import { experiences } from "@/data/destinations";
+import { useExperiences } from "@/hooks/useExperiences";
+import { Skeleton } from "@/components/ui/skeleton";
 
-const ExperiencesSection = () => (
+interface ExperiencesSectionProps {
+  eyebrow?: string;
+  heading?: string;
+  subheading?: string;
+}
+
+const ExperiencesSection = ({
+  eyebrow = "Local Experiences",
+  heading = "Immerse in Kenyan Culture",
+  subheading = "Hands-on experiences hosted by local communities. Every booking directly supports the artisans, guides, and families who make Kenya unforgettable.",
+}: ExperiencesSectionProps) => {
+  const { data: experiences = [], isLoading } = useExperiences();
+
+  return (
   <section id="experiences" className="py-20 lg:py-28 bg-muted/50">
     <div className="container mx-auto px-4">
       <motion.div
@@ -13,17 +27,23 @@ const ExperiencesSection = () => (
         className="text-center mb-14"
       >
         <span className="text-sm font-body font-semibold tracking-widest uppercase text-safari-green">
-          Local Experiences
+          {eyebrow}
         </span>
         <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground mt-2 mb-4">
-          Immerse in Kenyan Culture
+          {heading}
         </h2>
         <p className="text-muted-foreground font-body max-w-xl mx-auto">
-          Hands-on experiences hosted by local communities. Every booking directly
-          supports the artisans, guides, and families who make Kenya unforgettable.
+          {subheading}
         </p>
       </motion.div>
 
+      {isLoading ? (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <Skeleton key={i} className="h-96 rounded-2xl" />
+          ))}
+        </div>
+      ) : (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {experiences.slice(0, 3).map((exp, i) => (
           <motion.div
@@ -62,6 +82,7 @@ const ExperiencesSection = () => (
           </motion.div>
         ))}
       </div>
+      )}
 
       <div className="text-center mt-10">
         <Link to="/experiences" className="gradient-sunset text-primary-foreground rounded-full px-8 py-3 font-body font-semibold text-sm inline-block hover:opacity-90 transition-opacity">
@@ -70,6 +91,7 @@ const ExperiencesSection = () => (
       </div>
     </div>
   </section>
-);
+  );
+};
 
 export default ExperiencesSection;

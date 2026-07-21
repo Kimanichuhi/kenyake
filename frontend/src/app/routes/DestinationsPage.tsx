@@ -1,58 +1,23 @@
 import { useState, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 import { MapPin, Star, Users, Camera, Search, SlidersHorizontal, Map, Grid3X3 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import FooterSection from "@/components/FooterSection";
 import FavoriteButton from "@/components/FavoriteButton";
 import { Skeleton } from "@/components/ui/skeleton";
-import { supabase } from "@/integrations/supabase/client";
-import { Tables } from "@/integrations/supabase/types";
-import { Destination } from "@/data/destinations";
+import { useDestinations } from "@/hooks/useDestinations";
 
 const DestinationMap = lazy(() => import("@/components/DestinationMap"));
 
 const categories = ["All", "Wildlife Safari", "Wildlife & Mountains", "Beach & Marine", "Adventure & Hiking", "Birdwatching", "Culture & Heritage"];
-
-type DestinationRow = Tables<"destinations">;
-
-function mapDestinationRow(row: DestinationRow): Destination {
-  return {
-    id: row.slug,
-    name: row.name,
-    county: row.county,
-    image: row.cover_image ?? "",
-    gallery: row.gallery_images ?? [],
-    category: row.category,
-    rating: row.rating ?? 0,
-    reviews: row.review_count ?? 0,
-    crowdLevel: row.crowd_level ?? "",
-    bestTime: row.best_time ?? "",
-    price: row.price_display ?? "",
-    description: row.description ?? "",
-    highlights: row.highlights ?? [],
-    safetyRating: row.safety_rating ?? 0,
-    accessibilityRating: row.accessibility_rating ?? 0,
-    photographyScore: row.photography_score ?? 0,
-    lat: row.lat ?? 0,
-    lng: row.lng ?? 0,
-  };
-}
 
 const DestinationsPage = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [view, setView] = useState<"grid" | "map">("grid");
 
-  const { data: destinations = [], isLoading } = useQuery({
-    queryKey: ["public-destinations"],
-    queryFn: async () => {
-      const { data, error } = await supabase.from("destinations").select("*");
-      if (error) throw error;
-      return (data ?? []).map(mapDestinationRow);
-    },
-  });
+  const { data: destinations = [], isLoading } = useDestinations();
 
   const filtered = destinations.filter((d) => {
     const matchCategory = selectedCategory === "All" || d.category === selectedCategory;

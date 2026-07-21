@@ -11,6 +11,9 @@ import CommunitySection from "@/components/CommunitySection";
 import FooterSection from "@/components/FooterSection";
 import FloatingTripPlanner from "@/components/FloatingTripPlanner";
 import PWAInstallBanner from "@/components/PWAInstallBanner";
+import { usePlatformStats } from "@/hooks/usePlatformStats";
+import { useHomepageSections } from "@/hooks/useHomepageSections";
+import Seo from "@/components/Seo";
 
 const quickLinks = [
   { icon: Home, label: "Domestic", href: "/domestic", color: "gradient-safari" },
@@ -21,19 +24,42 @@ const quickLinks = [
   { icon: Compass, label: "Impacts", href: "/impact", color: "gradient-sunset" },
 ];
 
-const heroStats = [
-  { value: "47", label: "Counties" },
-  { value: "300+", label: "Destinations" },
-  { value: "1,000+", label: "Experiences" },
-  { value: "50+", label: "Communities" },
-];
-
 const Index = () => {
   const [quickOpen, setQuickOpen] = useState(false);
   const [statCounts, setStatCounts] = useState([0, 0, 0, 0]);
+  const { data: platformStats } = usePlatformStats();
+  const { data: homepageSections = [], isLoading: sectionsLoading } = useHomepageSections();
+
+  const sectionsByKey = new Map(homepageSections.map((s) => [s.section_key, s]));
+  // While the config is still loading, default every section to visible so
+  // nothing flickers/disappears on first paint before the query resolves.
+  const heroSection = sectionsLoading ? undefined : sectionsByKey.get("hero");
+  const showHero = sectionsLoading || !!heroSection;
+  const ctaSection = sectionsByKey.get("cta");
+  const showCta = sectionsLoading || !!ctaSection;
+  const bodySectionComponents: Record<string, typeof DestinationsSection | typeof ExperiencesSection | typeof WildlifeSection | typeof CommunitySection> = {
+    destinations: DestinationsSection,
+    experiences: ExperiencesSection,
+    wildlife: WildlifeSection,
+    community: CommunitySection,
+  };
+  const orderedBodySections = sectionsLoading
+    ? Object.keys(bodySectionComponents).map((key) => ({ section_key: key, eyebrow_text: null, heading_line1: null, subheading: null }))
+    : ["destinations", "experiences", "wildlife", "community"]
+        .map((key) => sectionsByKey.get(key))
+        .filter((s): s is NonNullable<typeof s> => !!s)
+        .sort((a, b) => a.display_order - b.display_order);
+
+  const heroStats = [
+    { value: `${platformStats?.counties ?? 0}`, label: "Counties" },
+    { value: `${platformStats?.destinations ?? 0}+`, label: "Destinations" },
+    { value: `${platformStats?.experiences ?? 0}+`, label: "Experiences" },
+    { value: `${platformStats?.communities ?? 0}+`, label: "Communities" },
+  ];
 
   useEffect(() => {
-    const targets = [47, 300, 1000, 50];
+    if (!platformStats) return;
+    const targets = [platformStats.counties, platformStats.destinations, platformStats.experiences, platformStats.communities];
     const start = performance.now();
     const durationMs = 900;
 
@@ -45,12 +71,23 @@ const Index = () => {
     };
 
     requestAnimationFrame(tick);
-  }, []);
+  }, [platformStats]);
 
   return (
     <div className="min-h-screen bg-background">
+    <Seo />
     <Navbar />
-    <HeroSection />
+    {showHero && (
+      <HeroSection
+        eyebrow={heroSection?.eyebrow_text ?? undefined}
+        headingLine1={heroSection?.heading_line1 ?? undefined}
+        headingLine2={heroSection?.heading_line2 ?? undefined}
+        subheading={heroSection?.subheading ?? undefined}
+        ctaLabel={heroSection?.cta_label ?? undefined}
+        ctaHref={heroSection?.cta_href ?? undefined}
+        image={heroSection?.image_url ?? undefined}
+      />
+    )}
 
     {/* Fast Stats */}
     <section className="py-6 bg-muted/30">
@@ -138,34 +175,43 @@ const Index = () => {
       </div>
     </section>
 
-    <DestinationsSection />
-    <ExperiencesSection />
-    <WildlifeSection />
-    <CommunitySection />
+    {orderedBodySections.map((section) => {
+      const Component = bodySectionComponents[section.section_key];
+      return (
+        <Component
+          key={section.section_key}
+          eyebrow={section.eyebrow_text ?? undefined}
+          heading={section.heading_line1 ?? undefined}
+          subheading={section.subheading ?? undefined}
+        />
+      );
+    })}
 
     {/* CTA Section */}
-    <section className="py-20 bg-muted/30">
-      <div className="container mx-auto px-4 text-center">
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-          <Compass className="h-12 w-12 text-sunset-orange mx-auto mb-4" />
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Ready to Explore Kenya?</h2>
-          <p className="text-muted-foreground max-w-lg mx-auto mb-8">
-            Create your profile to get personalized recommendations, save destinations, and track your travel impact.
-          </p>
-          <Link to="/onboard" className="gradient-sunset text-primary-foreground px-10 py-4 rounded-full font-semibold inline-block hover:opacity-90 transition-opacity">
-            Start Your Journey â†’
-          </Link>
-          <div className="flex flex-wrap justify-center gap-8 mt-10">
-            {heroStats.map((stat) => (
-              <div key={stat.label} className="text-center">
-                <div className="text-2xl font-display font-bold text-sunset-orange">{stat.value}</div>
-                <div className="text-xs text-muted-foreground font-body uppercase tracking-wide">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      </div>
-    </section>
+    {showCta && (
+      <section className="py-20 bg-muted/30">
+        <div className="container mx-auto px-4 text-center">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <Compass className="h-12 w-12 text-sunset-orange mx-auto mb-4" />
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">{ctaSection?.heading_line1 ?? "Ready to Explore Kenya?"}</h2>
+            <p className="text-muted-foreground max-w-lg mx-auto mb-8">
+              {ctaSection?.subheading ?? "Create your profile to get personalized recommendations, save destinations, and track your travel impact."}
+            </p>
+            <Link to={ctaSection?.cta_href ?? "/onboard"} className="gradient-sunset text-primary-foreground px-10 py-4 rounded-full font-semibold inline-block hover:opacity-90 transition-opacity">
+              {ctaSection?.cta_label ?? "Start Your Journey"} →
+            </Link>
+            <div className="flex flex-wrap justify-center gap-8 mt-10">
+              {heroStats.map((stat) => (
+                <div key={stat.label} className="text-center">
+                  <div className="text-2xl font-display font-bold text-sunset-orange">{stat.value}</div>
+                  <div className="text-xs text-muted-foreground font-body uppercase tracking-wide">{stat.label}</div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+    )}
 
     <FooterSection />
     <FloatingTripPlanner />

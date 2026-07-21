@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Star, MapPin } from "lucide-react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { destinations } from "@/data/destinations";
+import { useDestinations } from "@/hooks/useDestinations";
 
 // Fix default marker icons
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -25,6 +25,7 @@ const safariIcon = new L.DivIcon({
 const DestinationMap = () => {
   // Kenya center
   const center: [number, number] = [-0.5, 37.8];
+  const { data: destinations = [] } = useDestinations();
 
   return (
     <div className="rounded-2xl overflow-hidden border border-border shadow-[var(--shadow-card)]">

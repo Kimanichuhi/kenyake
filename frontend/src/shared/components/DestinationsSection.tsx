@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { MapPin, Star, Camera, Users } from "lucide-react";
-import { destinations } from "@/data/destinations";
+import { useDestinations } from "@/hooks/useDestinations";
 import FavoriteButton from "@/components/FavoriteButton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const container = {
   hidden: {},
@@ -14,7 +15,20 @@ const item = {
   show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
-const DestinationsSection = () => (
+interface DestinationsSectionProps {
+  eyebrow?: string;
+  heading?: string;
+  subheading?: string;
+}
+
+const DestinationsSection = ({
+  eyebrow = "Top Destinations",
+  heading = "Iconic Places to Explore",
+  subheading = "From legendary safari parks to pristine beaches and ancient towns — discover Kenya's most breathtaking destinations.",
+}: DestinationsSectionProps) => {
+  const { data: destinations = [], isLoading } = useDestinations();
+
+  return (
   <section id="destinations" className="py-20 lg:py-28 bg-background">
     <div className="container mx-auto px-4">
       <motion.div
@@ -24,17 +38,23 @@ const DestinationsSection = () => (
         className="text-center mb-14"
       >
         <span className="text-sm font-body font-semibold tracking-widest uppercase text-sunset-orange">
-          Top Destinations
+          {eyebrow}
         </span>
         <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground mt-2 mb-4">
-          Iconic Places to Explore
+          {heading}
         </h2>
         <p className="text-muted-foreground font-body max-w-xl mx-auto">
-          From legendary safari parks to pristine beaches and ancient towns —
-          discover Kenya's most breathtaking destinations.
+          {subheading}
         </p>
       </motion.div>
 
+      {isLoading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <Skeleton key={i} className="h-80 rounded-2xl" />
+          ))}
+        </div>
+      ) : (
       <motion.div
         variants={container}
         initial="hidden"
@@ -42,7 +62,7 @@ const DestinationsSection = () => (
         viewport={{ once: true }}
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
       >
-        {destinations.map((dest) => (
+        {destinations.slice(0, 6).map((dest) => (
           <motion.div key={dest.id} variants={item}>
             <Link to={`/destinations/${dest.id}`} className="group block">
               <div className="rounded-2xl overflow-hidden bg-card shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow duration-300">
@@ -84,6 +104,7 @@ const DestinationsSection = () => (
           </motion.div>
         ))}
       </motion.div>
+      )}
 
       <div className="text-center mt-10">
         <Link to="/destinations" className="gradient-safari text-primary-foreground rounded-full px-8 py-3 font-body font-semibold text-sm inline-block hover:opacity-90 transition-opacity">
@@ -92,6 +113,7 @@ const DestinationsSection = () => (
       </div>
     </div>
   </section>
-);
+  );
+};
 
 export default DestinationsSection;

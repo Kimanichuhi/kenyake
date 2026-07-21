@@ -1,7 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, MapPin, Star, Camera, Shield, Accessibility, Users, Clock, Heart, ChevronLeft, ChevronRight, Check, Loader2 } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
@@ -10,34 +9,10 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import FooterSection from "@/components/FooterSection";
-import { supabase } from "@/integrations/supabase/client";
-import { Tables } from "@/integrations/supabase/types";
-import { Destination, experiences, reviews } from "@/data/destinations";
-
-type DestinationRow = Tables<"destinations">;
-
-function mapDestinationRow(row: DestinationRow): Destination {
-  return {
-    id: row.slug,
-    name: row.name,
-    county: row.county,
-    image: row.cover_image ?? "",
-    gallery: row.gallery_images ?? [],
-    category: row.category,
-    rating: row.rating ?? 0,
-    reviews: row.review_count ?? 0,
-    crowdLevel: row.crowd_level ?? "",
-    bestTime: row.best_time ?? "",
-    price: row.price_display ?? "",
-    description: row.description ?? "",
-    highlights: row.highlights ?? [],
-    safetyRating: row.safety_rating ?? 0,
-    accessibilityRating: row.accessibility_rating ?? 0,
-    photographyScore: row.photography_score ?? 0,
-    lat: row.lat ?? 0,
-    lng: row.lng ?? 0,
-  };
-}
+import { useDestination } from "@/hooks/useDestinations";
+import { useExperiencesByCounty } from "@/hooks/useExperiences";
+import MultiReviewForm, { ReviewList } from "@/components/MultiReviewForm";
+import Seo from "@/components/Seo";
 
 const RatingDots = ({ value, max = 5 }: { value: number; max?: number }) => (
   <div className="flex gap-1">
@@ -59,16 +34,8 @@ const DestinationDetail = () => {
   const [date, setDate] = useState<Date>();
   const [guests, setGuests] = useState(2);
 
-  const { data: dest, isLoading } = useQuery({
-    queryKey: ["public-destination", id],
-    queryFn: async () => {
-      if (!id) return null;
-      const { data, error } = await supabase.from("destinations").select("*").eq("slug", id).maybeSingle();
-      if (error) throw error;
-      return data ? mapDestinationRow(data) : null;
-    },
-    enabled: !!id,
-  });
+  const { data: dest, isLoading } = useDestination(id);
+  const { data: nearbyExperiences = [] } = useExperiencesByCounty(dest?.county, 4);
 
   if (isLoading) {
     return (
@@ -91,14 +58,12 @@ const DestinationDetail = () => {
     );
   }
 
-  const destReviews = reviews.filter((r) => r.destinationId === dest.id);
-  const nearbyExperiences = experiences.filter((e) => e.destinationId === dest.id);
-
   const prevImage = () => setGalleryIndex((i) => (i === 0 ? dest.gallery.length - 1 : i - 1));
   const nextImage = () => setGalleryIndex((i) => (i === dest.gallery.length - 1 ? 0 : i + 1));
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo title={dest.metaTitle || dest.name} description={dest.metaDescription || dest.description} image={dest.image} />
       <Navbar />
 
       {/* Photo Gallery */}
@@ -220,40 +185,9 @@ const DestinationDetail = () => {
             </motion.div>
 
             {/* Reviews */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
-              <h2 className="font-display text-xl font-semibold text-foreground mb-4">
-                Traveler Reviews ({destReviews.length})
-              </h2>
-              {destReviews.length > 0 ? (
-                <div className="space-y-4">
-                  {destReviews.map((review) => (
-                    <div key={review.id} className="glass-card p-5">
-                      <div className="flex items-start gap-4">
-                        <div className="h-10 w-10 rounded-full gradient-safari flex items-center justify-center text-primary-foreground text-sm font-bold shrink-0">
-                          {review.avatar}
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between mb-1">
-                            <div>
-                              <span className="font-body font-semibold text-foreground text-sm">{review.author}</span>
-                              <span className="text-xs text-muted-foreground ml-2">{review.country}</span>
-                            </div>
-                            <span className="text-xs text-muted-foreground font-body">{review.date}</span>
-                          </div>
-                          <div className="flex gap-0.5 mb-2">
-                            {Array.from({ length: review.rating }).map((_, i) => (
-                              <Star key={i} className="h-3 w-3 fill-savannah-gold text-savannah-gold" />
-                            ))}
-                          </div>
-                          <p className="text-sm text-muted-foreground font-body leading-relaxed">{review.text}</p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-muted-foreground font-body text-sm">No reviews yet for this destination.</p>
-              )}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="space-y-5">
+              <ReviewList reviewableType="destination" reviewableId={dest.dbId} />
+              <MultiReviewForm reviewableType="destination" reviewableId={dest.dbId} />
             </motion.div>
 
             {/* Nearby Experiences */}

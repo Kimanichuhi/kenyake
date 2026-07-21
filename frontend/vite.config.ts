@@ -42,7 +42,7 @@ export default defineConfig(() => ({
             },
           },
         ],
-        maximumFileSizeToCacheInBytes: 3000000, // 3MB
+        maximumFileSizeToCacheInBytes: 5000000, // 5MB
       },
       manifest: {
         name: "Sync Safaris — Explore Kenya",

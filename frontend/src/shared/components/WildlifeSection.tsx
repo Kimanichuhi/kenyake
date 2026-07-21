@@ -1,40 +1,59 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Binoculars, TrendingUp, MapPin } from "lucide-react";
+import { useWildlifeSpecies } from "@/hooks/useWildlifeContent";
+import { Skeleton } from "@/components/ui/skeleton";
 
-const bigFive = [
-  { name: "Lion", emoji: "🦁", sightings: "92%", location: "Maasai Mara" },
-  { name: "Elephant", emoji: "🐘", sightings: "98%", location: "Amboseli" },
-  { name: "Buffalo", emoji: "🐃", sightings: "95%", location: "Lake Nakuru" },
-  { name: "Leopard", emoji: "🐆", sightings: "45%", location: "Samburu" },
-  { name: "Rhino", emoji: "🦏", sightings: "78%", location: "Ol Pejeta" },
-];
+interface WildlifeSectionProps {
+  eyebrow?: string;
+  heading?: string;
+  subheading?: string;
+}
 
-const WildlifeSection = () => (
+const WildlifeSection = ({
+  eyebrow = "Wildlife Intelligence",
+  heading = "Track the Big Five",
+  subheading = "Real-time sighting data from our network of guides across Kenya's national parks.",
+}: WildlifeSectionProps) => {
+  const { data: bigFive = [], isLoading } = useWildlifeSpecies();
+
+  return (
   <section id="wildlife" className="py-20 lg:py-28 bg-foreground text-primary-foreground">
     <div className="container mx-auto px-4">
       <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-14">
-        <span className="text-sm font-body font-semibold tracking-widest uppercase text-savannah-gold">Wildlife Intelligence</span>
-        <h2 className="font-display text-3xl md:text-5xl font-bold mt-2 mb-4">Track the Big Five</h2>
+        <span className="text-sm font-body font-semibold tracking-widest uppercase text-savannah-gold">{eyebrow}</span>
+        <h2 className="font-display text-3xl md:text-5xl font-bold mt-2 mb-4">{heading}</h2>
         <p className="text-primary-foreground/60 font-body max-w-xl mx-auto">
-          Real-time sighting data from our network of guides across Kenya's national parks.
+          {subheading}
         </p>
       </motion.div>
 
+      {isLoading ? (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Skeleton key={i} className="h-40 rounded-2xl bg-primary-foreground/10" />
+          ))}
+        </div>
+      ) : (
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
         {bigFive.map((animal, i) => (
-          <motion.div key={animal.name} initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.4 }} className="glass-card-dark p-6 text-center hover:border-savannah-gold/30 transition-colors cursor-pointer">
+          <motion.div key={animal.id} initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.4 }} className="glass-card-dark p-6 text-center hover:border-savannah-gold/30 transition-colors cursor-pointer">
             <div className="text-4xl mb-3">{animal.emoji}</div>
             <h3 className="font-display font-semibold text-lg mb-1">{animal.name}</h3>
-            <div className="flex items-center justify-center gap-1 text-savannah-gold text-sm font-body font-semibold mb-2">
-              <TrendingUp className="h-3 w-3" /> {animal.sightings}
-            </div>
-            <p className="flex items-center justify-center gap-1 text-primary-foreground/50 text-xs font-body">
-              <MapPin className="h-3 w-3" /> {animal.location}
-            </p>
+            {animal.sightings_note && (
+              <div className="flex items-center justify-center gap-1 text-savannah-gold text-sm font-body font-semibold mb-2">
+                <TrendingUp className="h-3 w-3" /> {animal.sightings_note}
+              </div>
+            )}
+            {animal.location_name && (
+              <p className="flex items-center justify-center gap-1 text-primary-foreground/50 text-xs font-body">
+                <MapPin className="h-3 w-3" /> {animal.location_name}
+              </p>
+            )}
           </motion.div>
         ))}
       </div>
+      )}
 
       <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mt-14 glass-card-dark p-8 md:p-10 flex flex-col md:flex-row items-center gap-6">
         <div className="flex items-center justify-center h-16 w-16 rounded-2xl gradient-sunset shrink-0">
@@ -50,6 +69,7 @@ const WildlifeSection = () => (
       </motion.div>
     </div>
   </section>
-);
+  );
+};
 
 export default WildlifeSection;
