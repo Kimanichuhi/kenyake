@@ -103,25 +103,38 @@ const ProfilePage = () => {
     return null;
   }
 
+  const initials = (profile?.full_name || user.email || "E")
+    .trim()
+    .split(/\s+/)
+    .map((part) => part[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <div className="pt-24 pb-16">
         <div className="container mx-auto px-4 max-w-4xl">
           {/* Header */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-card rounded-2xl p-8 mb-8">
-            <div className="flex items-center gap-6">
-              <div className="h-20 w-20 rounded-full gradient-safari flex items-center justify-center">
-                <User className="h-8 w-8 text-primary-foreground" />
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-card rounded-2xl p-5 sm:p-8 mb-8">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-6">
+              <div className="flex items-center gap-4 min-w-0">
+                <div className="h-16 w-16 sm:h-20 sm:w-20 shrink-0 rounded-full gradient-safari flex items-center justify-center ring-4 ring-background shadow-md">
+                  <span className="font-display text-lg sm:text-2xl font-bold text-primary-foreground">{initials}</span>
+                </div>
+                <div className="min-w-0">
+                  <h1 className="font-display text-xl sm:text-2xl font-bold text-foreground truncate">{profile?.full_name || "Explorer"}</h1>
+                  <p className="text-muted-foreground font-body text-sm truncate">{user.email}</p>
+                  {profile?.nationality && (
+                    <p className="text-sm text-muted-foreground font-body mt-1 flex items-center gap-1">
+                      <MapPin className="h-3 w-3 shrink-0" />
+                      <span className="truncate">{profile.nationality}{profile.first_visit ? " • First time in Kenya" : " • Returning visitor"}</span>
+                    </p>
+                  )}
+                </div>
               </div>
-              <div className="flex-1">
-                <h1 className="font-display text-2xl font-bold text-foreground">{profile?.full_name || "Explorer"}</h1>
-                <p className="text-muted-foreground font-body">{user.email}</p>
-                {profile?.nationality && (
-                  <p className="text-sm text-muted-foreground font-body mt-1"><MapPin className="inline h-3 w-3 mr-1" />{profile.nationality}{profile.first_visit ? " • First time in Kenya" : " • Returning visitor"}</p>
-                )}
-              </div>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2 sm:ml-auto sm:shrink-0">
                 {canAccessAdmin && (
                   <Button variant="outline" size="sm" onClick={() => navigate("/admin")} className="text-sm">
                     <ShieldCheck className="h-4 w-4 mr-1" /> Admin Panel
