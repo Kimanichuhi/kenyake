@@ -384,3 +384,4 @@ SafariSync is an AI-powered, community-first tourism intelligence platform for K
 - SafariSync  |  Research Collaboration Â· Grant Funding Â· Technology Partnership Â· Community Investment  |  safarisync.africa  |  2026
 
 
+"# syncsafaris" 
